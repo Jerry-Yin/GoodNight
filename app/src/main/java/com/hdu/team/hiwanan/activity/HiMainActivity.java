@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
@@ -29,10 +31,10 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
     public static HiActivity mIntance = null;
 
     /**Views*/
-    private ImageButton mbtnHomePage;
-    private ImageButton mbtnGoodNight;
-    private ImageButton mbtnSleep;
-    private ImageButton mbtnSetting;
+    private RadioButton mbtnHomePage;
+    private RadioButton mbtnGoodNight;
+    private RadioButton mbtnSleep;
+    private RadioButton mbtnSetting;
 
     private TextView mtextTitle;
 
@@ -64,10 +66,10 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
     public void initViews() {
         mFragmentManager = getFragmentManager();
         mtextTitle = (TextView) findViewById(R.id.text_title);
-        mbtnHomePage = (ImageButton) findViewById(R.id.btn_home_page);
-        mbtnGoodNight = (ImageButton) findViewById(R.id.btn_good_night);
-        mbtnSleep = (ImageButton) findViewById(R.id.btn_sleep);
-        mbtnSetting = (ImageButton) findViewById(R.id.btn_setting);
+        mbtnHomePage = (RadioButton) findViewById(R.id.btn_home_page);
+        mbtnGoodNight = (RadioButton) findViewById(R.id.btn_good_night);
+        mbtnSleep = (RadioButton) findViewById(R.id.btn_sleep);
+        mbtnSetting = (RadioButton) findViewById(R.id.btn_setting);
         mbtnHomePage.setOnClickListener(this);
         mbtnGoodNight.setOnClickListener(this);
         mbtnSleep.setOnClickListener(this);

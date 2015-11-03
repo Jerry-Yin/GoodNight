@@ -2,101 +2,71 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="55dp"
-    android:orientation="horizontal"
-    android:background="#E0E0E0">
+    android:background="#E0E0E0"
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:orientation="vertical">
+    <RadioGroup
+        android:id="@+id/buttom_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-        <ImageButton
+        <RadioButton
             android:id="@+id/btn_home_page"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:background="@drawable/ic_mood_black_24dp"
-            android:paddingBottom="2dp"/>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/ic_mood_black_24dp"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="5dp"
+            android:text="@string/home_page"
+            android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/text_homepage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="10sp"
-            android:text="@string/home_page"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:orientation="vertical">
-
-        <ImageButton
+        <RadioButton
             android:id="@+id/btn_good_night"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:background="@drawable/ic_notifications_none_black_24dp"/>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/ic_notifications_none_black_24dp"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="5dp"
+            android:text="@string/good_night"
+            android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/text_good_night"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="10sp"
-            android:text="@string/good_night"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-
-        android:orientation="vertical">
-
-        <ImageButton
+        <RadioButton
             android:id="@+id/btn_sleep"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:background="@drawable/ic_access_alarm_black_24dp"/>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/ic_access_alarm_black_24dp"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="5dp"
+            android:text="@string/sleep"
+            android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/text_sleep"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="10sp"
-            android:text="@string/sleep"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="5dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <ImageButton
+        <RadioButton
             android:id="@+id/btn_setting"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:background="@drawable/ic_person_outline_black_24dp"/>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/ic_person_outline_black_24dp"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="5dp"
+            android:text="@string/setting"
+            android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/text_setting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="10sp"
-            android:text="@string/setting"/>
-    </LinearLayout>
+    </RadioGroup>
 
 </LinearLayout>
