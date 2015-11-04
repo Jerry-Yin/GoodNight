@@ -8,15 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hdu.team.hiwanan.R;
+
 /**
  * Created by JerryYin on 11/3/15.
  */
 public class HiHomePageFragment extends Fragment implements ViewPager.OnPageChangeListener {
 
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+//        return super.onCreateView(inflater, container, savedInstanceState);
+        return inflater.inflate(R.layout.layout_home_page, container, false);
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,15 +28,14 @@ import com.hdu.team.hiwanan.util.HiToast;
 
 public class HiMainActivity extends HiActivity implements View.OnClickListener {
 
+    /**constants*/
     private static final String TAG = "HiMainActivity";
-    public static HiActivity mIntance = null;
 
     /**Views*/
     private RadioButton mbtnHomePage;
     private RadioButton mbtnGoodNight;
     private RadioButton mbtnSleep;
     private RadioButton mbtnSetting;
-
     private TextView mtextTitle;
 
     /**Fragments*/
@@ -44,6 +44,10 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
     private HiGoodNightFragment mGoodNightFragment;
     private HiSleepFragment mSleepFragment;
     private HiSettingFragment mSettingFragment;
+
+    /**valuse*/
+    public static HiActivity mIntance = null;
+    private AlertDialog.Builder mQuitDialogBulider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +64,8 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
         mIntance = HiMainActivity.this;
 
         initViews();
-
+//        initDialog();
+        changeFragment(getHomeFragment(), false);   //初次进入时默认加载第一页
     }
 
     public void initViews() {
@@ -77,6 +82,10 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
 
     }
 
+//    private void initDialog() {
+//        mQuitDialogBulider = new AlertDialog.Builder(mIntance);
+//        mQuitDialogBulider.setIcon()
+//    }
 
     @Override
     public void onClick(View v) {
@@ -146,4 +155,14 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
         transaction.commit();
     }
 
+    /** 捕捉返回事件，弹出对话框，是否退出应用*/
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN
+                && event.getKeyCode() == KeyEvent.KEYCODE_BACK){
+            finish();
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
+    }
 }

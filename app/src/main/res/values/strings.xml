@@ -9,4 +9,13 @@
     <string name="setting">设置</string>
     <string name="sleep">睡眠</string>
     <string name="good_night">晚安</string>
+    <string name="hiwanan">Hi 晚安</string>
+    <string name="wananji">晚安集</string>
+    <string name="zhushuimian">助睡眠</string>
+    <string name="sleep_record">睡眠记录</string>
+    <string name="account_name">hello man</string>
+    <string name="text_level">晚安达人</string>
+    <string name="wanan_daren">晚安达人</string>
+    <string name="setting_hi">Hi语音设置</string>
+    <string name="about_app">功能介绍</string>
 </resources>

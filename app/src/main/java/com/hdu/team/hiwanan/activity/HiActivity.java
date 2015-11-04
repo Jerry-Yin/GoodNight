@@ -1,7 +1,9 @@
 package com.hdu.team.hiwanan.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.hdu.team.hiwanan.util.HiLog;
@@ -10,7 +12,7 @@ import com.hdu.team.hiwanan.util.HiLog;
  * Created by JerryYin on 11/3/15.
  * 本应用的基类Activity
  */
-public abstract class HiActivity extends Activity {
+public abstract class HiActivity extends Activity implements View.OnClickListener{
 
     public final String TAG = "HiActivity";
 
@@ -23,6 +25,10 @@ public abstract class HiActivity extends Activity {
 
     }
 
+//    public static void HiStartActivity(Activity a, Class toActivity){
+//        Intent intent = new Intent(a, toActivity);
+//        startActivity(intent);
+//    }
 
 //    public static showToast(String msg){
 //        HiLog.d("mToast="+mToast);
@@ -32,5 +38,7 @@ public abstract class HiActivity extends Activity {
 //        mToast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
 //        mToast.show();
 //    }
+
+
 
 }

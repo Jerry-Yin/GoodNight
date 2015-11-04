@@ -1,5 +1,6 @@
 package com.hdu.team.hiwanan.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,29 +9,42 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hdu.team.hiwanan.R;
+
 /**
  * Created by JerryYin on 11/3/15.
  */
-public class HiSleepFragment extends Fragment implements ViewPager.OnPageChangeListener {
+public class HiSleepFragment extends Fragment {
+
+    /**Constants*/
+    private View mContentView;
+    private Activity mSelf;
+
+
+    public Activity getmSelf(){
+        return mSelf;
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        if (null != mContentView){
+            ViewGroup vg = (ViewGroup) mContentView.getParent();
+            if (null != vg){
+                vg.removeView(mContentView);
+            }
+        }else {mSelf = getActivity();
+            mContentView = inflater.inflate(R.layout.layout_sleep, null);
+            mSelf = getActivity();
+            setupViews();
+        }
+        return mContentView;
     }
 
-    @Override
-    public void onPageScrolled(int i, float v, int i1) {
+    private void setupViews() {
+
 
     }
 
-    @Override
-    public void onPageSelected(int i) {
 
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int i) {
-
-    }
 }
