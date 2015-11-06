@@ -18,4 +18,12 @@
     <string name="wanan_daren">晚安达人</string>
     <string name="setting_hi">Hi语音设置</string>
     <string name="about_app">功能介绍</string>
+    <string name="wanan_voice">晚安语音</string>
+    <string name="shut_down">OFF</string>
+    <string name="open">ON</string>
+    <string name="about_app_function">功能介绍，，，</string>
+    <string name="switch_on_tips">您已经成功开启Hi语音提醒！</string>
+    <string name="switch_off_tips">您已经成功关闭Hi语音提醒！</string>
+    <string name="ready_time">预备时间</string>
+    <string name="ready_time_point">22 : 00</string>
 </resources>

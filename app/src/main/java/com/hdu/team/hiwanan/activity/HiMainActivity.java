@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
@@ -32,6 +33,7 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
     private static final String TAG = "HiMainActivity";
 
     /**Views*/
+    private RadioGroup mbuttomGroup;
     private RadioButton mbtnHomePage;
     private RadioButton mbtnGoodNight;
     private RadioButton mbtnSleep;
@@ -66,11 +68,13 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
         initViews();
 //        initDialog();
         changeFragment(getHomeFragment(), false);   //初次进入时默认加载第一页
+        initButton();
     }
 
     public void initViews() {
         mFragmentManager = getFragmentManager();
         mtextTitle = (TextView) findViewById(R.id.text_title);
+        mbuttomGroup = (RadioGroup) findViewById(R.id.buttom_group);
         mbtnHomePage = (RadioButton) findViewById(R.id.btn_home_page);
         mbtnGoodNight = (RadioButton) findViewById(R.id.btn_good_night);
         mbtnSleep = (RadioButton) findViewById(R.id.btn_sleep);
@@ -80,6 +84,11 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
         mbtnSleep.setOnClickListener(this);
         mbtnSetting.setOnClickListener(this);
 
+    }
+
+    /**初始化按钮点击效果，默认第一页*/
+    private void initButton() {
+        mbuttomGroup.check(R.id.btn_home_page);
     }
 
 //    private void initDialog() {

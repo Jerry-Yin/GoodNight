@@ -23,7 +23,9 @@
             android:paddingRight="0dp"
             android:paddingTop="5dp"
             android:text="@string/home_page"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:textColor="@color/tab_checked_text_color"/>
+
 
         <RadioButton
             android:id="@+id/btn_good_night"
@@ -37,7 +39,9 @@
             android:paddingRight="0dp"
             android:paddingTop="5dp"
             android:text="@string/good_night"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:textColor="@color/tab_checked_text_color"/>
+
 
         <RadioButton
             android:id="@+id/btn_sleep"
@@ -51,7 +55,9 @@
             android:paddingRight="0dp"
             android:paddingTop="5dp"
             android:text="@string/sleep"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:textColor="@color/tab_checked_text_color"/>
+
 
         <RadioButton
             android:id="@+id/btn_setting"
@@ -59,13 +65,14 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:button="@null"
-            android:drawableTop="@drawable/ic_person_outline_black_24dp"
+            android:drawableTop="@drawable/btn_setting"
             android:gravity="center"
             android:paddingLeft="0dp"
             android:paddingRight="0dp"
             android:paddingTop="5dp"
             android:text="@string/setting"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:textColor="@color/tab_checked_text_color"/>
 
     </RadioGroup>
 

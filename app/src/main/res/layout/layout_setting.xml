@@ -64,6 +64,7 @@
             android:layout_height="wrap_content">
 
             <RadioButton
+                android:id="@+id/btn_wanan_daren"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:button="@null"
@@ -80,6 +81,7 @@
                 android:background="#ECEFF1"/>
 
             <RadioButton
+                android:id="@+id/btn_setting_hi_voice"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:button="@null"
@@ -96,6 +98,7 @@
                 android:background="#ECEFF1"/>
 
             <RadioButton
+                android:id="@+id/btn_about_function"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:button="@null"
