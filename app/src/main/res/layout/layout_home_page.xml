@@ -13,30 +13,29 @@
         android:paddingTop="20dp"
         android:src="@drawable/shalou" />
 
-    <include
-        android:id="@+id/item_1"
-        layout="@layout/item_sleep_time"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp" />
+    <LinearLayout
+        android:id="@+id/sleep_time_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <include
+            android:id="@+id/item_1"
+            style="@style/SleepTime"
+            layout="@layout/item_sleep_time" />
 
-    <include
-        android:id="@+id/item_2"
-        layout="@layout/item_sleep_time"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp" />
+        <include
+            android:id="@+id/item_2"
+            layout="@layout/item_sleep_time"
+            style="@style/SleepTime" />
 
-    <include
-        android:id="@+id/item_3"
-        layout="@layout/item_sleep_time"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp" />
+        <include
+            android:id="@+id/item_3"
+            layout="@layout/item_sleep_time"
+            style="@style/SleepTime" />
+    </LinearLayout>
+
+
+    <ImageButton
+        android:id="@+id/btn_add_clock"
+        style="@style/BtnAdd" />
 </LinearLayout>
