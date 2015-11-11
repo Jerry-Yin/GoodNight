@@ -13,10 +13,10 @@
 
         <ImageView
             android:id="@+id/img_account"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:paddingLeft="10dp"
-            android:src="@drawable/img_account" />
+            android:src="@drawable/img_user_icon" />
 
         <TextView
             android:id="@+id/text_account_name"
@@ -67,6 +67,7 @@
                 android:id="@+id/btn_wanan_daren"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:background="@drawable/tab_pressed_btn_bg"
                 android:button="@null"
                 android:text="@string/wanan_daren"
                 android:textSize="18sp"
@@ -84,6 +85,7 @@
                 android:id="@+id/btn_setting_hi_voice"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:background="@drawable/tab_pressed_btn_bg"
                 android:button="@null"
                 android:text="@string/setting_hi"
                 android:textSize="18sp"
@@ -101,6 +103,7 @@
                 android:id="@+id/btn_about_function"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:background="@drawable/tab_pressed_btn_bg"
                 android:button="@null"
                 android:text="@string/about_app"
                 android:textSize="18sp"

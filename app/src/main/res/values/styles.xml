@@ -20,4 +20,16 @@
         <item name="android:layout_marginLeft">20dp</item>
         <item name="android:background">@drawable/btn_add</item>
     </style>
+    
+    <style name="AudioDialog">
+        <!-- 背景色 透明-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <!-- 是否是浮动在activity之上的-->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否是半透明的-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--  弹出对话框事屏幕是否需要变暗（模糊）-->
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
 </resources>

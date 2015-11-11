@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_bar_layout" />
+
+    <ListView
+        android:id="@+id/list_voice_item"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#ebebeb"
+        android:divider="@null"
+        android:dividerHeight="10dp"
+        android:cacheColorHint="@color/click_no_color"
+        android:listSelector="@color/click_no_color">
+
+    </ListView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ccc" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom"
+        android:background="#E0E0E0"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:src="@drawable/img_speak" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.hdu.team.hiwanan.view.HiVoiceRecorderButton
+                android:id="@+id/btn_speak"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/btn_speak_normal"
+                android:gravity="center"
+                android:minHeight="0dp"
+                android:padding="5dp"
+                android:text="@string/str_press_to_speak_normal"
+                android:textColor="#727272">
+            </com.hdu.team.hiwanan.view.HiVoiceRecorderButton>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>

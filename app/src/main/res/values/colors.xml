@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="test_color">#BDBDBD</color>
+    <color name="color_voice_text">#ffffff</color>
+    <color name="text_voice_length">#ff777777</color>
+
+    <!-- 点击语音播放时不会显示颜色listview的点击颜色-->
+    <color name="click_no_color">#00000000</color>
+
+
+    <drawable name="main_button_checked_bg">#BDBDBD</drawable>
+    <drawable name="radio_btn_pressed_bg">#BDBDBD</drawable>
+    <drawable name="img_around_color">#616161</drawable>
+    <drawable name="img_pressed_bg_normal">#E0E0E0</drawable>
+    <drawable name="img_pressed_bg_pressed">#B0BEC5</drawable>
+</resources>

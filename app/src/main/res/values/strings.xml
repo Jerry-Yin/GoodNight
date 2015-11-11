@@ -9,9 +9,11 @@
     <string name="setting">设置</string>
     <string name="sleep">睡眠</string>
     <string name="good_night">晚安</string>
+
     <string name="hiwanan">Hi 晚安</string>
     <string name="wananji">晚安集</string>
     <string name="zhushuimian">助睡眠</string>
+
     <string name="sleep_record">睡眠记录</string>
     <string name="account_name">hello man</string>
     <string name="text_level">晚安达人</string>
@@ -24,6 +26,14 @@
     <string name="about_app_function">功能介绍，，，</string>
     <string name="switch_on_tips">您已经成功开启Hi语音提醒！</string>
     <string name="switch_off_tips">您已经成功关闭Hi语音提醒！</string>
+
     <string name="ready_time">预备时间</string>
     <string name="ready_time_point">22 : 00</string>
+
+    <string name="str_press_to_speak_normal">按住 说话</string>
+    <string name="str_press_to_speak_recording">松开 结束</string>
+    <string name="str_press_to_speak_cancel">松开手指，取消发送</string>
+    <string name="str_press_to_speak_tooshort">录音时间过短！</string>
+    <string name="str_recorder_dialog">手指上划，取消发送</string>
+
 </resources>

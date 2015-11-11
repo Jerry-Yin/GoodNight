@@ -4,46 +4,70 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/title_bar_layout"/>
+    <include layout="@layout/title_bar_layout" />
 
     <FrameLayout
-        android:layout_below="@+id/title_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_layout">
 
         <LinearLayout
             android:id="@+id/frgment_root"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </LinearLayout>
+            android:layout_height="match_parent"></LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:background="#E0E0E0"
             android:layout_gravity="bottom"
+            android:background="#E0E0E0"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_voice"
-                android:layout_gravity="center_vertical"/>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:src="@drawable/img_voice" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="#ECEFF1">
+                android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/btn_speak"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/img_speak"
-                    android:layout_gravity="center"/>
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/img_around_color">
+
+                    <!--<ImageView-->
+                    <!--android:id="@+id/btn_speak"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_marginTop="1.5dp"-->
+                    <!--android:layout_marginBottom="1.5dp"-->
+                    <!--android:layout_marginLeft="1.5dp"-->
+                    <!--android:layout_marginRight="1.5dp"-->
+                    <!--android:src="@drawable/img_speak"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:background="@drawable/tab_pressed_img_bg"/>-->
+
+                    <Button
+                        android:id="@+id/btn_speak"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginTop="1dp"
+                        android:background="@drawable/tab_pressed_img_bg"
+                        android:text="@string/str_press_to_speak_normal" />
+                </LinearLayout>
+
             </RelativeLayout>
 
         </LinearLayout>
