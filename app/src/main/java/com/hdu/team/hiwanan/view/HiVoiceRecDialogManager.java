@@ -11,6 +11,7 @@ import com.hdu.team.hiwanan.R;
 
 /**
  * Created by JerryYin on 11/9/15.
+ * 录音时的dialog类，绑定了写好的dialog布局文件
  */
 public class HiVoiceRecDialogManager {
 

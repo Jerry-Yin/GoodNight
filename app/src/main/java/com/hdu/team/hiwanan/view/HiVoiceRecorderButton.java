@@ -11,49 +11,33 @@ import android.view.View;
 import android.widget.Button;
 
 import com.hdu.team.hiwanan.R;
+import com.hdu.team.hiwanan.manager.HiMediaRecordManager;
 
 
 /**
  * Created by JerryYin on 11/9/15.
  * 发送语音消息的按钮button类
  */
-public class HiVoiceRecorderButton extends Button implements HiAudioManager.AudioStateListener {
+public class HiVoiceRecorderButton extends Button implements HiMediaRecordManager.AudioStateListener {
 
-    /**
-     * 三种状态
-     */
+    /** 三种状态*/
     private final static int STATE_NORMAL = 1;
     private final static int STATE_SPEARKING = 2;
     private final static int STATE_WANT_TO_CANCEL = 3;
-
-    /**
-     * 当前状态 （默认正常）
-     */
+    /** 当前状态 （默认正常）*/
     private int mCurState = STATE_NORMAL;
-
-    /**
-     * y方向超出一定距离 认为取消录音
-     */
+    /** y方向超出一定距离 认为取消录音*/
     private final static int DISTANCE_Y_CANCEL = 50;
-
-    /**
-     * 是否已经开始录音
-     */
+    /** 是否已经开始录音*/
     private boolean isRecording = false;
-
-    /**
-     * 需要整合的dialog
-     */
+    /** 需要整合的dialog*/
     private HiVoiceRecDialogManager mDialogManager;
-
-    private HiAudioManager mHiAudioManager;
+    private HiMediaRecordManager mHiMediaRecordManager;
 
     private float mTime;    //计时时长
     private boolean mReady;    //是否触发LongClick；
 
-    /**
-     * 振动器
-     */
+    /** 振动器*/
     private Vibrator mVibrator;
 
 
@@ -70,7 +54,7 @@ public class HiVoiceRecorderButton extends Button implements HiAudioManager.Audi
          * 整合音频部分
          * 音频存储在外置sd卡根目录的 /hiwanan_voice_audios/ 文件夹下
          */
-        initAudioManager();
+        initMediaRecorder();
 
     }
 
@@ -80,33 +64,34 @@ public class HiVoiceRecorderButton extends Button implements HiAudioManager.Audi
             @Override
             public boolean onLongClick(View v) {
                 mReady = true;
-                mHiAudioManager.prepareAudio();
+                mHiMediaRecordManager.prepareAudio();
                 return false;
             }
         });
     }
 
+    private void initMediaRecorder() {
+        String dir = Environment.getExternalStorageDirectory() + "/hiwanan_voice_audios";
+        mHiMediaRecordManager = HiMediaRecordManager.getInstance(dir);
+        mHiMediaRecordManager.setOnAudioStateListener(this);        //录音准备完毕回调
+    }
+
     /**
      * 录音完成后的回调接口
      */
-    public interface AudioFinishRecorderListener {
+    public interface OnFinishRecorderListener {
         void onFinish(float times, String filePath);
     }
 
-    private AudioFinishRecorderListener mListener;
+    private OnFinishRecorderListener mListener;
 
-    public void setAudioFinishRecorderListener(AudioFinishRecorderListener listener) {
+    public void setAudioFinishRecorderListener(OnFinishRecorderListener listener) {
         mListener = listener;
     }
 
-    private void initAudioManager() {
-        String dir = Environment.getExternalStorageDirectory() + "/hiwanan_voice_audios";
-        mHiAudioManager = HiAudioManager.getInstance(dir);
-        mHiAudioManager.setOnAudioStateListener(this);
-    }
-
+    //录音准备完毕
     @Override
-    public void donePrepared() {
+    public void OnDenePrepared() {
         mHandler.sendEmptyMessage(MSG_AUDIO_PREPARED);
     }
 
@@ -120,11 +105,9 @@ public class HiVoiceRecorderButton extends Button implements HiAudioManager.Audi
         public void run() {
             while (isRecording) {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(100);  //每隔0.1s更新一次音量图片
                     mTime += 0.1f;      //累计时长
                     mHandler.sendEmptyMessage(MSG_VOICE_CHANGED);
-
-
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -132,6 +115,9 @@ public class HiVoiceRecorderButton extends Button implements HiAudioManager.Audi
         }
     };
 
+    /**
+     * handler,用来协同线程，完成振动，dialog显示， 更新音量图片，累计录音时长 以及 关闭dialog；
+     */
     private static final int MSG_AUDIO_PREPARED = 0X001;
     private static final int MSG_VOICE_CHANGED = 0X002;
     private static final int MSG_DIALOG_DISMISS = 0X003;
@@ -150,7 +136,7 @@ public class HiVoiceRecorderButton extends Button implements HiAudioManager.Audi
 
                     break;
                 case MSG_VOICE_CHANGED:
-                    mDialogManager.updateVoiceLevel(mHiAudioManager.getVoiceLevel(7));
+                    mDialogManager.updateVoiceLevel(mHiMediaRecordManager.getVoiceLevel(7));
                     break;
                 case MSG_DIALOG_DISMISS:
                     mDialogManager.dismissDialog();
@@ -161,9 +147,9 @@ public class HiVoiceRecorderButton extends Button implements HiAudioManager.Audi
         ;
     };
 
+    //振动
     private void showVibrator() {
         //震动一秒
-//        mVibrator = (Vibrator) getApplication().getSystemService(VIBRATOR_SERVICE);
         mVibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
         if (mVibrator.hasVibrator()) {
             //条件是设备有振动器
@@ -205,21 +191,21 @@ public class HiVoiceRecorderButton extends Button implements HiAudioManager.Audi
                 if (!isRecording || mTime < 0.6f) {
                     //prepar还未完成就up
                     mDialogManager.tooShort();
-                    mHiAudioManager.cancel();
+                    mHiMediaRecordManager.cancel();
                     mHandler.sendEmptyMessageDelayed(MSG_DIALOG_DISMISS, 1300);     //延迟，1.3s以后关闭dialog
                 } else if (mCurState == STATE_SPEARKING) {
                     //正常录制结束
                     mDialogManager.dismissDialog();
-                    mHiAudioManager.release();
+                    mHiMediaRecordManager.release();
 
                     if (mListener != null) {
-                        mListener.onFinish(mTime, mHiAudioManager.getCurFilePath());
+                        mListener.onFinish(mTime, mHiMediaRecordManager.getCurFilePath());
                     }
                     //todo callbackToActivity保存录音
 
                 } else if (mCurState == STATE_WANT_TO_CANCEL) {
                     mDialogManager.dismissDialog();
-                    mHiAudioManager.cancel();
+                    mHiMediaRecordManager.cancel();
                     //cancel()
 
                 }

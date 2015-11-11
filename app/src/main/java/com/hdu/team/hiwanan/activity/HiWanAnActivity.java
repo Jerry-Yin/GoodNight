@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
-import com.hdu.team.hiwanan.manager.HiMediaManager;
+import com.hdu.team.hiwanan.manager.HiMediaPlayerManager;
 import com.hdu.team.hiwanan.view.HiVoiceRecorderButton;
 
 import java.util.ArrayList;
@@ -43,8 +43,8 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
      * Values
      */
     private Vibrator mVibrator;
-    private ArrayAdapter<Recorder> mAdapter;
-    private List<Recorder> mDataLists = new ArrayList<>();
+    private ArrayAdapter<RecorderVoice> mAdapter;
+    private List<RecorderVoice> mDataLists = new ArrayList<>();
     private View mAnimView;
 
     @Override
@@ -65,31 +65,16 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
         mAdapter = new HiVoiceListAdapter(this, mDataLists);
         mlistVoice.setAdapter(mAdapter);
         mbtnSpeak = (HiVoiceRecorderButton) findViewById(R.id.btn_speak);
-        mbtnSpeak.setAudioFinishRecorderListener(new HiVoiceRecorderButton.AudioFinishRecorderListener() {
+        mbtnSpeak.setAudioFinishRecorderListener(new HiVoiceRecorderButton.OnFinishRecorderListener() {
             @Override
             public void onFinish(float times, String filePath) {
                 //录音完成调用
-                Recorder recorder = new Recorder(filePath, times);
-                mDataLists.add(recorder);
+                RecorderVoice recorderVoice = new RecorderVoice(filePath, times);
+                mDataLists.add(recorderVoice);
                 mAdapter.notifyDataSetChanged();
                 mlistVoice.setSelection(mDataLists.size() - 1);
             }
         });
-//        mbtnSpeak.setOnClickListener(this);
-//        mbtnSpeak.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                //震动一秒
-                mVibrator = (Vibrator) getApplication().getSystemService(VIBRATOR_SERVICE);
-//                if (mVibrator.hasVibrator()){
-//                    //条件是设备有振动器
-//                    long[] param = {0, 10};     //(等待开启震动的时间， 持续时间)
-//                    mVibrator.vibrate(param, -1);    //(时间,  －1 标识只震动一次)
-//                }
-//                return false;
-//            }
-//        });
-
         mlistVoice.setOnItemClickListener(this);
 
     }
@@ -130,7 +115,7 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
         animationDrawable.start();
 
         //TODO 播放音频
-        HiMediaManager.playSound(mDataLists.get(position).filePath, new MediaPlayer.OnCompletionListener() {
+        HiMediaPlayerManager.playSound(mDataLists.get(position).filePath, new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 //TODO 播放完成后调用
@@ -143,12 +128,12 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
     /**
      * 记录录音voice条目的类
      */
-    class Recorder {
+    class RecorderVoice {
         String filePath;
         float time;
 
 
-        public Recorder(String filePath, float time) {
+        public RecorderVoice(String filePath, float time) {
             super();
             this.filePath = filePath;
             this.time = time;
@@ -172,10 +157,10 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
     }
 
     /**
-     * 适配器 ArrayAdapter<Recorder>
+     * 适配器 ArrayAdapter<RecorderVoice>
      */
-    public class HiVoiceListAdapter extends ArrayAdapter<Recorder> {
-        private List<Recorder> mDatas;
+    public class HiVoiceListAdapter extends ArrayAdapter<RecorderVoice> {
+        private List<RecorderVoice> mDatas;
         private Context mContext;
         private LayoutInflater mLayoutInflater;
 
@@ -183,7 +168,7 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
         private int itemMinWidth;
         private int itemMaxWidth;
 
-        public HiVoiceListAdapter(Context context, List<Recorder> datas) {
+        public HiVoiceListAdapter(Context context, List<RecorderVoice> datas) {
             super(context, -1, datas);
             mLayoutInflater = LayoutInflater.from(context);
             //获取屏幕宽度
@@ -222,18 +207,18 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
     @Override
     protected void onPause() {
         super.onPause();
-        HiMediaManager.pause();
+        HiMediaPlayerManager.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        HiMediaManager.resume();
+        HiMediaPlayerManager.resume();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        HiMediaManager.release();
+        HiMediaPlayerManager.release();
     }
 }

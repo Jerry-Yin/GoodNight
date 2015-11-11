@@ -7,11 +7,11 @@ import java.io.IOException;
 
 /**
  * Created by JerryYin on 11/10/15.
- * 用于播放音频的管理类
+ * 用于MediaPlayer播放音频的管理类
  * 根据 官网 http://developer.android.com/intl/zh-cn/reference/android/media/MediaPlayer.html
  * 的MediaPlayer 流程方法编写状态图
  */
-public class HiMediaManager {
+public class HiMediaPlayerManager {
 
     private static MediaPlayer mMediaPlayer;
     private static boolean isPaused;    //是否暂停掉

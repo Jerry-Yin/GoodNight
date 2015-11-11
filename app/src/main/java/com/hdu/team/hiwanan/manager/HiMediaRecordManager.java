@@ -1,4 +1,4 @@
-package com.hdu.team.hiwanan.view;
+package com.hdu.team.hiwanan.manager;
 
 import android.media.MediaRecorder;
 
@@ -8,12 +8,13 @@ import java.util.UUID;
 
 /**
  * Created by JerryYin on 11/10/15.
+ * MediaRecorder录音 管理类
  * 单例化 编写
  */
-public class HiAudioManager {
+public class HiMediaRecordManager {
 
     private MediaRecorder mediaRecorder;
-    private String mDir;    //文件夹，用于保存录音文件
+    private String mDir;    //文件夹名字，用于保存录音文件
     private String mCurFilePath;    //文件夹路径     (需要回传) -->Button -->Activity
 
     private boolean isPrepared = false;
@@ -21,9 +22,9 @@ public class HiAudioManager {
     /**
      * 单例化
      */
-    private static HiAudioManager mInstance;
+    private static HiMediaRecordManager mInstance;
 
-    private HiAudioManager(String dir) {
+    private HiMediaRecordManager(String dir) {
         mDir = dir;
     }
 
@@ -35,7 +36,7 @@ public class HiAudioManager {
      * 回调准备完毕
      */
     public interface AudioStateListener {
-        void donePrepared();
+        void OnDenePrepared();
     }
 
     public AudioStateListener mAudioStateListener;
@@ -47,11 +48,11 @@ public class HiAudioManager {
     /**
      * 工厂方法
      */
-    public static HiAudioManager getInstance(String dir) {
+    public static HiMediaRecordManager getInstance(String dir) {
         if (mInstance == null) {
-            synchronized (HiAudioManager.class) {        // 同步
+            synchronized (HiMediaRecordManager.class) {        // 同步
                 if (mInstance == null) {
-                    mInstance = new HiAudioManager(dir);
+                    mInstance = new HiMediaRecordManager(dir);
                 }
             }
         }
@@ -89,7 +90,7 @@ public class HiAudioManager {
             isPrepared = true;
             //TODO 可以开始录音
             if (mAudioStateListener != null){
-                mAudioStateListener.donePrepared();
+                mAudioStateListener.OnDenePrepared();
             }
 
         } catch (IllegalStateException | IOException e) {
