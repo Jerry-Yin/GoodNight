@@ -3,11 +3,13 @@
     package="com.hdu.team.hiwanan">
 
     <!-- 震动-->
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
     <!-- 录音 和读写文件 的权限-->
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="ANDROID.PERMISSION.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +18,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activity.HiMainActivity"
+            android:name=".activity.HiLoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -25,6 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activity.HiRegistActivity"></activity>
+        <activity android:name=".activity.HiMainActivity"></activity>
 
         <activity
             android:name=".activity.HiWanAnActivity"

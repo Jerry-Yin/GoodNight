@@ -98,12 +98,7 @@ public class HiVoiceRecDialogManager {
      */
     public void updateVoiceLevel(int level) {
         if (mDialog != null && mDialog.isShowing()) {
-//            mImgRecIcon.setVisibility(View.VISIBLE);
-//            mImgRecVoice.setVisibility(View.GONE);
-//            mtxtRecDialog.setVisibility(View.VISIBLE);
-
             int resId = mContext.getResources().getIdentifier("voice"+level, "drawable", mContext.getPackageName());
-
             mImgRecVoice.setImageResource(resId);
         }
     }

@@ -2,10 +2,10 @@ package com.hdu.team.hiwanan.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -19,10 +19,14 @@ import com.hdu.team.hiwanan.util.HiToast;
  */
 public class HiVoiceSettingActivity extends Activity implements View.OnClickListener {
 
-    /**Values*/
-//    public static boolean SWITCH_STATUS = false;    //标志位，用于判断switch开关的状态
-
-    /**Views*/
+    /**
+     * Values
+     */
+    private final String[] mItemSex = new String[]{"只看异性", "只看同性", "任意性别"};
+    private SharedPreferences.Editor mEditor;
+    /**
+     * Views
+     */
     private TextView mTextTitle;
     private Switch mSwitchVoice;
 
@@ -33,8 +37,14 @@ public class HiVoiceSettingActivity extends Activity implements View.OnClickList
         setContentView(R.layout.layout_setting_hi_voice);
 
         setupViews();
+        initData();
         setupSwitch();
 
+        int[] a = new int[3];
+    }
+
+    private void initData() {
+        mEditor = getSharedPreferences(HiConstants.HI_PREFERENCE_NAME, MODE_PRIVATE).edit();
     }
 
     private void setupViews() {
@@ -81,22 +91,61 @@ public class HiVoiceSettingActivity extends Activity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.switch_voice:
-                SharedPreferences.Editor editor = getSharedPreferences(HiConstants.HI_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
                 //设置并存储switch对应的状态
                 if (mSwitchVoice.isChecked()) {
-                    editor.putBoolean("hi_switch_status", true);
-                    HiToast.showToast(HiVoiceSettingActivity.this, R.string.switch_on_tips);
+                    mEditor.putBoolean("hi_switch_status", true);
+//                    HiToast.showToast(HiVoiceSettingActivity.this, R.string.switch_on_tips);
+                    showDialog();
 
                 } else {
-                    editor.putBoolean("hi_switch_status", false);
+                    mEditor.putBoolean("hi_switch_status", false);
                     HiToast.showToast(HiVoiceSettingActivity.this, R.string.switch_off_tips);
                 }
-                editor.commit();
+                mEditor.commit();
                 break;
 
             default:
                 break;
         }
+    }
+
+    public void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Hi语音类别选择")
+                .setItems(mItemSex, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+                                HiToast.showToast(HiVoiceSettingActivity.this, R.string.sex_diff_choosed);
+                                mEditor.putBoolean(HiConstants.KEY_SEX_DIF, true);
+                                mEditor.putBoolean(HiConstants.KEY_SEX_SAME, false);
+                                mEditor.putBoolean(HiConstants.KEY_SEX_ALL, false);
+                                mEditor.commit();
+                                break;
+
+                            case 1:
+                                HiToast.showToast(HiVoiceSettingActivity.this, R.string.sex_same_choosed);
+                                mEditor.putBoolean(HiConstants.KEY_SEX_DIF, false);
+                                mEditor.putBoolean(HiConstants.KEY_SEX_SAME, true);
+                                mEditor.putBoolean(HiConstants.KEY_SEX_ALL, false);
+                                mEditor.commit();
+                                break;
+
+                            case 2:
+                                HiToast.showToast(HiVoiceSettingActivity.this, R.string.sex_all_choosed);
+                                mEditor.putBoolean(HiConstants.KEY_SEX_DIF, false);
+                                mEditor.putBoolean(HiConstants.KEY_SEX_SAME, false);
+                                mEditor.putBoolean(HiConstants.KEY_SEX_ALL, true);
+                                mEditor.commit();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                })
+                .create().show();
     }
 }
 

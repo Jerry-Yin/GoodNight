@@ -18,8 +18,12 @@ import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.manager.HiMediaPlayerManager;
+import com.hdu.team.hiwanan.util.HiConstants;
+import com.hdu.team.hiwanan.util.HiLog;
+import com.hdu.team.hiwanan.utils.HiUploadAudioUtil;
 import com.hdu.team.hiwanan.view.HiVoiceRecorderButton;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +32,7 @@ import java.util.List;
  */
 public class HiWanAnActivity extends HiActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
+    private final static String TAG = "HiWanAnActivity";
 
     /**
      * Views
@@ -76,7 +81,6 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
             }
         });
         mlistVoice.setOnItemClickListener(this);
-
     }
 
     @Override
@@ -104,7 +108,7 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //为防止在播放一个item 的时候 点击了另外一个item
-        if (mAnimView != null){
+        if (mAnimView != null) {
             mAnimView.setBackgroundResource(R.drawable.img_anim);
             mAnimView = null;
         }
@@ -122,6 +126,10 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
                 mAnimView.setBackgroundResource(R.drawable.img_anim);
             }
         });
+
+        //TODO 传送音频到服务器
+        String result = HiUploadAudioUtil.upLoadAudio(new File(mDataLists.get(position).filePath), HiConstants.TEST_URL);
+        HiLog.d(TAG, "result = "+result);
 
     }
 
@@ -182,24 +190,24 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
-            if (convertView == null){
+            if (convertView == null) {
                 convertView = mLayoutInflater.inflate(R.layout.item_record_voice, parent, false);
                 holder = new ViewHolder();
                 holder.seconds = (TextView) convertView.findViewById(R.id.text_voice_time);
                 holder.length = convertView.findViewById(R.id.zone_voice_msg);
                 convertView.setTag(holder);
-            }else {
+            } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             holder.seconds.setText(Math.round(getItem(position).time) + "\"");
             ViewGroup.LayoutParams lp = holder.length.getLayoutParams();
-            lp.width = (int) (itemMinWidth + itemMaxWidth/60f*getItem(position).time);  //此处设置最大时长为60s
+            lp.width = (int) (itemMinWidth + itemMaxWidth / 60f * getItem(position).time);  //此处设置最大时长为60s
 
             return convertView;
         }
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         TextView seconds;   //时长秒数
         View length;        //item条目宽度
     }

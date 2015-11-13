@@ -36,4 +36,23 @@
     <string name="str_press_to_speak_tooshort">录音时间过短！</string>
     <string name="str_recorder_dialog">手指上划，取消发送</string>
 
+    <string name="text_logo">Hi WanAn</string>
+    <string name="hint_login_user">用户名/电话号码</string>
+    <string name="hint_login_pwd">密码</string>
+    <string name="text_regist">注册</string>
+    <string name="text_login">登录</string>
+    <string name="sex">性别：</string>
+    <string name="sex_man">汉子</string>
+    <string name="sex_woman">妹纸</string>
+    <string name="type_student">学生党</string>
+    <string name="type_worker">工作党</string>
+
+    <string name="only_same_sex">只看异性</string>
+    <string name="only_diff_sex">只看同性</string>
+    <string name="all_sex_ok">任意性别</string>
+
+    <string name="sex_same_choosed">您已经选择为只看同性</string>
+    <string name="sex_diff_choosed">您已经选择为只看异性</string>
+    <string name="sex_all_choosed">您已经选择为看任意性别</string>
+
 </resources>
