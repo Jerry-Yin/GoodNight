@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="20dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/tab_pressed_btn_bg"
         android:orientation="horizontal">
 
         <ImageView
@@ -106,6 +106,24 @@
                 android:background="@drawable/tab_pressed_btn_bg"
                 android:button="@null"
                 android:text="@string/about_app"
+                android:textSize="18sp"
+                android:paddingLeft="10dp"
+                android:drawableLeft="@drawable/abc_btn_radio_to_on_mtrl_015"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:background="#ECEFF1"/>
+
+            <RadioButton
+                android:id="@+id/btn_clean"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/tab_pressed_btn_bg"
+                android:button="@null"
+                android:text="@string/clean_source"
                 android:textSize="18sp"
                 android:paddingLeft="10dp"
                 android:drawableLeft="@drawable/abc_btn_radio_to_on_mtrl_015"/>

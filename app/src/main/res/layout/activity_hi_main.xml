@@ -9,7 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/title_bar_layout" />
+        <include
+            android:id="@+id/title_bar"
+            layout="@layout/title_bar_layout" />
     </RelativeLayout>
 
     <FrameLayout

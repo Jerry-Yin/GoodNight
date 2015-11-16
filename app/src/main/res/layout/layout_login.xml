@@ -120,4 +120,20 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btn_start_lock_service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="启动锁屏服务"/>
+
+    <Button
+        android:id="@+id/btn_send_broadcast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="发送锁屏广播"/>
+
 </LinearLayout>

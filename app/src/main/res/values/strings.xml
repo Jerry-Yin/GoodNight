@@ -20,6 +20,8 @@
     <string name="wanan_daren">晚安达人</string>
     <string name="setting_hi">Hi语音设置</string>
     <string name="about_app">功能介绍</string>
+    <string name="clean_source">清除缓存</string>
+
     <string name="wanan_voice">晚安语音</string>
     <string name="shut_down">OFF</string>
     <string name="open">ON</string>
@@ -54,5 +56,11 @@
     <string name="sex_same_choosed">您已经选择为只看同性</string>
     <string name="sex_diff_choosed">您已经选择为只看异性</string>
     <string name="sex_all_choosed">您已经选择为看任意性别</string>
+
+    <string name="title_text_wanan">晚安吧</string>
+    <string name="btn_share">发送</string>
+    <string name="type_something">用文字来跟自己说晚安吧 ...</string>
+    <string name="just_9_img">图片最多9张</string>
+    <string name="add_picture">添加图片</string>
 
 </resources>

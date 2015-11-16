@@ -10,6 +10,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.hdu.team.hiwanan.R;
+import com.hdu.team.hiwanan.service.HiLockScreenService;
+import com.hdu.team.hiwanan.tools.HiFullScreenTools;
+import com.hdu.team.hiwanan.util.HiConstants;
 import com.hdu.team.hiwanan.view.HiLoadingDialogManager;
 
 /**
@@ -22,7 +25,7 @@ public class HiLoginActivity extends Activity implements View.OnClickListener {
     private static final int RESULT_CODE = 1;
 
     /**Views*/
-    private Button mBtnLogin, mbtnRegister;
+    private Button mBtnLogin, mbtnRegister, mBtnLockScreen, mBtnSendBroadcast;
     private EditText mTxtAccount, mTxtPwd;
     private ImageView mBtnForgetPwd;
 
@@ -32,6 +35,7 @@ public class HiLoginActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.layout_login);
 
         initViews();
+//        HiFullScreenTools.updateFullscreenStatus(this, false);
     }
 
     private void initViews() {
@@ -43,6 +47,11 @@ public class HiLoginActivity extends Activity implements View.OnClickListener {
         mBtnLogin.setOnClickListener(this);
         mbtnRegister.setOnClickListener(this);
         mBtnForgetPwd.setOnClickListener(this);
+
+        mBtnLockScreen = (Button) findViewById(R.id.btn_start_lock_service);
+        mBtnSendBroadcast = (Button) findViewById(R.id.btn_send_broadcast);
+        mBtnLockScreen.setOnClickListener(this);
+        mBtnSendBroadcast.setOnClickListener(this);
     }
 
     @Override
@@ -65,6 +74,19 @@ public class HiLoginActivity extends Activity implements View.OnClickListener {
             case R.id.img_forget_pwd:
 
                 break;
+
+            case R.id.btn_start_lock_service:
+                Intent intent1 = new Intent(this, HiLockScreenService.class);
+                startService(intent1);
+                break;
+
+            case R.id.btn_send_broadcast:
+                // 发送锁屏广播（显示锁屏界面）
+//                Intent i2 = new Intent(Intent.ACTION_SCREEN_OFF);
+////                i2.setAction()
+//                sendBroadcast(i2);
+                break;
+
 
             default:
                 break;

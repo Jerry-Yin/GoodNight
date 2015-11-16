@@ -15,6 +15,7 @@ import android.widget.RadioButton;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiWanAnActivity;
+import com.hdu.team.hiwanan.activity.HiWanAnShareActivity;
 
 /**
  * Created by JerryYin on 11/3/15.
@@ -72,7 +73,7 @@ public class HiGoodNightFragment extends Fragment implements View.OnClickListene
                 break;
 
             case R.id.btn_collection_wanan:
-
+                HiStartActivity(mSelf, HiWanAnShareActivity.class);
                 break;
 
             case R.id.btn_help_sleep:

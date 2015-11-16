@@ -13,9 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
@@ -37,7 +39,9 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
     private RadioButton mbtnGoodNight;
     private RadioButton mbtnSleep;
     private RadioButton mbtnSetting;
+
     private TextView mtextTitle;
+    private RelativeLayout mTitleBar;
 
     /**Fragments*/
     private FragmentManager mFragmentManager;
@@ -82,7 +86,11 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
         mbtnGoodNight.setOnClickListener(this);
         mbtnSleep.setOnClickListener(this);
         mbtnSetting.setOnClickListener(this);
+        mTitleBar = (RelativeLayout) findViewById(R.id.title_bar);
+        mTitleBar.getChildAt(0).setVisibility(View.GONE);
+        mTitleBar.getChildAt(2).setVisibility(View.GONE);
 
+        mtextTitle.setText(R.string.home_page);
     }
 
     /**初始化按钮点击效果，默认第一页*/

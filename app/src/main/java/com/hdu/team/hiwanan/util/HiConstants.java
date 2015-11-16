@@ -24,5 +24,11 @@ public class HiConstants {
     public final static String KEY_SEX_ALL = "sex_all";
 
 
+    /**
+     * 锁屏，解锁服务 参数
+     */
+    public final static String LOCK_SCREEN = "0X11";
+    public final static String UN_LOCK_SCREEN = "0X12";
+
 
 }

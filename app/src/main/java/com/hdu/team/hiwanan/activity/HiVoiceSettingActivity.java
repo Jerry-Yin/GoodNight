@@ -145,6 +145,7 @@ public class HiVoiceSettingActivity extends Activity implements View.OnClickList
                         }
                     }
                 })
+                .setCancelable(false)
                 .create().show();
     }
 }
