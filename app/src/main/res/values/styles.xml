@@ -21,6 +21,7 @@
         <item name="android:background">@drawable/btn_add</item>
     </style>
     
+    <!-- 录音时的 dialog -->
     <style name="AudioDialog">
         <!-- 背景色 透明-->
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -39,4 +40,5 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
     </style>
+    
 </resources>

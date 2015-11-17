@@ -26,6 +26,7 @@ import com.hdu.team.hiwanan.fragments.HiHomePageFragment;
 import com.hdu.team.hiwanan.fragments.HiSettingFragment;
 import com.hdu.team.hiwanan.fragments.HiSleepFragment;
 import com.hdu.team.hiwanan.util.HiToast;
+import com.jauker.widget.BadgeView;
 
 
 public class HiMainActivity extends HiActivity implements View.OnClickListener {
@@ -42,6 +43,8 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
 
     private TextView mtextTitle;
     private RelativeLayout mTitleBar;
+
+    private BadgeView mBadgeView;
 
     /**Fragments*/
     private FragmentManager mFragmentManager;
@@ -72,6 +75,7 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
 //        initDialog();
         changeFragment(getHomeFragment(), false);   //初次进入时默认加载第一页
         initButton();
+        initBadgeView();
     }
 
     public void initViews() {
@@ -102,6 +106,17 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
 //        mQuitDialogBulider = new AlertDialog.Builder(mIntance);
 //        mQuitDialogBulider.setIcon()
 //    }
+
+    private void initBadgeView(){
+        //底部第二个按钮
+        mBadgeView = new BadgeView(this);
+        mBadgeView.setBadgeCount(8);
+//        mBadgeView.setBadgeMargin(5);
+        mBadgeView.setBadgeMargin(7, 7, 10, 10);
+//        mBadgeView.setBackgroundResource(R.color.title_color);
+//        mBadgeView.setBackground(1, R.color.title_color);
+        mBadgeView.setTargetView(findViewById(R.id.view_good_night));
+    }
 
     @Override
     public void onClick(View v) {

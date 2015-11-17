@@ -73,7 +73,7 @@ public class HiLockScreenService extends Service {
         //保留了开启service的intent，在这里再启动一次自己，以达到长期运行的服务，不被系统杀死
         if (mStartIntent != null) {
             System.out.println("serviceIntent not null");
-//            startService(mStartIntent);
+            startService(mStartIntent);
         }
     }
 }

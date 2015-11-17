@@ -12,8 +12,10 @@
 
     <uses-permission android:name="ANDROID.PERMISSION.INTERNET" />
 
-
     <uses-feature android:name="android.hardware.Camera" />
+
+    <!-- 取消系统锁屏权限-->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
 
     <application
         android:allowBackup="true"
@@ -56,10 +58,24 @@
 
         <!-- 锁屏界面 全屏显示-->
         <activity android:name=".activity.HiLockScreenActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:launchMode="singleTask">
         </activity>
 
-        <service android:name=".service.HiLockScreenService"></service>
+        <service android:name=".service.HiLockScreenService">
+        </service>
+
+        <!-- 为捕获home键而设置的 空的 activity， 不需要显示 (Theme.NoDisplay)；-->
+        <!-- 但非锁屏状态下按home，也会调用此home界面。我们只需在home界面onCreate（）里如此设置即可-->
+        <activity android:name=".activity.HiLockScreenHome"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
