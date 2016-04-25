@@ -1,10 +1,12 @@
 package com.hdu.team.hiwanan.activity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
+import com.hdu.team.hiwanan.manager.SystemBarTintManager;
 
 /**
  * Created by JerryYin on 11/4/15.

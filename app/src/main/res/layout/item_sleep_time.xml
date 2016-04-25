@@ -1,49 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="40dp">
-
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:descendantFocusability="blocksDescendants">
 
     <ImageView
-        android:id="@+id/img1"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:id="@+id/img_icon"
+        android:layout_width="0dp"
+        android:layout_weight="0.1"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_access_alarm_black_24dp" />
 
     <TextView
         android:id="@+id/text_ready_time"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/img1"
-        android:gravity="center_vertical"
-        android:paddingLeft="20dp"
+        android:layout_width="0dp"
+        android:layout_weight="0.3"
+        android:layout_height="60dp"
+        android:gravity="center"
         android:text="@string/ready_time"
         android:textSize="18sp" />
 
     <TextView
         android:id="@+id/text_ready_time_point"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@id/text_ready_time"
-        android:gravity="center_vertical"
-        android:paddingLeft="40dp"
+        android:layout_width="0dp"
+        android:layout_weight="0.3"
+        android:layout_height="60dp"
+        android:gravity="center"
         android:text="@string/ready_time_point"
         android:textSize="18sp" />
 
     <Switch
         android:id="@+id/switch_ready_time"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight="0.3"
         android:layout_toRightOf="@+id/text_ready_time_point"
-        android:layout_alignParentRight="true"
-        android:paddingRight="10dp"
-        android:textOn="@string/open"
-        android:textOff="@string/shut_down"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:showText="true"
-        android:thumbTextPadding="2dp"
+        android:switchMinWidth="29sp"
         android:switchPadding="2dp"
-        android:switchMinWidth="29sp"/>
+        android:textOff="@string/shut_down"
+        android:textOn="@string/open"
+        android:thumbTextPadding="2dp"
+        android:paddingRight="10dp"/>
 
-</RelativeLayout>
+</LinearLayout>

@@ -31,4 +31,9 @@ public class HiConstants {
     public final static String UN_LOCK_SCREEN = "0X12";
 
 
+    /**
+     * 闹钟时差（分 秒）
+     */
+    public static final String DIF_HOURS = "dif_hours";
+    public static final String DIF_MINUTES = "dif_minutes";;
 }

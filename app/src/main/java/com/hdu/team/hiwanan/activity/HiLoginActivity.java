@@ -1,7 +1,6 @@
 package com.hdu.team.hiwanan.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,9 +10,6 @@ import android.widget.ImageView;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.service.HiLockScreenService;
-import com.hdu.team.hiwanan.tools.HiFullScreenTools;
-import com.hdu.team.hiwanan.util.HiConstants;
-import com.hdu.team.hiwanan.view.HiLoadingDialogManager;
 
 /**
  * Created by JerryYin on 11/12/15.
@@ -22,7 +18,7 @@ public class HiLoginActivity extends Activity implements View.OnClickListener {
 
 
     /**Constant*/
-    private static final int RESULT_CODE = 1;
+    private static final int REQUEST_CODE = 1;
 
     /**Views*/
     private Button mBtnLogin, mbtnRegister, mBtnLockScreen, mBtnSendBroadcast;
@@ -68,7 +64,7 @@ public class HiLoginActivity extends Activity implements View.OnClickListener {
 
             case R.id.btn_to_register:
                 Intent intent = new Intent(this, HiRegistActivity.class);
-                startActivityForResult(intent, RESULT_CODE);
+                startActivityForResult(intent, REQUEST_CODE);
                 break;
 
             case R.id.img_forget_pwd:
@@ -96,7 +92,7 @@ public class HiLoginActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
-            case RESULT_CODE:
+            case REQUEST_CODE:
                 if (resultCode == RESULT_OK){
                     String userName = data.getStringExtra(HiRegistActivity.KEY_USER_NAME);
                     mTxtAccount.setText(userName);

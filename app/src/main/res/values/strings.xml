@@ -62,5 +62,8 @@
     <string name="type_something">用文字来跟自己说晚安吧 ...</string>
     <string name="just_9_img">图片最多9张</string>
     <string name="add_picture">添加图片</string>
+    <string name="btn_save">保存</string>
+    <string name="last_time">还有 00 小时 00 分钟</string>
+    <string name="music">铃声</string>
 
 </resources>

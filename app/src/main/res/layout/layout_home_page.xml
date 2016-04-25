@@ -7,35 +7,25 @@
     <ImageView
         android:id="@+id/img_shalou"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp"
-        android:src="@drawable/shalou" />
+        android:layout_height="180dp"
+        android:src="@drawable/img_time2" />
 
     <LinearLayout
-        android:id="@+id/sleep_time_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical">
-        <include
-            android:id="@+id/item_1"
-            style="@style/SleepTime"
-            layout="@layout/item_sleep_time" />
 
-        <include
-            android:id="@+id/item_2"
-            layout="@layout/item_sleep_time"
-            style="@style/SleepTime" />
+        <!-- android:listSelector="@android:color/transparent" 可去除ListView点击颜色效果-->
+        <ListView
+            android:id="@+id/list_sleep_time"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"></ListView>
 
-        <include
-            android:id="@+id/item_3"
-            layout="@layout/item_sleep_time"
-            style="@style/SleepTime" />
+        <ImageButton
+            android:id="@+id/btn_add_clock"
+            style="@style/BtnAdd" />
     </LinearLayout>
-
-
-    <ImageButton
-        android:id="@+id/btn_add_clock"
-        style="@style/BtnAdd" />
 </LinearLayout>

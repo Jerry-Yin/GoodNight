@@ -17,7 +17,7 @@ import com.hdu.team.hiwanan.util.HiToast;
  * Created by JerryYin on 11/4/15.
  * 注意，此处使用PreferenceActivity，自动保存页面数据状态
  */
-public class HiVoiceSettingActivity extends Activity implements View.OnClickListener {
+public class HiVoiceSettingActivity extends HiActivity {
 
     /**
      * Values
