@@ -101,7 +101,7 @@
                 android:id="@+id/btn_to_register"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:background="@drawable/btn_bg_click"
+                android:background="@drawable/btn_bg_green_click"
                 android:text="@string/text_regist"
                 android:textColor="@color/title_text_color"
                 android:textSize="18sp" />
@@ -111,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/btn_bg_click"
+                android:background="@drawable/btn_bg_green_click"
                 android:text="@string/text_login"
                 android:textColor="@color/title_text_color"
                 android:textSize="18sp" />

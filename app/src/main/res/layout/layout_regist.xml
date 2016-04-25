@@ -165,7 +165,7 @@
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:background="@drawable/btn_bg_click"
+        android:background="@drawable/btn_bg_green_click"
         android:text="@string/text_regist"
         android:textColor="@color/title_text_color"
         android:textSize="18sp" />
