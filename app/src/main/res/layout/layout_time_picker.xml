@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+
+    <include layout="@layout/title_bar_layout" />
+
+    <TextView
+        android:id="@+id/text_last_time"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="@string/last_time"
+        android:textSize="16sp" />
+
+    <TimePicker
+        android:id="@+id/time_picker"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/time_selector"></TimePicker>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/time_selector">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <RadioButton
+                    android:id="@+id/btn_hi_wanan"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/tab_pressed_btn_bg"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/img_music"
+                    android:drawablePadding="20dp"
+                    android:drawableRight="@drawable/ic_chevron_right_black_24dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/music"
+                    android:textSize="20sp"></RadioButton>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="80dp"
+                    android:background="#CFD8DC" />
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/text_audio_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="龙卷风"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="40dp"
+                android:textSize="18sp"/>
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

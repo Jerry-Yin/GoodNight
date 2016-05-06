@@ -1,0 +1,52 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <!-- sdk高于19的就会采用这个版本，定制过的状态栏-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Customize your theme here. -->
+
+        <!-- 自定义状态栏，状态栏上移，但是要求 minSdk=19 -->
+        <!-- Status Bar -->
+        <item name="android:windowTranslucentStatus">true</item>
+        <!-- Navigation Bar -->
+        <item name="android:windowTranslucentNavigation">true</item>
+
+    </style>
+
+    <style name="SleepTime">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+    </style>
+    
+    <style name="BtnAdd">
+        <item name="android:layout_width">35dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginLeft">25dp</item>
+        <item name="android:background">@drawable/btn_add</item>
+    </style>
+    
+    <!-- 录音时的 dialog -->
+    <style name="AudioDialog">
+        <!-- 背景色 透明-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <!-- 是否是浮动在activity之上的-->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否是半透明的-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--  弹出对话框事屏幕是否需要变暗（模糊）-->
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="SplashTheme" parent="android:Theme">
+        <!-- 将图层资源作为背景图像-->
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+    
+</resources>
