@@ -6,7 +6,6 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 
 import com.hdu.team.hiwanan.broadcast.HiBroadcastReceiver;
-import com.hdu.team.hiwanan.util.HiConstants;
 
 
 /**
@@ -36,12 +35,12 @@ public class HiLockScreenService extends Service {
         mIntentFilter = new IntentFilter();
 
 //        switch (intent.getAction()) {
-//            case HiConstants.LOCK_SCREEN:
+//            case HiConfig.LOCK_SCREEN:
 //                //锁屏
 //                mIntentFilter.addAction(Intent.ACTION_SCREEN_OFF);
 //                break;
 //
-//            case HiConstants.UN_LOCK_SCREEN:
+//            case HiConfig.UN_LOCK_SCREEN:
 //                //解锁
 //                mIntentFilter.addAction(Intent.ACTION_SCREEN_ON);
 //                break;

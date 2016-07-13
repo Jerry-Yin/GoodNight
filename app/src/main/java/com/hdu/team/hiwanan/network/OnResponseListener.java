@@ -12,7 +12,7 @@ public interface OnResponseListener {
      * @param actionId taskId taskId is the check code.
      * @param rawData
      */
-    public void onResponse(Object response, String actionId, boolean rawData);
+    void onResponse(Object response, String actionId, boolean rawData);
+    boolean isDisable();
 
-    public boolean isDisable();
 }

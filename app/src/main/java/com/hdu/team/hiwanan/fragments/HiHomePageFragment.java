@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiTimePickerActivity;
-import com.hdu.team.hiwanan.util.HiConstants;
+import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.view.HiTimeTabManager;
 
 import java.util.ArrayList;
@@ -105,11 +105,11 @@ public class HiHomePageFragment extends Fragment implements View.OnClickListener
      * 遍历mTimeList，
      */
     private void initTime() {
-        mPreferences = mSelf.getSharedPreferences(HiConstants.HI_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        mPreferences = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE);
         if (mTimeList.size() != 0) {
             for (int i = 0; i < mTimeList.size(); i++) {
-                long hour = mPreferences.getLong(HiConstants.DIF_HOURS + i, 00);
-                long minute = mPreferences.getLong(HiConstants.DIF_MINUTES + i, 00);
+                long hour = mPreferences.getLong(HiConfig.DIF_HOURS + i, 00);
+                long minute = mPreferences.getLong(HiConfig.DIF_MINUTES + i, 00);
                 String time = hour + " : " + minute;
                 mTimeList.get(i).put("time",time);
             }

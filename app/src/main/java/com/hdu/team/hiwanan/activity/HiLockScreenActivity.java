@@ -13,7 +13,7 @@ import com.hdu.team.hiwanan.R;
 /**
  * Created by JerryYin on 11/16/15.
  */
-public class HiLockScreenActivity extends HiActivity {
+public class HiLockScreenActivity extends HiActivity implements View.OnClickListener {
 
     private ImageView mbtnUnLock;
 

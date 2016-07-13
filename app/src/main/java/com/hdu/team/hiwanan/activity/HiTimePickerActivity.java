@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.hdu.team.hiwanan.R;
-import com.hdu.team.hiwanan.util.HiConstants;
+import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.util.HiToast;
 import com.hdu.team.hiwanan.utils.HiTimesUtil;
 
@@ -80,9 +79,9 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
                  * 3.返回设定的时间给主界面设置界面时间;
                  * 4.确定铃声
                  */
-                SharedPreferences.Editor editor = getSharedPreferences(HiConstants.HI_PREFERENCE_NAME, MODE_PRIVATE).edit();
-                editor.putLong(HiConstants.DIF_HOURS + mItemPosition, mTimePicker.getCurrentHour());
-                editor.putLong(HiConstants.DIF_MINUTES + mItemPosition, mTimePicker.getCurrentMinute());
+                SharedPreferences.Editor editor = getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, MODE_PRIVATE).edit();
+                editor.putLong(HiConfig.DIF_HOURS + mItemPosition, mTimePicker.getCurrentHour());
+                editor.putLong(HiConfig.DIF_MINUTES + mItemPosition, mTimePicker.getCurrentMinute());
                 editor.commit();
 
                 Intent intent = new Intent();

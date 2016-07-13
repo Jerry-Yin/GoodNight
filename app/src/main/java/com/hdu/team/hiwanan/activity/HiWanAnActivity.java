@@ -17,8 +17,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
+import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.manager.HiMediaPlayerManager;
-import com.hdu.team.hiwanan.util.HiConstants;
 import com.hdu.team.hiwanan.util.HiLog;
 import com.hdu.team.hiwanan.utils.HiUploadAudioUtil;
 import com.hdu.team.hiwanan.view.HiVoiceRecorderButton;
@@ -128,7 +128,7 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
         });
 
         //TODO 传送音频到服务器
-        String result = HiUploadAudioUtil.upLoadAudio(new File(mDataLists.get(position).filePath), HiConstants.TEST_URL);
+        String result = HiUploadAudioUtil.upLoadAudio(new File(mDataLists.get(position).filePath), HiConfig.TEST_URL);
         HiLog.d(TAG, "result = "+result);
 
     }

@@ -11,7 +11,7 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.widget.ListAdapter;
 
-import com.hdu.team.hiwanan.util.HiConstants;
+import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.util.HiLog;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class HiLockScreenHome extends Activity {
             }
         }
 
-        SharedPreferences sharedPreferences = getSharedPreferences(HiConstants.HI_PREFERENCE_NAME, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
         new AlertDialog.Builder(this).setTitle("请选择解锁后的屏幕").setCancelable(false).setSingleChoiceItems((ListAdapter) actNamesT, 0, new DialogInterface.OnClickListener() {

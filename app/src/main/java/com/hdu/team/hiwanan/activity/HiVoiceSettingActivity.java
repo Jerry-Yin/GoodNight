@@ -1,6 +1,5 @@
 package com.hdu.team.hiwanan.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -10,7 +9,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
-import com.hdu.team.hiwanan.util.HiConstants;
+import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.util.HiToast;
 
 /**
@@ -44,7 +43,7 @@ public class HiVoiceSettingActivity extends HiActivity {
     }
 
     private void initData() {
-        mEditor = getSharedPreferences(HiConstants.HI_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        mEditor = getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, MODE_PRIVATE).edit();
     }
 
     private void setupViews() {
@@ -58,7 +57,7 @@ public class HiVoiceSettingActivity extends HiActivity {
      * 界面初始化switch开关状态
      */
     private void setupSwitch() {
-        boolean switch_status = getSharedPreferences(HiConstants.HI_PREFERENCE_NAME, MODE_PRIVATE).getBoolean("hi_switch_status", false);
+        boolean switch_status = getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, MODE_PRIVATE).getBoolean("hi_switch_status", false);
         if (switch_status) {
             mSwitchVoice.setChecked(true);
         } else {
@@ -119,25 +118,25 @@ public class HiVoiceSettingActivity extends HiActivity {
                         switch (which){
                             case 0:
                                 HiToast.showToast(HiVoiceSettingActivity.this, R.string.sex_diff_choosed);
-                                mEditor.putBoolean(HiConstants.KEY_SEX_DIF, true);
-                                mEditor.putBoolean(HiConstants.KEY_SEX_SAME, false);
-                                mEditor.putBoolean(HiConstants.KEY_SEX_ALL, false);
+                                mEditor.putBoolean(HiConfig.KEY_SEX_DIF, true);
+                                mEditor.putBoolean(HiConfig.KEY_SEX_SAME, false);
+                                mEditor.putBoolean(HiConfig.KEY_SEX_ALL, false);
                                 mEditor.commit();
                                 break;
 
                             case 1:
                                 HiToast.showToast(HiVoiceSettingActivity.this, R.string.sex_same_choosed);
-                                mEditor.putBoolean(HiConstants.KEY_SEX_DIF, false);
-                                mEditor.putBoolean(HiConstants.KEY_SEX_SAME, true);
-                                mEditor.putBoolean(HiConstants.KEY_SEX_ALL, false);
+                                mEditor.putBoolean(HiConfig.KEY_SEX_DIF, false);
+                                mEditor.putBoolean(HiConfig.KEY_SEX_SAME, true);
+                                mEditor.putBoolean(HiConfig.KEY_SEX_ALL, false);
                                 mEditor.commit();
                                 break;
 
                             case 2:
                                 HiToast.showToast(HiVoiceSettingActivity.this, R.string.sex_all_choosed);
-                                mEditor.putBoolean(HiConstants.KEY_SEX_DIF, false);
-                                mEditor.putBoolean(HiConstants.KEY_SEX_SAME, false);
-                                mEditor.putBoolean(HiConstants.KEY_SEX_ALL, true);
+                                mEditor.putBoolean(HiConfig.KEY_SEX_DIF, false);
+                                mEditor.putBoolean(HiConfig.KEY_SEX_SAME, false);
+                                mEditor.putBoolean(HiConfig.KEY_SEX_ALL, true);
                                 mEditor.commit();
                                 break;
                             default:

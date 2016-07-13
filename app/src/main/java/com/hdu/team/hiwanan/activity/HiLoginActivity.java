@@ -9,12 +9,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.hdu.team.hiwanan.R;
+import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.service.HiLockScreenService;
 
 /**
  * Created by JerryYin on 11/12/15.
  */
-public class HiLoginActivity extends Activity implements View.OnClickListener {
+public class HiLoginActivity extends HiActivity{
 
 
     /**Constant*/
@@ -94,8 +95,10 @@ public class HiLoginActivity extends Activity implements View.OnClickListener {
         switch (requestCode){
             case REQUEST_CODE:
                 if (resultCode == RESULT_OK){
-                    String userName = data.getStringExtra(HiRegistActivity.KEY_USER_NAME);
+                    String userName = data.getStringExtra(HiConfig.KEY_USER_NAME);
+                    String password = data.getStringExtra(HiConfig.KEY_PASSWORD);
                     mTxtAccount.setText(userName);
+                    mTxtPwd.setText(password);
                 }
                 break;
             default:

@@ -1,15 +1,16 @@
 package com.hdu.team.hiwanan.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.hdu.team.hiwanan.R;
+import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.manager.SystemBarTintManager;
-import com.hdu.team.hiwanan.util.HiLog;
+
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobConfig;
 
 /**
  * Created by JerryYin on 11/3/15.
@@ -39,7 +40,31 @@ public abstract class HiActivity extends Activity implements View.OnClickListene
             tintManager.setStatusBarTintResource(R.color.colorPrimaryDark);
         }
 
+
+        initBmobSdk();
     }
+
+    private void initBmobSdk() {
+        //第一：默认初始化
+        Bmob.initialize(this, HiConfig.APPLICATION_ID);
+
+        //第二：自v3.4.7版本开始,设置BmobConfig,允许设置请求超时时间、文件分片上传时每片的大小、文件的过期时间(单位为秒)，
+//        BmobConfig config =new BmobConfig.Builder(this)
+//        //设置appkey
+//        .setApplicationId(HiConfig.APPLICATION_ID)
+//        //请求超时时间（单位为秒）：默认15s
+//        .setConnectTimeout(30)
+//        //文件分片上传时每片的大小（单位字节），默认512*1024
+//        .setUploadBlockSize(1024*1024)
+//        //文件的过期时间(单位为秒)：默认1800s
+//        .setFileExpiration(2500)
+//        .build();
+//        Bmob.initialize(config);
+
+    }
+
+
+
 
 //    public static void HiStartActivity(Activity a, Class toActivity){
 //        Intent intent = new Intent(a, toActivity);

@@ -55,10 +55,35 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/img_login_pwd"
                 android:hint="@string/hint_login_pwd"
+                android:inputType="numberPassword|textPassword"
                 android:textColorHint="@color/hint_text_color" />
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:id="@+id/img_pwd_confirm"
+                android:layout_width="35dp"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/img_pwd" />
+
+            <EditText
+                android:id="@+id/txt_pwd_confirm"
+                android:layout_width="250dp"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/img_pwd_confirm"
+                android:hint="@string/hint_login_pwd_confirm"
+                android:inputType="numberPassword|textPassword"
+                android:textColorHint="@color/hint_text_color" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,44 +93,64 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
+                android:layout_weight="0.3"
                 android:gravity="center"
                 android:text="@string/sex"
                 android:textSize="18sp" />
 
-            <CheckBox
-                android:id="@+id/checkbox_sex_man"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/check_box"
-                android:button="@null" />
+            <!--<CheckBox-->
+                <!--android:id="@+id/checkbox_sex_man"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:background="@drawable/check_box"-->
+                <!--android:button="@null" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginLeft="5dp"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/sex_man"-->
+                <!--android:textSize="20sp" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/checkbox_sex_woman"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="49dp"-->
+                <!--android:background="@drawable/check_box"-->
+                <!--android:button="@null" />-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginLeft="5dp"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/sex_woman"-->
+                <!--android:textSize="20sp" />-->
+
+            <RadioGroup
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:gravity="center"
-                android:text="@string/sex_man"
-                android:textSize="20sp" />
+                android:orientation="horizontal"
+                android:gravity="center">
 
-            <CheckBox
-                android:id="@+id/checkbox_sex_woman"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="49dp"
-                android:background="@drawable/check_box"
-                android:button="@null" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:gravity="center"
-                android:text="@string/sex_woman"
-                android:textSize="20sp" />
+                <RadioButton
+                    android:id="@+id/btn_man"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sex_man"/>
+                <RadioButton
+                    android:id="@+id/btn_women"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sex_woman"/>
+            </RadioGroup>
 
         </LinearLayout>
 
@@ -117,45 +162,63 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
                 android:gravity="center"
-                android:text="@string/sex"
+                android:text="@string/group"
                 android:textSize="18sp" />
 
-            <CheckBox
-                android:id="@+id/checkbox_type_student"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/check_box"
-                android:button="@null" />
+            <!--<CheckBox-->
+                <!--android:id="@+id/checkbox_type_student"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:background="@drawable/check_box"-->
+                <!--android:button="@null" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginLeft="5dp"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/type_student"-->
+                <!--android:textSize="20sp" />-->
+
+            <!--<CheckBox-->
+                <!--android:id="@+id/checkbox_type_worker"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="30dp"-->
+                <!--android:background="@drawable/check_box"-->
+                <!--android:button="@null" />-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginLeft="5dp"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/type_worker"-->
+                <!--android:textSize="20sp" />-->
+
+            <RadioGroup
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:gravity="center"
-                android:text="@string/type_student"
-                android:textSize="20sp" />
+                android:orientation="horizontal"
+                android:gravity="center">
+                <RadioButton
+                    android:id="@+id/btn_student"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/type_student"/>
 
-            <CheckBox
-                android:id="@+id/checkbox_type_worker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:background="@drawable/check_box"
-                android:button="@null" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:gravity="center"
-                android:text="@string/type_worker"
-                android:textSize="20sp" />
-
+                <RadioButton
+                    android:id="@+id/btn_worker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/type_worker"/>
+            </RadioGroup>
         </LinearLayout>
     </LinearLayout>
 

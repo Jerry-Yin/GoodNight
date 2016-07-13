@@ -11,7 +11,7 @@ import com.hdu.team.hiwanan.manager.SystemBarTintManager;
 /**
  * Created by JerryYin on 11/4/15.
  */
-public class HiAboutFunction extends HiActivity {
+public class HiAboutFunction extends HiActivity implements View.OnClickListener{
 
     private TextView mTextTitle;
 

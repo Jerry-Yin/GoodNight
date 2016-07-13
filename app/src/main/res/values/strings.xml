@@ -41,11 +41,13 @@
     <string name="text_logo">Hi WanAn</string>
     <string name="hint_login_user">用户名/电话号码</string>
     <string name="hint_login_pwd">密码</string>
+    <string name="hint_login_pwd_confirm">密码确认</string>
     <string name="text_regist">注册</string>
     <string name="text_login">登录</string>
-    <string name="sex">性别：</string>
-    <string name="sex_man">汉子</string>
-    <string name="sex_woman">妹纸</string>
+    <string name="sex">性别:</string>
+    <string name="group">分组:</string>
+    <string name="sex_man">男</string>
+    <string name="sex_woman">女</string>
     <string name="type_student">学生党</string>
     <string name="type_worker">工作党</string>
 
@@ -65,5 +67,12 @@
     <string name="btn_save">保存</string>
     <string name="last_time">还有 00 小时 00 分钟</string>
     <string name="music">铃声</string>
+
+    // 注册部分
+    <string name="usr_null">用户名不能为空！</string>
+    <string name="chk_pwd">请检查密码是否合法（长度6-15）！</string>
+    <string name="chk_pwd_confirm">确认密码与之前不一致！</string>
+    <string name="sex_not_nul">请选择性别！</string>
+    <string name="regist_success">恭喜，注册成功！</string>
 
 </resources>

@@ -9,7 +9,7 @@ import com.hdu.team.hiwanan.R;
 /**
  * Created by JerryYin on 11/16/15.
  */
-public class HiLogoActivity extends HiActivity {
+public class HiLogoActivity extends HiActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
