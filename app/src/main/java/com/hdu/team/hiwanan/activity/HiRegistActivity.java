@@ -1,5 +1,6 @@
 package com.hdu.team.hiwanan.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,16 +10,16 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.hdu.team.hiwanan.R;
+import com.hdu.team.hiwanan.base.HiActivity;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.constant.HiRequestCodes;
 import com.hdu.team.hiwanan.listener.OnResponseListener;
-import com.hdu.team.hiwanan.model.User;
+import com.hdu.team.hiwanan.model.UserBmob;
 import com.hdu.team.hiwanan.util.BmobNetworkUtils;
 import com.hdu.team.hiwanan.util.ToastUtils;
 
@@ -27,10 +28,14 @@ import com.hdu.team.hiwanan.util.ToastUtils;
  */
 public class HiRegistActivity extends HiActivity {
 
+    private static final String TAG = "HiRegistActivity";
+
     /**View*/
     private Button mBtnRegister;
-    private EditText mTxtUsrName, mTxtPwd, mTxtPwdCfm;
+    private EditText mTxtUsrName, mTxtPwd, mTxtPwdCfm, mTxtEmail;
     private RadioButton mBoxMan, mBoxWoman, mBoxStudent, mBoxWorker;
+
+    private AlertDialog mAlertDialog;
 
     /** values*/
 
@@ -42,6 +47,7 @@ public class HiRegistActivity extends HiActivity {
         setContentView(R.layout.layout_regist);
 
         initViews();
+        initDatas();
 
     }
 
@@ -50,11 +56,19 @@ public class HiRegistActivity extends HiActivity {
         mTxtUsrName = (EditText) findViewById(R.id.txt_account);
         mTxtPwd = (EditText) findViewById(R.id.txt_password);
         mTxtPwdCfm = (EditText) findViewById(R.id.txt_pwd_confirm);
+        mTxtEmail = (EditText) findViewById(R.id.txt_email);
         mBoxMan = (RadioButton) findViewById(R.id.btn_man);
         mBoxWoman = (RadioButton) findViewById(R.id.btn_women);
         mBoxStudent = (RadioButton) findViewById(R.id.btn_student);
         mBoxWorker = (RadioButton) findViewById(R.id.btn_worker);
         mBtnRegister.setOnClickListener(this);
+    }
+
+
+    private void initDatas() {
+        if (mAlertDialog == null){
+            mAlertDialog = new AlertDialog.Builder(this).create();
+        }
     }
 
     /**
@@ -64,10 +78,12 @@ public class HiRegistActivity extends HiActivity {
         String usrName = mTxtUsrName.getText().toString().trim();
         String pwd = mTxtPwd.getText().toString().trim();
         String pwdCfm = mTxtPwdCfm.getText().toString().trim();
+        String email = mTxtEmail.getText().toString().trim();
+        String sex = null;
+        String group = null;
         if (!TextUtils.isEmpty(usrName)){
             if (!TextUtils.isEmpty(pwd) || (pwd.length()>6 && pwd.length()<15)){
                 if (!TextUtils.isEmpty(pwdCfm) && pwdCfm.equals(pwd)){
-                    String sex = null;
                     if (mBoxMan.isChecked()){
                         sex = getString(R.string.sex_man);
                     }else if (mBoxWoman.isChecked()){
@@ -75,7 +91,16 @@ public class HiRegistActivity extends HiActivity {
                     }else {
                         ToastUtils.showToast(this, getString(R.string.sex_not_nul), Toast.LENGTH_SHORT);
                     }
-                    RegisterUsr(usrName, pwd, sex);
+                    if (mBoxStudent.isChecked()){
+                        group = getString(R.string.type_student);
+                    }else if (mBoxWorker.isChecked()){
+                        group = getString(R.string.type_worker);
+                    }else {
+                        ToastUtils.showToast(this, getString(R.string.group_not_nul), Toast.LENGTH_SHORT);
+                    }
+
+                    RegisterUsr(usrName, pwd, sex, email, group);
+
                 }else {
                     ToastUtils.showToast(this, getString(R.string.chk_pwd_confirm), Toast.LENGTH_SHORT);
                 }
@@ -93,13 +118,38 @@ public class HiRegistActivity extends HiActivity {
      * 注册用户信息
      * @param usrName
      * @param pwd
+     * @param sex
+     * @param email
+     * @param group
      */
-    private void RegisterUsr(String usrName, String pwd, String sex) {
-        User user = new User(usrName, pwd, sex);
+    private void RegisterUsr(String usrName, String pwd, String sex, String email, String group) {
+//        User user = new User(usrName, pwd, sex);
+        mAlertDialog.setMessage("正在注册...");
+        mAlertDialog.show();
+        UserBmob user = new UserBmob();
+        user.setUsername(usrName);
+        user.setPassword(pwd);
+        user.setEmail(null);
+        user.setSex(sex);
+        user.setGroup(group);
+        if (sex.equals(getString(R.string.sex_man))){
+            if (group.equals(getString(R.string.type_student))){
+                user.setIcon(HiConfig.USER_ICON_M_S);
+            }else {
+                user.setIcon(HiConfig.USER_ICON_M_W);
+            }
+        }else if(sex.equals(getString(R.string.sex_woman))){
+            if (group.equals(getString(R.string.type_student))){
+                user.setIcon(HiConfig.USER_ICON_W_S);
+            }else {
+                user.setIcon(HiConfig.USER_ICON_W_W);
+            }
+        }
+
         final Message message = new Message();
         BmobNetworkUtils.signUp(user, new OnResponseListener() {
             @Override
-            public void onSuccess(String result) {
+            public void onSuccess(Object result) {
                 Log.d(TAG, "result = "+result);
                 message.what = HiRequestCodes.REGIST_SUCCESS;
                 message.obj = result;
@@ -131,14 +181,17 @@ public class HiRegistActivity extends HiActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case HiRequestCodes.REGIST_SUCCESS:
+                    mAlertDialog.dismiss();
                     ToastUtils.showToast(getApplicationContext(), getString(R.string.regist_success), Toast.LENGTH_LONG);
                     String name = mTxtUsrName.getText().toString().trim();
                     String password = mTxtPwd.getText().toString().trim();
                     backToLogin(name, password);
+//                    String icon = ((UserBmob)msg.obj).getIcon();
                     saveUsrInfoToLocal(name, password);
                     break;
 
                 case HiRequestCodes.REGIST_FAIL:
+                    mAlertDialog.dismiss();
                     ToastUtils.showToast(getApplicationContext(), msg.obj.toString(), Toast.LENGTH_LONG);
                     break;
             }
@@ -151,9 +204,10 @@ public class HiRegistActivity extends HiActivity {
      * @param password
      */
     private void saveUsrInfoToLocal(String name, String password) {
-        SharedPreferences.Editor editor = (SharedPreferences.Editor) getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(HiConfig.KEY_USER_NAME, name);
         editor.putString(HiConfig.KEY_PASSWORD, password);
+//        editor.putString(HiConfig.KEY_ICON, icon);
         editor.commit();
     }
 

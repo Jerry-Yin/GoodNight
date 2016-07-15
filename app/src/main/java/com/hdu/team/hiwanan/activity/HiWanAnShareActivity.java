@@ -18,11 +18,9 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 
 import com.hdu.team.hiwanan.R;
-import com.hdu.team.hiwanan.util.HiLog;
-import com.hdu.team.hiwanan.utils.HiCameraUtil;
+import com.hdu.team.hiwanan.base.HiActivity;
 import com.hdu.team.hiwanan.util.HiToast;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

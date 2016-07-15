@@ -1,10 +1,10 @@
 package com.hdu.team.hiwanan.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import com.hdu.team.hiwanan.R;
+import com.hdu.team.hiwanan.base.HiActivity;
 
 /**
  * Created by JerryYin on 11/16/15.

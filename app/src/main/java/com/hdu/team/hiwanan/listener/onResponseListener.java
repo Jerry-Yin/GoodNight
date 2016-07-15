@@ -5,7 +5,7 @@ package com.hdu.team.hiwanan.listener;
  */
 public interface OnResponseListener {
 
-    void onSuccess(String result);
+    void onSuccess(Object result);
 
     void onFailure(int errorCode, String error);
 

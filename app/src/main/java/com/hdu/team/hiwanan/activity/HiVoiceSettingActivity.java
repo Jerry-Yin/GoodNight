@@ -9,6 +9,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
+import com.hdu.team.hiwanan.base.HiActivity;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.util.HiToast;
 

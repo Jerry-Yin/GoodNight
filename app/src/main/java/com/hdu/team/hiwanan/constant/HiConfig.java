@@ -1,9 +1,20 @@
 package com.hdu.team.hiwanan.constant;
 
+import android.os.Environment;
+
 /**
  * Created by JerryYin on 7/13/16.
  */
 public class HiConfig {
+
+
+    /**
+     *  app数据存储路径
+     */
+    public static final String APP_DIR = Environment.getExternalStorageDirectory() + "/HiWanan";
+    public static final String APP_TEMP = APP_DIR + "/temp";
+    public static final String APP_IMAGE = APP_DIR + "/image";
+
     /**
      * sharedPrf数据库名称
      * 全局数据库，只有这一个sp数据库
@@ -51,6 +62,15 @@ public class HiConfig {
      */
     public static final String KEY_USER_NAME = "user_name";
     public static final String KEY_PASSWORD = "password";
+    public static final String KEY_ICON = "icon";
+
+    /**
+     * 默认用户头像URL
+     */
+    public static final String USER_ICON_M_S = "http://bmob-cdn-4793.b0.upaiyun.com/2016/07/14/938fe7af40e67ab680670a9a4881a4e1.png";
+    public static final String USER_ICON_M_W = "http://bmob-cdn-4793.b0.upaiyun.com/2016/07/14/6f9e6d0b405d3e79809f04e32ec772e5.png";
+    public static final String USER_ICON_W_S = "http://bmob-cdn-4793.b0.upaiyun.com/2016/07/14/6a0d846a400aec6b804c0de660c02953.png";
+    public static final String USER_ICON_W_W = "http://bmob-cdn-4793.b0.upaiyun.com/2016/07/14/39be4f5d4043b1c880095d179b4eaf5b.png";
 
 
 }

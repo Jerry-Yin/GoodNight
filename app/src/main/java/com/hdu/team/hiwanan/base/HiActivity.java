@@ -1,6 +1,7 @@
-package com.hdu.team.hiwanan.activity;
+package com.hdu.team.hiwanan.base;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,11 @@ public abstract class HiActivity extends Activity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /**
+         * 设置竖屏
+         */
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         /**
          * 如果当前sdk版本 >＝ 19, 就采用自定制状态栏

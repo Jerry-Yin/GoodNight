@@ -1,4 +1,4 @@
-package com.hdu.team.hiwanan.utils;
+package com.hdu.team.hiwanan.util;
 
 import android.net.Uri;
 import android.os.Environment;

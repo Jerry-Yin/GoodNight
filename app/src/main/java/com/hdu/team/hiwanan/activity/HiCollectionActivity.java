@@ -7,11 +7,12 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.hdu.team.hiwanan.R;
+import com.hdu.team.hiwanan.base.HiActivity;
 
 /**
  * Created by JerryYin on 11/23/15.
  */
-public class HiCollectionActivity extends HiActivity{
+public class HiCollectionActivity extends HiActivity {
 
     private static final int ADD_COLL = 1;
     /**Views*/

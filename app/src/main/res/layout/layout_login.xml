@@ -73,7 +73,7 @@
                 android:layout_toRightOf="@+id/img_login_pwd"
                 android:hint="@string/hint_login_pwd"
                 android:textColorHint="@color/hint_text_color"
-                android:inputType="numberPassword|textPassword"/>
+                android:inputType="textPassword"/>
 
             <ImageView
                 android:id="@+id/img_forget_pwd"

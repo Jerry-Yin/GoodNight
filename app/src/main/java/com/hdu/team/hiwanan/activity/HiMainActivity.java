@@ -1,40 +1,37 @@
 package com.hdu.team.hiwanan.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
+import com.hdu.team.hiwanan.base.HiActivity;
 import com.hdu.team.hiwanan.fragments.HiGoodNightFragment;
 import com.hdu.team.hiwanan.fragments.HiHomePageFragment;
 import com.hdu.team.hiwanan.fragments.HiSettingFragment;
 import com.hdu.team.hiwanan.fragments.HiSleepFragment;
-import com.hdu.team.hiwanan.util.HiToast;
 import com.jauker.widget.BadgeView;
 
 
 public class HiMainActivity extends HiActivity implements View.OnClickListener {
 
-    /**constants*/
+    /**
+     * constants
+     */
     private static final String TAG = "HiMainActivity";
 
-    /**Views*/
+    /**
+     * Views
+     */
     private RadioGroup mbuttomGroup;
     private RadioButton mbtnHomePage;
     private RadioButton mbtnGoodNight;
@@ -46,16 +43,20 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
 
     private BadgeView mBadgeView;
 
-    /**Fragments*/
+    /**
+     * Fragments
+     */
     private FragmentManager mFragmentManager;
     private HiHomePageFragment mHomePageFragment;
     private HiGoodNightFragment mGoodNightFragment;
     private HiSleepFragment mSleepFragment;
     private HiSettingFragment mSettingFragment;
 
-    /**valuse*/
+    /**
+     * valuse
+     */
     public static HiActivity mIntance = null;
-    private AlertDialog.Builder mQuitDialogBulider;
+    private AlertDialog mQuitDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +98,9 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
         mtextTitle.setText(R.string.home_page);
     }
 
-    /**初始化按钮点击效果，默认第一页*/
+    /**
+     * 初始化按钮点击效果，默认第一页
+     */
     private void initButton() {
         mbuttomGroup.check(R.id.btn_home_page);
     }
@@ -107,7 +110,7 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
 //        mQuitDialogBulider.setIcon()
 //    }
 
-    private void initBadgeView(){
+    private void initBadgeView() {
         //底部第二个按钮
         mBadgeView = new BadgeView(this);
         mBadgeView.setBadgeCount(8);
@@ -119,8 +122,26 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (mbtnHomePage.isChecked()) {
+            changeFragment(getHomeFragment(), false);
+            mtextTitle.setText(R.string.home_page);
+        } else if (mbtnGoodNight.isChecked()) {
+            changeFragment(getGoodNightFragment(), false);
+            mtextTitle.setText(R.string.good_night);
+        } else if (mbtnSleep.isChecked()) {
+            changeFragment(getSleepFragment(), false);
+            mtextTitle.setText(R.string.sleep);
+        } else if (mbtnSetting.isChecked()) {
+            changeFragment(getSettingFragment(), false);
+            mtextTitle.setText(R.string.setting);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_home_page:
                 changeFragment(getHomeFragment(), false);
                 mtextTitle.setText(R.string.home_page);
@@ -147,53 +168,79 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
     }
 
 
-    /**获取fragment实例*/
-    public HiHomePageFragment getHomeFragment(){
-        if (mHomePageFragment == null){
+    /**
+     * 获取fragment实例
+     */
+    public HiHomePageFragment getHomeFragment() {
+        if (mHomePageFragment == null) {
             mHomePageFragment = new HiHomePageFragment();
         }
         return mHomePageFragment;
     }
 
-    public HiGoodNightFragment getGoodNightFragment(){
-        if (mGoodNightFragment == null){
+    public HiGoodNightFragment getGoodNightFragment() {
+        if (mGoodNightFragment == null) {
             mGoodNightFragment = new HiGoodNightFragment();
         }
         return mGoodNightFragment;
     }
 
-    public HiSleepFragment getSleepFragment(){
-        if (mSleepFragment == null){
+    public HiSleepFragment getSleepFragment() {
+        if (mSleepFragment == null) {
             mSleepFragment = new HiSleepFragment();
         }
         return mSleepFragment;
     }
 
-    public HiSettingFragment getSettingFragment(){
-        if (mSettingFragment == null){
+    public HiSettingFragment getSettingFragment() {
+        if (mSettingFragment == null) {
             mSettingFragment = new HiSettingFragment();
         }
         return mSettingFragment;
     }
 
-    /**替换fragment*/
-    public void changeFragment(Fragment f, boolean init){
+    /**
+     * 替换fragment
+     */
+    public void changeFragment(Fragment f, boolean init) {
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.replace(R.id.frgment_root, f);
-        if (!init){
+        if (!init) {
             transaction.addToBackStack(null);
         }
         transaction.commit();
     }
 
-    /** 捕捉返回事件，弹出对话框，是否退出应用*/
+    /**
+     * 捕捉返回事件，弹出对话框，是否退出应用
+     */
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN
-                && event.getKeyCode() == KeyEvent.KEYCODE_BACK){
-            finish();
+                && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            showQuitDialog();
             return true;
         }
         return super.dispatchKeyEvent(event);
+    }
+
+    private void showQuitDialog() {
+        if (mQuitDialog == null) {
+            mQuitDialog = new AlertDialog.Builder(this)
+                    .setMessage("您确定要退出应用吗？")
+                    .setPositiveButton("狠心离开", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            HiMainActivity.this.finish();
+                        }
+                    })
+                    .setNegativeButton("再看一会", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mQuitDialog.dismiss();
+                        }
+                    }).create();
+        }
+        mQuitDialog.show();
     }
 }

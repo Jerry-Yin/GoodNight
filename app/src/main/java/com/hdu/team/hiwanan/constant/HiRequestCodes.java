@@ -6,12 +6,23 @@ package com.hdu.team.hiwanan.constant;
  */
 public class HiRequestCodes {
 
-    /*
-       注册相关
+    /**
+     * 注册相关
      */
     public static final int REGIST_SUCCESS = 0X01;
     public static final int REGIST_FAIL = 0X02;
 
+    /**
+     * 登录相关
+     */
+    public static final int LOGIN_SUCCESS = 0X04;
+    public static final int LOGIN_FAIL = 0X05;
 
+    /**
+     * 下载
+     */
+    public static final int DOWNLOAD_SUCCESS = 0X08;
+    public static final int DOWNLOAD_FAIL = 0X09;
+    public static final int DOWNLOAD_PROGRESS = 0X10;
 
 }
