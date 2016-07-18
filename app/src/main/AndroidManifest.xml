@@ -2,34 +2,34 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hdu.team.hiwanan">
 
-    <!-- 震动-->
+    <!-- 震动 -->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <!-- 录音 和读写文件 的权限-->
+    <!-- 录音 和读写文件 的权限 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!-- 申明权限 操作SD卡 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-feature android:name="android.hardware.Camera" />
 
-    <!-- 取消系统锁屏权限-->
+    <!-- 取消系统锁屏权限 -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
+    <!-- Bmob -->
 
-    <!--Bmob-->
 
-    <!--允许联网 -->
+    <!-- 允许联网 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--获取GSM（2g）、WCDMA（联通3g）等网络状态的信息  -->
+    <!-- 获取GSM（2g）、WCDMA（联通3g）等网络状态的信息 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!--获取wifi网络状态的信息 -->
+    <!-- 获取wifi网络状态的信息 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!--保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
+    <!-- 保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!--获取sd卡写的权限，用于文件上传和下载-->
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
-    <!--允许读取手机状态 用于创建BmobInstallation-->
+    <!-- 获取sd卡写的权限，用于文件上传和下载 -->
+    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
+    <!-- 允许读取手机状态 用于创建BmobInstallation -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
 
     <application
         android:name=".base.HiApplication"
@@ -38,11 +38,7 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme">
-
-
-        <activity android:name=".activity.HiLogoActivity">
-        </activity>
-
+        <activity android:name=".activity.HiLogoActivity"></activity>
         <activity
             android:name=".activity.HiLoginActivity"
             android:label="@string/app_name"
@@ -53,41 +49,36 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.HiRegistActivity"></activity>
-        <activity android:name=".activity.HiMainActivity"
-            android:screenOrientation="portrait"></activity>
-
-        <activity android:name=".activity.HiTimePickerActivity"></activity>
-
+        <activity android:name=".activity.HiRegistActivity" />
+        <activity
+            android:name=".activity.HiMainActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.HiTimePickerActivity" />
         <activity
             android:name=".activity.HiWanAnActivity"
-            android:screenOrientation="portrait"></activity>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.HiVoiceSettingActivity"
-            android:screenOrientation="portrait"></activity>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.HiAboutFunction"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.HiCollectionActivity"></activity>
-        <activity android:name=".activity.HiWanAnShareActivity"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.HiCollectionActivity" />
+        <activity android:name=".activity.HiWanAnShareActivity" />
         <activity
             android:name=".activity.HiWanAnShareActivity2"
-            android:windowSoftInputMode="stateVisible|adjustResize"></activity>
+            android:windowSoftInputMode="stateVisible|adjustResize" />
 
-
-        <!-- 锁屏界面 全屏显示-->
+        <!-- 锁屏界面 全屏显示 -->
         <activity
             android:name=".activity.HiLockScreenActivity"
             android:launchMode="singleTask"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
-        <service android:name=".service.HiLockScreenService"></service>
+        <service android:name=".service.HiLockScreenService" />
 
-        <!-- 为捕获home键而设置的 空的 activity， 不需要显示 (Theme.NoDisplay)；-->
-        <!-- 但非锁屏状态下按home，也会调用此home界面。我们只需在home界面onCreate（）里如此设置即可-->
+        <!-- 为捕获home键而设置的 空的 activity， 不需要显示 (Theme.NoDisplay)； -->
+        <!-- 但非锁屏状态下按home，也会调用此home界面。我们只需在home界面onCreate（）里如此设置即可 -->
         <activity
             android:name=".activity.HiLockScreenHome"
             android:theme="@android:style/Theme.NoDisplay">
@@ -98,7 +89,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".activity.HiUserInfoActivity"></activity>
     </application>
 
 </manifest>

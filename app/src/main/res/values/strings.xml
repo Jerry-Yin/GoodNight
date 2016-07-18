@@ -80,5 +80,8 @@
     <string name="chk_name_pwd">用户名或密码不能为空！</string>
     <string name="hint_login_email">email</string>
     <string name="logout">退出当前账号</string>
+    <string name="account_icon">头像</string>
+    <string name="account_level">用户等级</string>
+    <string name="user_name">用户名</string>
 
 </resources>

@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.bmob.newim.core.d.b;
+
 /**
  * Created by JerryYin on 11/13/15.
  */
@@ -117,7 +119,7 @@ public class HiWanAnShareActivity extends HiActivity implements AdapterView.OnIt
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (mDataList.size() >= 10) {
             HiToast.showToast(this, R.string.just_9_img);
-        } else if (position == 0) {
+        }else if (position == 0) {
 //            HiToast.showToast(this, R.string.add_picture);
             //TODO 选择图片（本地图片 或者 拍照）
 

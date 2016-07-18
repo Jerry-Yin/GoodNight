@@ -2,7 +2,9 @@ package com.hdu.team.hiwanan.util;
 
 import android.content.Context;
 import android.os.Environment;
+import android.text.TextUtils;
 
+import com.hdu.team.hiwanan.listener.OnProgressListener;
 import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.model.User;
 import com.hdu.team.hiwanan.model.UserBmob;
@@ -15,6 +17,8 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
 
 /**
  * Created by JerryYin on 7/13/16.
@@ -150,4 +154,81 @@ public class BmobNetworkUtils {
         });
     }
 
+
+    /**
+     *  上传单一文件的方法
+     * @param filePath
+     * @param listener
+     */
+    public static void uploadFile(String filePath, final OnProgressListener listener) {
+        File file = new File(filePath);
+        final BmobFile bmobFile = new BmobFile(file);
+        bmobFile.uploadblock(new UploadFileListener() {
+                                 @Override
+                                 public void done(BmobException e) {
+                                     if (e == null) {
+                                         //bmobFile.getFileUrl()--返回的上传文件的完整地址
+                                        if (listener != null){
+                                            listener.onSuccess(bmobFile.getFileUrl());
+                                        }
+                                     } else {
+                                         if (listener != null){
+                                             listener.onFailure(e.getErrorCode(), e.getMessage());
+                                         }
+                                     }
+                                 }
+
+                                 @Override
+                                 public void onProgress(Integer value) {
+                                     super.onProgress(value);
+                                     // 返回的上传进度（百分比）
+                                    if (listener != null){
+                                        listener.onProgress(value);
+                                    }
+                                 }
+                             }
+        );
+    }
+
+    /**
+     *  更新云端用户信息
+     * @param name
+     * @param pwd
+     * @param icon
+     * @param level
+     * @param group
+     */
+    public static void updateUser(String name, String pwd, String icon, int level, String group, final OnResponseListener listener){
+        UserBmob newUsr = new UserBmob();
+        if (!TextUtils.isEmpty(name)){
+            newUsr.setUsername(name);
+        }
+        if (!TextUtils.isEmpty(pwd)){
+            newUsr.setPassword(pwd);
+        }
+        if (!TextUtils.isEmpty(icon)){
+            newUsr.setIcon(icon);
+        }
+        if (level != 0){
+            newUsr.setLevel(level);
+        }
+        if (!TextUtils.isEmpty(group)){
+            newUsr.setGroup(name);
+        }
+        UserBmob user = BmobUser.getCurrentUser(UserBmob.class);
+        newUsr.update(user.getObjectId(), new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null){
+                    if (listener != null){
+                        listener.onSuccess(new String("update success"));
+                    }
+                }else {
+                    if (listener != null){
+                        listener.onFailure(e.getErrorCode(), e.getMessage());
+                    }
+                }
+            }
+        });
+    }
 }

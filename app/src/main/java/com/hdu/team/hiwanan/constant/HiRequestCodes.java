@@ -25,4 +25,18 @@ public class HiRequestCodes {
     public static final int DOWNLOAD_FAIL = 0X09;
     public static final int DOWNLOAD_PROGRESS = 0X10;
 
+
+    /**
+     * 拍照&图片选择
+     */
+    public static final int IMAGE_OPEN = 0X14;
+    public static final int TAKE_PHOTO = 0X15;
+
+    /**
+     * 上传文件
+     */
+    public static final int UPLOAD_SUCCESS = 0X18;
+    public static final int UPLOAD_PROGRESS = 0X19;
+    public static final int UPLOAD_FAIL = 0X20;
+
 }

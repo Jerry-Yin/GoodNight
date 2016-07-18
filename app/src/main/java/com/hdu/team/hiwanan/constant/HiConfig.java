@@ -33,14 +33,6 @@ public class HiConfig {
     public final static String KEY_SEX_SAME = "sex_same_only";
     public final static String KEY_SEX_ALL = "sex_all";
 
-
-    /**
-     * 锁屏，解锁服务 参数
-     */
-    public final static String LOCK_SCREEN = "0X11";
-    public final static String UN_LOCK_SCREEN = "0X12";
-
-
     /**
      * 闹钟时差（分 秒）
      */
@@ -71,6 +63,14 @@ public class HiConfig {
     public static final String USER_ICON_M_W = "http://bmob-cdn-4793.b0.upaiyun.com/2016/07/14/6f9e6d0b405d3e79809f04e32ec772e5.png";
     public static final String USER_ICON_W_S = "http://bmob-cdn-4793.b0.upaiyun.com/2016/07/14/6a0d846a400aec6b804c0de660c02953.png";
     public static final String USER_ICON_W_W = "http://bmob-cdn-4793.b0.upaiyun.com/2016/07/14/39be4f5d4043b1c880095d179b4eaf5b.png";
+
+
+    /**
+     * 锁屏，解锁服务 参数
+     */
+    public final static String LOCK_SCREEN = "0X11";
+    public final static String UN_LOCK_SCREEN = "0X12";
+
 
 
 }

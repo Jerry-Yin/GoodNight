@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiAboutFunction;
 import com.hdu.team.hiwanan.activity.HiLoginActivity;
 import com.hdu.team.hiwanan.activity.HiMainActivity;
+import com.hdu.team.hiwanan.activity.HiUserInfoActivity;
 import com.hdu.team.hiwanan.activity.HiVoiceSettingActivity;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.constant.HiRequestCodes;
@@ -51,6 +53,7 @@ public class HiSettingFragment extends Fragment implements View.OnClickListener 
     /**
      * Views
      */
+    private LinearLayout mbtnPersonal;
     private RadioButton mbtnWADaRen;
     private RadioButton mbtnSettingHi;
     private RadioButton mbtnAboutApp;
@@ -78,7 +81,7 @@ public class HiSettingFragment extends Fragment implements View.OnClickListener 
             mContentView = inflater.inflate(R.layout.layout_setting, null);
             mSelf = getActivity();
             setupViews();
-            loadUsrInfo();
+//            loadUsrInfo();
 
         }
         return mContentView;
@@ -124,25 +127,41 @@ public class HiSettingFragment extends Fragment implements View.OnClickListener 
 
 
     private void setupViews() {
+        mbtnPersonal = (LinearLayout) mContentView.findViewById(R.id.btn_personal);
         mTxtName = (TextView) mContentView.findViewById(R.id.text_account_name);
         mbtnWADaRen = (RadioButton) mContentView.findViewById(R.id.btn_wanan_daren);
         mbtnSettingHi = (RadioButton) mContentView.findViewById(R.id.btn_setting_hi_voice);
         mbtnAboutApp = (RadioButton) mContentView.findViewById(R.id.btn_about_function);
         mbtnLogout = (RadioButton) mContentView.findViewById(R.id.btn_logout);
         mImgIcon = (ImageView) mContentView.findViewById(R.id.img_account);
+        mbtnPersonal.setOnClickListener(this);
         mbtnWADaRen.setOnClickListener(this);
         mbtnSettingHi.setOnClickListener(this);
         mbtnAboutApp.setOnClickListener(this);
         mbtnLogout.setOnClickListener(this);
+        mImgIcon.setOnClickListener(this);
         if (mAlertDialog == null) {
             mAlertDialog = new AlertDialog.Builder(mSelf);
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadUsrInfo();
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btn_personal:
+                Intent i = new Intent(mSelf, HiUserInfoActivity.class);
+                startActivity(i);
+                // TODO: 7/16/16 个人信息页面修改了一些信息后，切换回来的时候需要更新
+
+
+                break;
+
             case R.id.btn_wanan_daren:
 
                 break;
@@ -159,6 +178,10 @@ public class HiSettingFragment extends Fragment implements View.OnClickListener 
 
             case R.id.btn_logout:
                 showDialog();
+                break;
+
+            case R.id.img_account:
+
                 break;
 
             default:
