@@ -1,6 +1,7 @@
 package com.hdu.team.hiwanan.base;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,9 +20,12 @@ import cn.bmob.v3.BmobConfig;
  */
 public abstract class HiActivity extends Activity implements View.OnClickListener{
 
-    public final String TAG = "HiActivity";
+    private static final String TAG = "HiActivity";
 
 //    public static Toast mToast;
+
+    public AlertDialog mAlertDialog;
+    public AlertDialog.Builder mBuilder;
 
 
     @Override
@@ -48,6 +52,16 @@ public abstract class HiActivity extends Activity implements View.OnClickListene
 
 
         initBmobSdk();
+        initDialog();
+    }
+
+    private void initDialog(){
+        if (mAlertDialog == null){
+            mAlertDialog = new AlertDialog.Builder(this).create();
+        }
+        if (mBuilder == null){
+            mBuilder = new AlertDialog.Builder(this);
+        }
     }
 
     private void initBmobSdk() {

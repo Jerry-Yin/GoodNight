@@ -39,4 +39,9 @@ public class HiRequestCodes {
     public static final int UPLOAD_PROGRESS = 0X19;
     public static final int UPLOAD_FAIL = 0X20;
 
+    /**
+     * 倒计时
+     */
+    public static final int COUNT_DOWN = 0X24;
+
 }

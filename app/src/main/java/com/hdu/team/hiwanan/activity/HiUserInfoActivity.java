@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.base.HiActivity;
@@ -42,6 +43,7 @@ public class HiUserInfoActivity extends HiActivity {
      */
     private RelativeLayout mBtnIcon;
     private ImageView mImgIcon;
+    private TextView mTxtName;
 
     private AlertDialog.Builder mBuilder;
     private AlertDialog mAlertDialog;
@@ -66,6 +68,7 @@ public class HiUserInfoActivity extends HiActivity {
     private void initViews() {
         mBtnIcon = (RelativeLayout) findViewById(R.id.btn_icon);
         mImgIcon = (ImageView) findViewById(R.id.img_account);
+        mTxtName = (TextView) findViewById(R.id.txt_usr_name);
         mBtnIcon.setOnClickListener(this);
 
         if (mBuilder == null) {
@@ -92,8 +95,7 @@ public class HiUserInfoActivity extends HiActivity {
         Log.d(TAG, "icon = " + usr.getIcon());    //用户头像url
 
         ImageLoaderUtil.displayWebImage(usr.getIcon(), mImgIcon);   // 加载用户头像
-//        mTxtName.setText(usr.getUsername());
-
+        mTxtName.setText(usr.getUsername());
     }
 
 

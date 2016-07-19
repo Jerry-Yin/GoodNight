@@ -14,6 +14,7 @@ public class HiConfig {
     public static final String APP_DIR = Environment.getExternalStorageDirectory() + "/HiWanan";
     public static final String APP_TEMP = APP_DIR + "/temp";
     public static final String APP_IMAGE = APP_DIR + "/image";
+    public static final String APP_VOICE_DIR = Environment.getExternalStorageDirectory() + "/hiwanan_voice_audios";   //录音文件
 
     /**
      * sharedPrf数据库名称
@@ -65,11 +66,13 @@ public class HiConfig {
     public static final String USER_ICON_W_W = "http://bmob-cdn-4793.b0.upaiyun.com/2016/07/14/39be4f5d4043b1c880095d179b4eaf5b.png";
 
 
+
     /**
      * 锁屏，解锁服务 参数
      */
     public final static String LOCK_SCREEN = "0X11";
     public final static String UN_LOCK_SCREEN = "0X12";
+
 
 
 

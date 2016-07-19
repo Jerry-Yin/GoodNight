@@ -11,7 +11,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.hdu.team.hiwanan.R;
+import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.manager.HiMediaRecordManager;
+import com.hdu.team.hiwanan.util.HiTimesUtil;
 
 
 /**
@@ -64,15 +66,15 @@ public class HiVoiceRecorderButton extends Button implements HiMediaRecordManage
             @Override
             public boolean onLongClick(View v) {
                 mReady = true;
-                mHiMediaRecordManager.prepareAudio();
+                mHiMediaRecordManager.prepareAudio(HiTimesUtil.getCurDataTime());
                 return false;
             }
         });
     }
 
     private void initMediaRecorder() {
-        String dir = Environment.getExternalStorageDirectory() + "/hiwanan_voice_audios";
-        mHiMediaRecordManager = HiMediaRecordManager.getInstance(dir);
+//        String dir = Environment.getExternalStorageDirectory() + "/hiwanan_voice_audios";
+        mHiMediaRecordManager = HiMediaRecordManager.getInstance(HiConfig.APP_VOICE_DIR);
         mHiMediaRecordManager.setOnAudioStateListener(this);        //录音准备完毕回调
     }
 

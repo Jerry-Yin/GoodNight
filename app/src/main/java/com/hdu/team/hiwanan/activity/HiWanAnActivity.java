@@ -1,11 +1,17 @@
 package com.hdu.team.hiwanan.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,19 +25,28 @@ import android.widget.TextView;
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.base.HiActivity;
 import com.hdu.team.hiwanan.constant.HiConfig;
+import com.hdu.team.hiwanan.constant.HiRequestCodes;
+import com.hdu.team.hiwanan.listener.OnProgressListener;
 import com.hdu.team.hiwanan.manager.HiMediaPlayerManager;
+import com.hdu.team.hiwanan.model.RecorderVoice;
+import com.hdu.team.hiwanan.util.BmobNetworkUtils;
 import com.hdu.team.hiwanan.util.HiLog;
+import com.hdu.team.hiwanan.util.HiTimesUtil;
 import com.hdu.team.hiwanan.util.HiUploadAudioUtil;
+import com.hdu.team.hiwanan.util.common.AmrFileUtil;
+import com.hdu.team.hiwanan.util.common.FileUtils;
 import com.hdu.team.hiwanan.view.HiVoiceRecorderButton;
+import com.nostra13.universalimageloader.utils.L;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by JerryYin on 11/3/15.
  */
-public class HiWanAnActivity extends HiActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class HiWanAnActivity extends HiActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private final static String TAG = "HiWanAnActivity";
 
@@ -52,6 +67,8 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
     private ArrayAdapter<RecorderVoice> mAdapter;
     private List<RecorderVoice> mDataLists = new ArrayList<>();
     private View mAnimView;
+
+    private ArrayList<Boolean> mCancelAble = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,13 +92,22 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
             @Override
             public void onFinish(float times, String filePath) {
                 //录音完成调用
-                RecorderVoice recorderVoice = new RecorderVoice(filePath, times);
+                RecorderVoice recorderVoice = new RecorderVoice(filePath, times, HiTimesUtil.getCurDataTime());
                 mDataLists.add(recorderVoice);
                 mAdapter.notifyDataSetChanged();
-                mlistVoice.setSelection(mDataLists.size() - 1);
+                int position = mDataLists.size()-1;
+                mlistVoice.setSelection(position);
+
+                //TODO 录音完毕 发送音频到服务器； 启动撤回倒计时线程，
+                sendVoiceToServer(mDataLists.size()-1);
+                mCancelAble.add(true);
+                HiTimesUtil.startCountDown(times*2, mHandler, position);
             }
         });
         mlistVoice.setOnItemClickListener(this);
+        mlistVoice.setOnItemLongClickListener(this);
+
+
     }
 
     @Override
@@ -98,12 +124,6 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
             default:
                 break;
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-//        mVibrator.cancel();
     }
 
     @Override
@@ -127,42 +147,84 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
                 mAnimView.setBackgroundResource(R.drawable.img_anim);
             }
         });
-
-        //TODO 传送音频到服务器
-        String result = HiUploadAudioUtil.upLoadAudio(new File(mDataLists.get(position).filePath), HiConfig.TEST_URL);
-        HiLog.d(TAG, "result = "+result);
-
     }
 
     /**
-     * 记录录音voice条目的类
+     *
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     * @return
      */
-    class RecorderVoice {
-        String filePath;
-        float time;
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        if (mCancelAble.get(position)){
+            mBuilder.setItems(new CharSequence[]{"复制", "撤回", "删除", "更多..."}, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case 0:
 
+                            break;
 
-        public RecorderVoice(String filePath, float time) {
-            super();
-            this.filePath = filePath;
-            this.time = time;
+                        case 1:
+
+                            break;
+
+                        case 2:
+
+                            break;
+
+                        case 3:
+
+                            break;
+                    }
+                }
+            }).create().show();
+        }else {
+            mBuilder.setItems(new CharSequence[]{"复制", "删除", "更多..."}, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case 0:
+
+                            break;
+
+                        case 1:
+
+                            break;
+
+                        case 2:
+
+                            break;
+                    }
+                }
+            }).create().show();
         }
 
-        public String getFilePath() {
-            return filePath;
-        }
+        return true;
+    }
 
-        public void setFilePath(String filePath) {
-            this.filePath = filePath;
-        }
+    public void sendVoiceToServer(int position){
+        BmobNetworkUtils.uploadFile(mDataLists.get(position).filePath, new OnProgressListener() {
+            @Override
+            public void onSuccess(Object result) {
+                Log.d(TAG, "result = "+result.toString());
+                // result = http://bmob-cdn-4793.b0.upaiyun.com/2016/07/19/e1d1a9b35a3848a4964ec9af51fa264b.amr
 
-        public float getTime() {
-            return time;
-        }
+            }
 
-        public void setTime(float time) {
-            this.time = time;
-        }
+            @Override
+            public void onFailure(int errorCode, String error) {
+                Log.d(TAG, "error = "+errorCode+ " " +error.toString());
+            }
+
+            @Override
+            public void onProgress(Integer progress) {
+                Log.d(TAG, "progress = "+progress);
+            }
+        });
     }
 
     /**
@@ -176,6 +238,12 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
         //语音item的最大最小宽度，根据屏幕宽度确定
         private int itemMinWidth;
         private int itemMaxWidth;
+
+
+        private class ViewHolder {
+            TextView seconds;   //时长秒数
+            View length;        //item条目宽度
+        }
 
         public HiVoiceListAdapter(Context context, List<RecorderVoice> datas) {
             super(context, -1, datas);
@@ -208,10 +276,25 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
         }
     }
 
-    private class ViewHolder {
-        TextView seconds;   //时长秒数
-        View length;        //item条目宽度
-    }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case HiRequestCodes.COUNT_DOWN:
+                    //倒计时
+                    Log.d(TAG, "倒计时："+msg.obj + " s");
+                    Log.d(TAG, "mCancelAble.get(position) = "+mCancelAble.get(msg.arg1));
+                    if (Float.valueOf(msg.obj.toString()) <= 0){
+                        mCancelAble.set(msg.arg1, false);
+                        Log.d(TAG, "mCancelAble.get(position) done = "+mCancelAble.get(msg.arg1));
+                    }
+                    break;
+            }
+        }
+    };
+
 
     @Override
     protected void onPause() {
@@ -223,6 +306,48 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
     protected void onResume() {
         super.onResume();
         HiMediaPlayerManager.resume();
+
+        reloadLocalVoice();
+    }
+
+    //加载之前的本地录音
+    private void reloadLocalVoice() {
+        ArrayList<File> localList = FileUtils.readFile(HiConfig.APP_VOICE_DIR);
+        mCancelAble.clear();
+        mDataLists.clear();
+        mAdapter.notifyDataSetChanged();
+        for (File file : localList){
+            Log.d(TAG, "path = "+file.getPath());
+            Log.d(TAG, "abPath = "+file.getAbsolutePath());
+            Log.d(TAG, "file = "+file.getName());
+            String[] names = file.getName().split("\\|");
+            for (String n : names){
+                //name : date.time.amr
+                Log.d(TAG, "n = "+n);
+            }
+
+            long duration = 0;
+            try {
+                duration = AmrFileUtil.getAmrDuration(file);
+                Log.d(TAG, "duration = "+ duration);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            RecorderVoice voice = new RecorderVoice(file.getPath(), duration, names[0]);
+            mDataLists.add(voice);
+            mCancelAble.add(false);
+            mAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        mVibrator.cancel();
     }
 
     @Override

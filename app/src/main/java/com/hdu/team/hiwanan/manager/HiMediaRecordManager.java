@@ -60,7 +60,7 @@ public class HiMediaRecordManager {
     }
 
 
-    public void prepareAudio() {
+    public void prepareAudio(String date) {
         //创建文件夹
         try {
             isPrepared = false;
@@ -70,7 +70,7 @@ public class HiMediaRecordManager {
                 dir.mkdirs();
 
             //根据文件夹创建文件
-            String fileName = generateFileName();
+            String fileName = generateFileName(date);
             File file = new File(dir, fileName);
 
             mCurFilePath = file.getAbsolutePath();
@@ -100,11 +100,16 @@ public class HiMediaRecordManager {
     }
 
     /**
-     * 随即生成文件的名称
+     * old 随即生成文件的名称
+     * new 以 “日期＋时长” 来命文件名
      * 音频的后缀名为 .amr
+     * @param date 日期
+     * @param time 时长
      */
-    private String generateFileName() {
-        return UUID.randomUUID().toString() + "amr";
+    private String generateFileName(String date) {
+//        return UUID.randomUUID().toString() + ".amr";     //eg: 520c0f04-59e0-4e39-a7a5-335c09db3a74.amr
+//        return date + "|"+ time + "|"+".amr";
+        return date + "|"+".amr";
     }
 
     /**

@@ -3,6 +3,8 @@ package com.hdu.team.hiwanan.manager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -34,8 +36,16 @@ public class HiMediaPlayerManager {
         try {
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setOnCompletionListener(onCompletionListener);
-            mMediaPlayer.setDataSource(filePath);
+
+            // 此处播放音频出现过一个问题，具体参考： http://blog.csdn.net/zbcll2012/article/details/44020931
+
+            File file = new File(filePath);
+            FileInputStream fis = new FileInputStream(file);
+            mMediaPlayer.setDataSource(fis.getFD());
+
+//            mMediaPlayer.setDataSource(filePath);
             mMediaPlayer.prepare();
+//            mMediaPlayer.prepareAsync();
             mMediaPlayer.start();
         } catch (IOException e) {
             e.printStackTrace();
