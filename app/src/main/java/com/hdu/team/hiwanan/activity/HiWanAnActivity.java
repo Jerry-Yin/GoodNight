@@ -158,7 +158,7 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
      * @return
      */
     @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
         if (mCancelAble.get(position)){
             mBuilder.setItems(new CharSequence[]{"复制", "撤回", "删除", "更多..."}, new DialogInterface.OnClickListener() {
                 @Override
@@ -173,7 +173,8 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
                             break;
 
                         case 2:
-
+                            FileUtils.deleteFile(mDataLists.get(position).filePath);
+                            reloadLocalVoice();
                             break;
 
                         case 3:
@@ -192,7 +193,8 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
                             break;
 
                         case 1:
-
+                            FileUtils.deleteFile(mDataLists.get(position).filePath);
+                            reloadLocalVoice();
                             break;
 
                         case 2:
@@ -295,21 +297,6 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
         }
     };
 
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        HiMediaPlayerManager.pause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        HiMediaPlayerManager.resume();
-
-        reloadLocalVoice();
-    }
-
     //加载之前的本地录音
     private void reloadLocalVoice() {
         ArrayList<File> localList = FileUtils.readFile(HiConfig.APP_VOICE_DIR);
@@ -343,6 +330,19 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HiMediaPlayerManager.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HiMediaPlayerManager.resume();
+
+        reloadLocalVoice();
+    }
 
     @Override
     protected void onStop() {

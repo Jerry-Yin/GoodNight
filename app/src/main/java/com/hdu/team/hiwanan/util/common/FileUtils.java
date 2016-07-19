@@ -40,8 +40,20 @@ public class FileUtils {
         return fileList;
     }
 
+    /**
+     * 删除文件
+     * @param path
+     * @return
+     */
     public static boolean deleteFile(String path){
-
-        return true;
+        Boolean ok = false;
+        File file = new File(path);
+        if (file.isFile()){
+            ok = file.delete();
+        }
+        else if (file.isDirectory()){
+            ok = file.delete();
+        }
+        return ok;
     }
 }
