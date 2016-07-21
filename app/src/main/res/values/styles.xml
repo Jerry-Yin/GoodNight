@@ -10,6 +10,7 @@
         <!--&lt;!&ndash; Navigation Bar &ndash;&gt;-->
         <!--<item name="android:windowTranslucentNavigation">true</item>-->
 
+
     </style>
 
     <style name="SleepTime">
@@ -48,4 +49,9 @@
         <item name="android:windowFullscreen">true</item>
     </style>
     
+    <style name="LogoTheme" parent="android:Theme">
+        <item name="android:windowBackground">@color/logo</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        </style>
 </resources>
