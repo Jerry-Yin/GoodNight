@@ -35,13 +35,25 @@ public class HiRequestCodes {
     /**
      * 上传文件
      */
-    public static final int UPLOAD_SUCCESS = 0X18;
+    public static final int UPLOAD_ICON_SUCCESS = 0X18;
     public static final int UPLOAD_PROGRESS = 0X19;
     public static final int UPLOAD_FAIL = 0X20;
+
+    /***
+     * 更新用户信息
+     */
+    public static final int UPDATE_ICON_SUCCESS = 0X21;
+    public static final int UPDATE_NAME_SUCCESS = 0X22;
+    public static final int UPDATE_LEVEL_SUCCESS = 0X23;
+    public static final int UPDATE_GROUP_SUCCESS = 0X24;
+    public static final int UPDATE_FAIL = 0X25;
+
+
 
     /**
      * 倒计时
      */
-    public static final int COUNT_DOWN = 0X24;
+    public static final int COUNT_DOWN = 0X30;
+
 
 }

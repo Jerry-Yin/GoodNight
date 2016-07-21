@@ -194,13 +194,17 @@ public class HiLoginActivity extends HiActivity {
                     Log.d(TAG, "json = " + json);
                     Log.d(TAG, "PWD = "+user.getObjectByKey("password"));
 
-//                    String pwd = mTxtPwd.getText().toString().trim();
-//                    if (!TextUtils.isEmpty(pwd)){
-//                        saveUsrInfoToLocal(user.getUsername(), pwd);
-//                    }else {
+                    if (mTxtPwd != null){
+                        String pwd = mTxtPwd.getText().toString().trim();
+                        user.setPassword(pwd);
+                    }
+                    String pwd = user.getPassword(user);
+                    if (!TextUtils.isEmpty(pwd)){
+                        saveUsrInfoToLocal(user.getUsername(), pwd);
+                    }else {
 //                        // TODO: 7/15/16  从服务器返回的用户信息保存 密码如何获取？
 //
-//                    }
+                    }
 
                     Intent intent = new Intent(HiLoginActivity.this, HiMainActivity.class);
                     startActivity(intent);

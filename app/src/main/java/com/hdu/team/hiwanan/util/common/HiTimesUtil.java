@@ -1,4 +1,4 @@
-package com.hdu.team.hiwanan.util;
+package com.hdu.team.hiwanan.util.common;
 
 import android.os.Bundle;
 import android.os.Handler;

@@ -1,7 +1,6 @@
 package com.hdu.team.hiwanan.view;
 
 import android.content.Context;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
@@ -13,7 +12,7 @@ import android.widget.Button;
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.manager.HiMediaRecordManager;
-import com.hdu.team.hiwanan.util.HiTimesUtil;
+import com.hdu.team.hiwanan.util.common.HiTimesUtil;
 
 
 /**

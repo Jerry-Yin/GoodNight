@@ -1,11 +1,9 @@
 package com.hdu.team.hiwanan.activity;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,13 +28,10 @@ import com.hdu.team.hiwanan.listener.OnProgressListener;
 import com.hdu.team.hiwanan.manager.HiMediaPlayerManager;
 import com.hdu.team.hiwanan.model.RecorderVoice;
 import com.hdu.team.hiwanan.util.BmobNetworkUtils;
-import com.hdu.team.hiwanan.util.HiLog;
-import com.hdu.team.hiwanan.util.HiTimesUtil;
-import com.hdu.team.hiwanan.util.HiUploadAudioUtil;
+import com.hdu.team.hiwanan.util.common.HiTimesUtil;
 import com.hdu.team.hiwanan.util.common.AmrFileUtil;
 import com.hdu.team.hiwanan.util.common.FileUtils;
 import com.hdu.team.hiwanan.view.HiVoiceRecorderButton;
-import com.nostra13.universalimageloader.utils.L;
 
 import java.io.File;
 import java.io.IOException;

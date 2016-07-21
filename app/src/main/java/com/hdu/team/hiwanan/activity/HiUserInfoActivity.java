@@ -1,6 +1,5 @@
 package com.hdu.team.hiwanan.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,17 +7,19 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.base.HiActivity;
@@ -28,9 +29,7 @@ import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.model.UserBmob;
 import com.hdu.team.hiwanan.util.BmobNetworkUtils;
 import com.hdu.team.hiwanan.util.ImageLoaderUtil;
-import com.nostra13.universalimageloader.utils.L;
-
-import java.util.HashMap;
+import com.hdu.team.hiwanan.util.ToastUtils;
 
 import cn.bmob.v3.BmobUser;
 
@@ -41,7 +40,7 @@ public class HiUserInfoActivity extends HiActivity {
     /**
      * Views
      */
-    private RelativeLayout mBtnIcon;
+    private RelativeLayout mBtnIcon, mBtnName;
     private ImageView mImgIcon;
     private TextView mTxtName;
 
@@ -67,9 +66,11 @@ public class HiUserInfoActivity extends HiActivity {
 
     private void initViews() {
         mBtnIcon = (RelativeLayout) findViewById(R.id.btn_icon);
+        mBtnName = (RelativeLayout) findViewById(R.id.btn_usr_name);
         mImgIcon = (ImageView) findViewById(R.id.img_account);
         mTxtName = (TextView) findViewById(R.id.txt_usr_name);
         mBtnIcon.setOnClickListener(this);
+        mBtnName.setOnClickListener(this);
 
         if (mBuilder == null) {
             mBuilder = new AlertDialog.Builder(this);
@@ -105,7 +106,8 @@ public class HiUserInfoActivity extends HiActivity {
         switch (v.getId()) {
             case R.id.btn_icon:
                 // TODO: 7/16/16 更换用户头像
-                mBuilder.setTitle("更换头像")
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("更换头像")
                         .setItems(new CharSequence[]{"拍照", "选择本地照片"}, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -129,11 +131,55 @@ public class HiUserInfoActivity extends HiActivity {
 
                 break;
 
+            case R.id.btn_usr_name:
+                final EditText editText = new EditText(this);
+                final AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+                builder1.setTitle("修改用户名")
+                        .setView(editText)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String name = editText.getText().toString().trim();
+                        if (!TextUtils.isEmpty(name)){
+                            mAlertDialog.setMessage("更新当中...");
+                            mAlertDialog.show();
+                            BmobNetworkUtils.updateUser(name, null, null, 0, null, new OnResponseListener() {
+                                final Message msg = new Message();
+                                @Override
+                                public void onSuccess(Object result) {
+                                    Log.d(TAG, result.toString());
+                                    msg.what = HiRequestCodes.UPDATE_NAME_SUCCESS;
+                                    msg.obj = result;
+                                    mHandler.sendMessage(msg);
+                                }
+
+                                @Override
+                                public void onFailure(int errorCode, String error) {
+                                    Log.d(TAG, errorCode + "error: "+error);
+                                    msg.what = HiRequestCodes.UPDATE_FAIL;
+                                    msg.obj = error;
+                                    mHandler.sendMessage(msg);
+                                }
+                            });
+                        }else {
+                            ToastUtils.showToast(getApplicationContext(), "用户名不能为空", Toast.LENGTH_SHORT);
+                        }
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        builder1.create().dismiss();
+                    }
+                }).create().show();
+                break;
+
             default:
                 break;
         }
 
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -180,6 +226,62 @@ public class HiUserInfoActivity extends HiActivity {
         }
     }
 
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case HiRequestCodes.UPLOAD_ICON_SUCCESS:
+                    mAlertDialog.dismiss();
+                    mUser.setIcon(msg.obj.toString());
+//                    updateLocalUser(msg.obj.toString());
+//                    updateUser(null, null, msg.obj.toString(),0, null, null);
+                    BmobNetworkUtils.updateUser(null, null, msg.obj.toString(), 0, null, new OnResponseListener() {
+                        final Message msg = new Message();
+                        @Override
+                        public void onSuccess(Object result) {
+                            Log.d(TAG, result.toString());
+                            msg.what = HiRequestCodes.UPDATE_ICON_SUCCESS;
+                            msg.obj = result;
+                            mHandler.sendMessage(msg);
+                        }
+
+                        @Override
+                        public void onFailure(int errorCode, String error) {
+                            Log.d(TAG, errorCode + "error: "+error);
+                        }
+                    });
+                    break;
+
+                case HiRequestCodes.UPLOAD_PROGRESS:
+
+                    break;
+
+                case HiRequestCodes.UPLOAD_FAIL:
+
+                    break;
+
+                case HiRequestCodes.UPDATE_ICON_SUCCESS:
+                    mAlertDialog.dismiss();
+                    ToastUtils.showToast(getApplicationContext(), "更新完毕！", Toast.LENGTH_SHORT);
+                    ImageLoaderUtil.displayFileImage(mImgPath, mImgIcon);   // 加载当前用户头像
+                    break;
+
+                case HiRequestCodes.UPDATE_NAME_SUCCESS:
+                    mAlertDialog.dismiss();
+                    ToastUtils.showToast(getApplicationContext(), "更新完毕！", Toast.LENGTH_SHORT);
+                    mTxtName.setText(BmobUser.getCurrentUser(UserBmob.class).getUsername());
+                    break;
+
+                case HiRequestCodes.UPDATE_FAIL:
+                    mAlertDialog.dismiss();
+                    ToastUtils.showToast(getApplicationContext(), "更新失败！"+msg.obj.toString(), Toast.LENGTH_SHORT);
+                    break;
+            }
+
+        }
+    };
+
     /**
      * 上传文件到服务器
      *
@@ -196,7 +298,7 @@ public class HiUserInfoActivity extends HiActivity {
                 public void onSuccess(Object result) {
                     if (!TextUtils.isEmpty(result.toString())) {
                         Log.d(TAG, "上传成功，url = " + result.toString());
-                        msg.what = HiRequestCodes.UPLOAD_SUCCESS;
+                        msg.what = HiRequestCodes.UPLOAD_ICON_SUCCESS;
                         msg.obj = result;
                         mHandler.sendMessage(msg);
                     }
@@ -218,42 +320,5 @@ public class HiUserInfoActivity extends HiActivity {
     }
 
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case HiRequestCodes.UPLOAD_SUCCESS:
-                    mAlertDialog.dismiss();
-                    mUser.setIcon(msg.obj.toString());
-                    updateUser(msg.obj.toString());
-                    break;
-
-                case HiRequestCodes.UPLOAD_PROGRESS:
-
-                    break;
-
-                case HiRequestCodes.UPLOAD_FAIL:
-
-                    break;
-            }
-
-        }
-    };
-
-    private void updateUser(String iconPath) {
-        ImageLoaderUtil.displayFileImage(mImgPath, mImgIcon);   // 加载用户头像
-        BmobNetworkUtils.updateUser(null, null, iconPath, 0, null, new OnResponseListener() {
-            @Override
-            public void onSuccess(Object result) {
-                Log.d(TAG, result.toString());
-            }
-
-            @Override
-            public void onFailure(int errorCode, String error) {
-                Log.d(TAG, errorCode + "error: "+error);
-            }
-        });
-    }
 }
 

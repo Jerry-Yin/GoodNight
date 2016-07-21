@@ -12,7 +12,7 @@ import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.base.HiActivity;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.util.HiToast;
-import com.hdu.team.hiwanan.util.HiTimesUtil;
+import com.hdu.team.hiwanan.util.common.HiTimesUtil;
 
 /**
  * Created by JerryYin on 11/23/15.

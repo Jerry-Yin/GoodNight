@@ -1,14 +1,13 @@
 package com.hdu.team.hiwanan.util;
 
 import android.content.Context;
-import android.os.Environment;
 import android.text.TextUtils;
 
 import com.hdu.team.hiwanan.listener.OnProgressListener;
 import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.model.User;
 import com.hdu.team.hiwanan.model.UserBmob;
-import com.hdu.team.hiwanan.network.OnDownloadListener;
+import com.hdu.team.hiwanan.listener.OnDownloadListener;
 
 import java.io.File;
 
@@ -231,4 +230,6 @@ public class BmobNetworkUtils {
             }
         });
     }
+
+    
 }

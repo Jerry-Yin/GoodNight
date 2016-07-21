@@ -49,6 +49,7 @@
         android:paddingRight="20dp" />
 
     <RelativeLayout
+        android:id="@+id/btn_usr_name"
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:background="@drawable/tab_pressed_btn_bg"

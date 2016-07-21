@@ -1,4 +1,4 @@
-package com.hdu.team.hiwanan.tools;
+package com.hdu.team.hiwanan.util.common;
 
 import android.app.Activity;
 import android.view.WindowManager;

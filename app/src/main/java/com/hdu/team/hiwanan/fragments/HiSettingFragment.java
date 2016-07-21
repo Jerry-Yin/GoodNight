@@ -10,7 +10,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,15 +26,11 @@ import com.hdu.team.hiwanan.activity.HiMainActivity;
 import com.hdu.team.hiwanan.activity.HiUserInfoActivity;
 import com.hdu.team.hiwanan.activity.HiVoiceSettingActivity;
 import com.hdu.team.hiwanan.constant.HiConfig;
-import com.hdu.team.hiwanan.constant.HiRequestCodes;
 import com.hdu.team.hiwanan.model.UserBmob;
-import com.hdu.team.hiwanan.network.OnDownloadListener;
-import com.hdu.team.hiwanan.util.BmobNetworkUtils;
 import com.hdu.team.hiwanan.util.HiSharedPreferenceUtil;
 import com.hdu.team.hiwanan.util.ImageLoaderUtil;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Created by JerryYin on 11/3/15.
