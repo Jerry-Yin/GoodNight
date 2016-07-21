@@ -38,10 +38,9 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.HiLogoActivity"></activity>
+
         <activity
-            android:name=".activity.HiLoginActivity"
-            android:label="@string/app_name"
+            android:name=".activity.HiLogoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/LogoTheme">
             <intent-filter>
@@ -49,23 +48,37 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity.HiLoginActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"></activity>
+
         <activity android:name=".activity.HiRegistActivity" />
+
         <activity
             android:name=".activity.HiMainActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.HiTimePickerActivity" />
+
         <activity
             android:name=".activity.HiWanAnActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.HiVoiceSettingActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.HiAboutFunction"
             android:screenOrientation="portrait" />
+
         <activity android:name=".activity.HiCollectionActivity" />
+
         <activity android:name=".activity.HiWanAnShareActivity" />
+
         <activity
+
             android:name=".activity.HiWanAnShareActivity2"
             android:windowSoftInputMode="stateVisible|adjustResize" />
 

@@ -44,7 +44,7 @@
 
     <style name="SplashTheme" parent="android:Theme">
         <!-- 将图层资源作为背景图像-->
-        <item name="android:windowBackground">@color/logo</item>
+        <item name="android:windowBackground">@drawable/night2</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
     </style>

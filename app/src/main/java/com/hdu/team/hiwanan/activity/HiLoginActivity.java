@@ -60,7 +60,7 @@ public class HiLoginActivity extends HiActivity {
 
     //每次打开前先读取本地数据库，看有无用户信息，有的话直接登录
     private boolean checkUserBefore(){
-        setContentView(R.layout.layout_logo);
+//        setContentView(R.layout.layout_logo);
         SharedPreferences preferences = getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, MODE_PRIVATE);
         String usr_name = preferences.getString(HiConfig.KEY_USER_NAME, null);
         String pwd = preferences.getString(HiConfig.KEY_PASSWORD, null);

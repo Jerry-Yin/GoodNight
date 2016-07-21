@@ -50,7 +50,7 @@
     </style>
     
     <style name="LogoTheme" parent="android:Theme">
-        <item name="android:windowBackground">@color/logo</item>
+        <item name="android:windowBackground">@drawable/night2</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
         </style>
