@@ -42,6 +42,10 @@ public class HiHomePageFragment extends Fragment implements View.OnClickListener
      * Constants
      */
     private View mContentView;
+
+
+    fff
+    ff
     private Activity mSelf;
 
     /**

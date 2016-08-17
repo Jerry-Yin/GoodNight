@@ -31,7 +31,7 @@ public class HiLogoActivity extends HiActivity implements View.OnClickListener {
 
         initView();
 
-        setAnimation(view);
+        setAnimation(mImg1);
 
     }
 
@@ -93,9 +93,9 @@ public class HiLogoActivity extends HiActivity implements View.OnClickListener {
 //                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f),    //缩放Y
 //                ObjectAnimator.ofFloat(view, "alpha", 1.0f, 0.0f)   //透明度
 
-                ObjectAnimator.ofFloat(mImg1, "scaleX", 1.5f, 0.0f),    //缩放X
-                ObjectAnimator.ofFloat(mImg1, "scaleY", 1.5f, 0.0f),    //缩放Y
-                ObjectAnimator.ofFloat(mImg1, "alpha", 1.0f, 0.1f)   //透明度
+                ObjectAnimator.ofFloat(view, "scaleX", 1.5f, 0.0f),    //缩放X
+                ObjectAnimator.ofFloat(view, "scaleY", 1.5f, 0.0f),    //缩放Y
+                ObjectAnimator.ofFloat(view, "alpha", 1.0f, 0.1f)   //透明度
         );
 
         set.setDuration(2000).start();
