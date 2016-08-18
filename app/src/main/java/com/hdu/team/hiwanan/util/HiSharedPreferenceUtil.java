@@ -3,6 +3,9 @@ package com.hdu.team.hiwanan.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by JerryYin on 7/15/16.
  * SharedPreference 数据库辅助类
@@ -21,13 +24,23 @@ public class HiSharedPreferenceUtil {
      * @param key
      * @param value
      */
-    public static void putDataToSP(Context context, String dbName, String key, String value) {
+    public static void putOneDataToSP(Context context, String dbName, String key, String value) {
         mPreferences = context.getSharedPreferences(dbName, Context.MODE_PRIVATE);
         mEditor = mPreferences.edit();
         mEditor.putString(key, value);
         mEditor.commit();
     }
 
+    
+    public static void putMapsToSP(Context context, String dbName, List<Map<String, Object>> maps){
+        mPreferences = context.getSharedPreferences(dbName, Context.MODE_PRIVATE);
+        mEditor = mPreferences.edit();
+        for (Map<String, Object> map: maps){
+            mEditor.putString(map.);
+        }
+        mEditor.commit();
+
+    }
 
     /**
      * 获取数据

@@ -20,6 +20,14 @@ public class HiTimeTabManager {
     public final static String CATEGORY_SLEEP = "入睡时间";
     public final static String CATEGORY_GETUP = "早起时间";
 
+    /**
+     * key of the map value
+     */
+    public final static String ICON = "icon";
+    public final static String CATEGORY = "category";
+    public final static String TIME = "time";
+    public final static String SWITCH = "switch";
+
     private String mTime;
 
 
@@ -53,20 +61,30 @@ public class HiTimeTabManager {
      */
     public static Map<String, Object> createMapTab(int imgId, String tvCategory, String time, Context context) {
         Map<String, Object> map = new HashMap<>();
-        map.put("icon", imgId);
-        map.put("category", tvCategory);
-        map.put("time", time);
+        map.put(ICON, imgId);
+        map.put(CATEGORY, tvCategory);
+        map.put(TIME, time);
         Switch aSwitch = new Switch(context);
-        map.put("switch", aSwitch);
+        map.put(SWITCH, aSwitch);
         return map;
     }
 
     public static Map<String, Object> createMapTab(int imgId, String tvCategory, String time) {
         Map<String, Object> map = new HashMap<>();
-        map.put("icon", imgId);
-        map.put("category", tvCategory);
-        map.put("time", time);
+        map.put(ICON, imgId);
+        map.put(CATEGORY, tvCategory);
+        map.put(TIME, time);
         return map;
+    }
+
+    public static Boolean saveMapTab(Map<String, Object> map){
+        int imgId = (int) map.get(ICON);
+        String category = (String) map.get(CATEGORY);
+        String time = (String) map.get(TIME);
+
+
+
+        return false;
     }
 
 }
