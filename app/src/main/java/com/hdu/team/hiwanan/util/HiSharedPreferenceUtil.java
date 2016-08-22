@@ -33,12 +33,12 @@ public class HiSharedPreferenceUtil {
 
     
     public static void putMapsToSP(Context context, String dbName, List<Map<String, Object>> maps){
-        mPreferences = context.getSharedPreferences(dbName, Context.MODE_PRIVATE);
-        mEditor = mPreferences.edit();
-        for (Map<String, Object> map: maps){
-            mEditor.putString(map.);
-        }
-        mEditor.commit();
+//        mPreferences = context.getSharedPreferences(dbName, Context.MODE_PRIVATE);
+//        mEditor = mPreferences.edit();
+//        for (Map<String, Object> map: maps){
+//            mEditor.putString(map.);
+//        }
+//        mEditor.commit();
 
     }
 
