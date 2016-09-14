@@ -1,11 +1,13 @@
 package com.hdu.team.hiwanan.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -118,15 +120,26 @@ public class HiLoginActivity extends HiActivity {
 
             case R.id.btn_send_broadcast:
                 // 发送锁屏广播（显示锁屏界面）
-//                Intent i2 = new Intent(Intent.ACTION_SCREEN_OFF);
-////                i2.setAction()
-//                sendBroadcast(i2);
+                Intent i2 = new Intent(Intent.ACTION_SCREEN_OFF);
+//                i2.setAction()
+                sendBroadcast(i2);
+//                lockScreen();
                 break;
 
 
             default:
                 break;
         }
+    }
+
+    private void lockScreen() {
+        PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK , "my tag --- wake_lock");
+
+//        wakeLock.acquire();
+        if (wakeLock != null)
+            wakeLock.release();
+
     }
 
 
