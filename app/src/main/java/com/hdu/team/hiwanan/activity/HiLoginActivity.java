@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -48,6 +49,7 @@ public class HiLoginActivity extends HiActivity {
     private EditText mTxtAccount, mTxtPwd;
     private ImageView mBtnForgetPwd;
     private AlertDialog mDialog;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,9 @@ public class HiLoginActivity extends HiActivity {
         if (mDialog == null) {
             mDialog = new AlertDialog.Builder(this).create();
         }
+        if (mProgressBar == null){
+            mProgressBar = new ProgressBar(this);
+        }
     }
 
     @Override
@@ -114,8 +119,8 @@ public class HiLoginActivity extends HiActivity {
                 break;
 
             case R.id.btn_start_lock_service:
-                Intent intent1 = new Intent(this, HiLockScreenService.class);
-                startService(intent1);
+//                Intent intent1 = new Intent(this, HiLockScreenService.class);
+//                startService(intent1);
                 break;
 
             case R.id.btn_send_broadcast:
@@ -168,6 +173,7 @@ public class HiLoginActivity extends HiActivity {
     private void login(UserBmob user) {
         if (mDialog!= null){
             mDialog.setMessage("登录中...");
+            mDialog.setView(mProgressBar);
             mDialog.show();
         }
         final Message message = new Message();
@@ -183,7 +189,10 @@ public class HiLoginActivity extends HiActivity {
             @Override
             public void onFailure(int errorCode, String error) {
                 message.what = HiRequestCodes.LOGIN_FAIL;
-                message.obj = error;
+                if (errorCode == 9016)
+                    message.obj = "网络连接错误，请检查网络";
+                else
+                    message.obj = error;
                 mHandler.sendMessage(message);
             }
         });
@@ -227,6 +236,7 @@ public class HiLoginActivity extends HiActivity {
                     if (mDialog != null){
                         mDialog.dismiss();
                     }
+
                     ToastUtils.showToast(getApplicationContext(), msg.obj.toString(), Toast.LENGTH_SHORT);
                     break;
             }
