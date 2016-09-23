@@ -15,10 +15,10 @@ import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.base.HiActivity;
+import com.hdu.team.hiwanan.fragments.HiFindFragment;
 import com.hdu.team.hiwanan.fragments.HiGoodNightFragment;
 import com.hdu.team.hiwanan.fragments.HiHomePageFragment;
 import com.hdu.team.hiwanan.fragments.HiSettingFragment;
-import com.hdu.team.hiwanan.fragments.HiSleepFragment;
 import com.jauker.widget.BadgeView;
 
 
@@ -49,7 +49,7 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
     private FragmentManager mFragmentManager;
     private HiHomePageFragment mHomePageFragment;
     private HiGoodNightFragment mGoodNightFragment;
-    private HiSleepFragment mSleepFragment;
+    private HiFindFragment mSleepFragment;
     private HiSettingFragment mSettingFragment;
 
     /**
@@ -189,9 +189,9 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
         return mGoodNightFragment;
     }
 
-    public HiSleepFragment getSleepFragment() {
+    public HiFindFragment getSleepFragment() {
         if (mSleepFragment == null) {
-            mSleepFragment = new HiSleepFragment();
+            mSleepFragment = new HiFindFragment();
         }
         return mSleepFragment;
     }

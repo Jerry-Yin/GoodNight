@@ -2,7 +2,6 @@ package com.hdu.team.hiwanan.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,26 +16,22 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.hdu.team.hiwanan.R;
-import com.hdu.team.hiwanan.activity.TestActivity;
 import com.hdu.team.hiwanan.activity.TestActivity2;
 import com.hdu.team.hiwanan.util.ToastUtils;
 import com.hdu.team.hiwanan.view.ScrollerTabView;
-
-import junit.framework.Test;
 
 import java.util.ArrayList;
 
 /**
  * Created by JerryYin on 11/3/15.
  */
-public class HiSleepFragment extends Fragment {
+public class HiFindFragment extends Fragment {
 
-    private static final String TAG = "HiSleepFragment";
+    private static final String TAG = "HiFindFragment";
 
     /**Constants*/
     private View mContentView;
@@ -75,7 +70,7 @@ public class HiSleepFragment extends Fragment {
                 vg.removeView(mContentView);
             }
         }else {mSelf = getActivity();
-            mContentView = inflater.inflate(R.layout.layout_sleep, null);
+            mContentView = inflater.inflate(R.layout.layout_find, null);
             mSelf = getActivity();
             setupViews();
         }
