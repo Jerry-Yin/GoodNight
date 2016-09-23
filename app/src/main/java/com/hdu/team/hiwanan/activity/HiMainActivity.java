@@ -143,11 +143,13 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_home_page:
+                mTitleBar.setVisibility(View.VISIBLE);
                 changeFragment(getHomeFragment(), false);
                 mtextTitle.setText(R.string.home_page);
                 break;
 
             case R.id.btn_good_night:
+                mTitleBar.setVisibility(View.VISIBLE);
                 changeFragment(getGoodNightFragment(), false);
                 mtextTitle.setText(R.string.good_night);
                 break;
@@ -155,9 +157,11 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
             case R.id.btn_sleep:
                 changeFragment(getSleepFragment(), false);
                 mtextTitle.setText(R.string.sleep);
+                mTitleBar.setVisibility(View.GONE);
                 break;
 
             case R.id.btn_setting:
+                mTitleBar.setVisibility(View.VISIBLE);
                 changeFragment(getSettingFragment(), false);
                 mtextTitle.setText(R.string.setting);
                 break;

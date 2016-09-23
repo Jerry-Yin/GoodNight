@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="primary">#3F51B5</color>
+    <color name="primaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
     <color name="test_color">#BDBDBD</color>
     <color name="color_voice_text">#ffffff</color>
     <color name="text_voice_length">#ff777777</color>
@@ -22,7 +26,6 @@
     <drawable name="img_around_color">#616161</drawable>
     <drawable name="img_pressed_bg_normal">#E0E0E0</drawable>
     <drawable name="img_pressed_bg_pressed">#B0BEC5</drawable>
-    <drawable name="btn_out_color1">#FFAB91</drawable>
-    <drawable name="btn_out_color">#FF8A65</drawable>
+
 
 </resources>
