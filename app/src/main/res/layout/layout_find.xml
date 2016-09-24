@@ -2,38 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="@string/sleep_record"-->
-    <!--android:textSize="18sp"/>-->
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="@color/colorAccent"
+        app:tabSelectedTextColor="@color/colorAccent"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        app:tabTextColor="@color/title_color"
+        >
 
-    <!--<ListView-->
-    <!--android:id="@+id/list_sleep_record"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:paddingTop="10dp">-->
-
-    <!--</ListView>-->
-
+    </android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_gravity="center"
-        android:layout_height="match_parent">
-
-        <android.support.v4.view.PagerTabStrip
-            android:id="@+id/pager_tab_strip"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:background="@color/title_color"
-            android:textAlignment="center"
-            >
-        </android.support.v4.view.PagerTabStrip>
-
+        android:layout_height="0dp"
+        android:layout_weight="1">
     </android.support.v4.view.ViewPager>
 
 

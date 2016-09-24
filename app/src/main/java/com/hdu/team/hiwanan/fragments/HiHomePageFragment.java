@@ -2,7 +2,6 @@ package com.hdu.team.hiwanan.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiTimePickerActivity;
+import com.hdu.team.hiwanan.base.HiBaseFragment;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.view.HiTimeTabManager;
 
@@ -61,7 +62,6 @@ public class HiHomePageFragment extends Fragment implements View.OnClickListener
 
     private SharedPreferences mPreferences;
 
-
     public Activity getmSelf() {
         return mSelf;
     }
@@ -97,6 +97,14 @@ public class HiHomePageFragment extends Fragment implements View.OnClickListener
 //        mTimeListAdapter.notifyDataSetChanged();
         mListView.setOnItemClickListener(this);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initTime();
+        mTimeListAdapter.notifyDataSetChanged();
+    }
+
 
     /**
      * todo
@@ -166,11 +174,6 @@ public class HiHomePageFragment extends Fragment implements View.OnClickListener
         return firstLists;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mTimeListAdapter.notifyDataSetChanged();
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

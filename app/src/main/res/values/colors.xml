@@ -20,6 +20,7 @@
     <color name="content_color">#EFEBE9</color>
     <color name="title_text_color">#E3F2FD</color>
     <color name="hint_text_color">#ffbebebe</color>
+    <color name="white">#ffffff</color>
 
     <drawable name="main_button_checked_bg">#BDBDBD</drawable>
     <drawable name="radio_btn_pressed_bg">#BDBDBD</drawable>

@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.hdu.team.hiwanan.R;
@@ -18,7 +20,7 @@ import cn.bmob.v3.BmobConfig;
  * Created by JerryYin on 11/3/15.
  * 本应用的基类Activity
  */
-public abstract class HiActivity extends Activity implements View.OnClickListener{
+public abstract class HiActivity extends FragmentActivity implements View.OnClickListener{
 
     private static final String TAG = "HiActivity";
 

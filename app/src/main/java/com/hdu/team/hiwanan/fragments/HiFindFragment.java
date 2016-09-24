@@ -1,12 +1,16 @@
 package com.hdu.team.hiwanan.fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
@@ -21,10 +25,12 @@ import android.widget.Toast;
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.TestActivity2;
+import com.hdu.team.hiwanan.base.HiBaseFragment;
 import com.hdu.team.hiwanan.util.ToastUtils;
 import com.hdu.team.hiwanan.view.ScrollerTabView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by JerryYin on 11/3/15.
@@ -37,202 +43,105 @@ public class HiFindFragment extends Fragment {
     private View mContentView;
     private Activity mSelf;
 
+
     /**Views*/
     private ViewPager mViewPager;
-    private PagerTabStrip mPagerTabStrip;
-    private ScrollerTabView mTabView;
-    ArrayList<View> mViewContainer = new ArrayList<>();
-    ArrayList<String> mTitleContainer = new ArrayList<>();
+    private TabLayout mTabLayout;
 
-    View PageCalendar;
-    View PageFeeling;
-    View PageHelpSleep;
-
-    private MaterialViewPager materialViewPager;
 
     /**
      * Values
      */
-    private HiPagerAdapter mPagerAdapter;
-    private HiPageChangeListener mChangeListener;
+    private MyPagerFragmentAdapter mPagerAdapter;
+    private List<Fragment> mFragmentList;
+    private final String[] mTitles = new String[]{"单向历","心情","助睡眠"};
 
 
-    public Activity getmSelf(){
-        return mSelf;
-    }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (null != mContentView){
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (null != mContentView) {
             ViewGroup vg = (ViewGroup) mContentView.getParent();
-            if (null != vg){
+            if (null != vg) {
                 vg.removeView(mContentView);
             }
-        }else {mSelf = getActivity();
-            mContentView = inflater.inflate(R.layout.layout_find, null);
+        } else {
             mSelf = getActivity();
-            setupViews();
+            mContentView = inflater.inflate(R.layout.layout_find, null);
+            initViews();
+
         }
         return mContentView;
     }
 
-    private void setupViews() {
+
+    public void initViews() {
         mViewPager = (ViewPager) mContentView.findViewById(R.id.view_pager);
-        mPagerTabStrip = (PagerTabStrip) mContentView.findViewById(R.id.pager_tab_strip);
-        mPagerTabStrip.setDrawFullUnderline(false);
-        mPagerTabStrip.setTabIndicatorColorResource(R.color.btn_out_color);
-        mPagerTabStrip.setTextSpacing(100);
-//        mPagerTabStrip.setGravity(View.TEXT_ALIGNMENT_GRAVITY);
-        mPagerTabStrip.setTextSize(1, 16);
-        mPagerTabStrip.setTextColor(getResources().getColor(R.color.title_text_color));
-
-        PageCalendar = LayoutInflater.from(mSelf).inflate(R.layout.layout_calendar, null);
-        PageFeeling = LayoutInflater.from(mSelf).inflate(R.layout.layout_feeling, null);
-        PageHelpSleep = LayoutInflater.from(mSelf).inflate(R.layout.layout_help_sleep, null);
-        mViewContainer.add(PageCalendar);
-        mViewContainer.add(PageFeeling);
-        mViewContainer.add(PageHelpSleep);
-
-        mTitleContainer.add("单向历");
-        mTitleContainer.add("心情");
-        mTitleContainer.add("助睡眠");
-
-        initDatas();
-
-        mViewPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-
-        });
-
-//        mTabView = (ScrollerTabView) mContentView.findViewById(R.id.scroll_tab_view);
-//        mTabView.setTabNum(3);
-//        mTabView.setSelectedColor(R.color.colorPrimary, R.color.colorAccent);
-    }
-
-    private void initDatas() {
-        mPagerAdapter = new HiPagerAdapter();
-        mChangeListener = new HiPageChangeListener();
-
+        mTabLayout = (TabLayout) mContentView.findViewById(R.id.tab_layout);
+        initData();
+        Log.d(TAG, "list.size = "+mFragmentList.size());
+        mPagerAdapter = new MyPagerFragmentAdapter(getActivity().getSupportFragmentManager(), mSelf, mFragmentList, mTitles);
         mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.setOnPageChangeListener(mChangeListener);
+        mTabLayout.setupWithViewPager(mViewPager);
+    }
 
+    public void initData() {
+        mFragmentList = new ArrayList<>();
+        mFragmentList.add(new HiCalendarFragment());
+        mFragmentList.add(new HiFeelingFragment());
+        mFragmentList.add(new HiHelpSleepFragment());
     }
 
 
-
-
-
-    class HiPagerAdapter extends PagerAdapter{
-
-        @Override
-        public int getCount() {
-            return mViewContainer.size();
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            ((ViewPager)container).removeView(mViewContainer.get(position));
-//            super.destroyItem(container, position, object);
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(mViewContainer.get(position));
-            return mViewContainer.get(position);
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return super.getItemPosition(object);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mTitleContainer.get(position);
-//            return super.getPageTitle(position);
-        }
-
-    }
-
-    class HiPageChangeListener implements ViewPager.OnPageChangeListener{
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            Log.d(TAG, "-------scrolled position:" + position);
-            Log.d(TAG, "-------scrolled positionOffset:" + positionOffset);
-            Log.d(TAG, "-------scrolled positionOffsetPixels:" + positionOffsetPixels);
-//            mTabView.setOffset(position, positionOffset);
-
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            Log.d(TAG, "------selected:" + position);
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-            Log.d(TAG, "--------changed:" + state);
-        }
-    }
-
-
-
-//    class HiViewPager extends ViewPager{
-//
-//        public HiViewPager(Context context) {
-//            super(context);
-//        }
-//
-//        @Override
-//        public boolean dispatchTouchEvent(MotionEvent ev) {
-//            boolean ret = super.dispatchTouchEvent(ev);
-//            if(ret)
-//            {
-//                ((ViewGroup)itemViewPager.getParent()).requestDisallowInterceptTouchEvent(true);
-//            }
-//            return ret;
-////            return super.dispatchTouchEvent(ev);
-//        }
-//    }
 
 
     @Override
     public void onResume() {
         super.onResume();
+        mPagerAdapter.notifyDataSetChanged();
+        mViewPager.setVisibility(View.VISIBLE);
 
-//        materialViewPager = (MaterialViewPager) PageCalendar.findViewById(R.id.material_viewpager);
-        final CardView button;
-        button = (CardView) PageCalendar.findViewById(R.id.btn_test);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToastUtils.showToast(mSelf, "jajajaj", Toast.LENGTH_SHORT);
-
-                Intent intent = new Intent(mSelf, TestActivity2.class);
-
-                //普通的  平移，跟我们的overridePendingTransition效果是一样的，从第二个和第三个参数就可以看出
-//                ActivityOptionsCompat options = ActivityOptionsCompat.makeCustomAnimation(mSelf, R.animaation.transition, R.string.transition);
-
-                //场景动画  需要两个activity中的view 去协同完成
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mSelf, button, getString(R.string.transition));
-
-                //放大   第1个参数是scale哪个view的大小，第2和3个参数是以view为基点，从哪开始动画，这里是该view的中心，4和5参数是新的activity从多大开始放大，这里是从无到有的过程。
-//                ActivityOptionsCompat options = ActivityOptionsCompat.makeScaleUpAnimation(button, button.getWidth()/2, button.getHeight()/2, 0, 0);
-
-
-                ActivityCompat.startActivity(mSelf, intent, options.toBundle());
-//                startActivity(new Intent(mSelf, TestActivity2.class));
-
-            }
-        });
     }
+
+
+    /**
+     * 基础版本适配器
+     */
+    public class MyPagerFragmentAdapter extends FragmentPagerAdapter {
+
+        private Context mContext;
+        private List<android.support.v4.app.Fragment> mFragments;
+        private String[] mTitles;
+
+        public MyPagerFragmentAdapter(FragmentManager fm, Context context, List<android.support.v4.app.Fragment> fragments, String[] titles) {
+            super(fm);
+            this.mContext = context;
+            this.mFragments = fragments;
+            this.mTitles = titles;
+            Log.d(TAG, "adapter.size = "+mFragments.size());
+//            Log.d(TAG, "adapter.size = "+mFragmentList.size());
+//            Log.d(TAG, "adapter.size = "+mFragmentList.size());
+
+        }
+
+
+
+        @Override
+        public android.support.v4.app.Fragment getItem(int position) {
+            return mFragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragments.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mTitles[position];
+        }
+    }
+
+
 }

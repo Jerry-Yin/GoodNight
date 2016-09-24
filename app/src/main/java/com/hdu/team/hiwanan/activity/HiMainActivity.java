@@ -1,11 +1,14 @@
 package com.hdu.team.hiwanan.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RadioButton;
@@ -80,7 +83,7 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
     }
 
     public void initViews() {
-        mFragmentManager = getFragmentManager();
+        mFragmentManager = getSupportFragmentManager();
         mtextTitle = (TextView) findViewById(R.id.text_title);
         mbuttomGroup = (RadioGroup) findViewById(R.id.buttom_group);
         mbtnHomePage = (RadioButton) findViewById(R.id.btn_home_page);

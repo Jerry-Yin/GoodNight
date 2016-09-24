@@ -1,7 +1,7 @@
 package com.hdu.team.hiwanan.fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +18,7 @@ import com.hdu.team.hiwanan.activity.HiCollectionActivity;
 import com.hdu.team.hiwanan.activity.HiWanAnActivity;
 import com.hdu.team.hiwanan.activity.HiWanAnShareActivity;
 import com.hdu.team.hiwanan.activity.HiWanAnShareActivity2;
+import com.hdu.team.hiwanan.base.HiBaseFragment;
 
 /**
  * Created by JerryYin on 11/3/15.
@@ -36,36 +37,37 @@ public class HiGoodNightFragment extends Fragment implements View.OnClickListene
     private RadioButton mbtnCollection;
     private RadioButton mbtnHelpSleep;
 
-    public Activity getmSelf(){
-        return mSelf;
-    }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (null != mContentView){
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (null != mContentView) {
             ViewGroup vg = (ViewGroup) mContentView.getParent();
-            if (null != vg){
+            if (null != vg) {
                 vg.removeView(mContentView);
             }
-        }else {
+        } else {
             mSelf = getActivity();
             mContentView = inflater.inflate(R.layout.layout_good_night, null);
-            setupViews();
+            initViews();
+            initData();
         }
         return mContentView;
     }
 
-    private void setupViews() {
+    public void initViews() {
         mbtnHiWanAn = (RadioButton) mContentView.findViewById(R.id.btn_hi_wanan);
         mbtnCollection = (RadioButton) mContentView.findViewById(R.id.btn_collection_wanan);
         mbtnHelpSleep = (RadioButton) mContentView.findViewById(R.id.btn_help_sleep);
         mbtnHiWanAn.setOnClickListener(this);
         mbtnCollection.setOnClickListener(this);
         mbtnHelpSleep.setOnClickListener(this);
-
     }
 
+    public void initData() {
+
+
+    }
 
     @Override
     public void onClick(View v) {

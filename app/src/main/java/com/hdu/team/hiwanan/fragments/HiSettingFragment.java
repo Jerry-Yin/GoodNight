@@ -2,7 +2,6 @@ package com.hdu.team.hiwanan.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +25,7 @@ import com.hdu.team.hiwanan.activity.HiLoginActivity;
 import com.hdu.team.hiwanan.activity.HiMainActivity;
 import com.hdu.team.hiwanan.activity.HiUserInfoActivity;
 import com.hdu.team.hiwanan.activity.HiVoiceSettingActivity;
+import com.hdu.team.hiwanan.base.HiBaseFragment;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.model.UserBmob;
 import com.hdu.team.hiwanan.util.HiSharedPreferenceUtil;
@@ -59,27 +60,45 @@ public class HiSettingFragment extends Fragment implements View.OnClickListener 
     private AlertDialog.Builder mAlertDialog;
 
 
-    public Activity getmSelf() {
-        return mSelf;
-    }
-
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (null != mContentView) {
             ViewGroup vg = (ViewGroup) mContentView.getParent();
             if (null != vg) {
                 vg.removeView(mContentView);
             }
         } else {
-            mContentView = inflater.inflate(R.layout.layout_setting, null);
             mSelf = getActivity();
-            setupViews();
-//            loadUsrInfo();
-
+            mContentView = inflater.inflate(R.layout.layout_setting, null);
+            initViews();
+            initData();
         }
         return mContentView;
+    }
+
+    public void initViews() {
+        mbtnPersonal = (LinearLayout) mContentView.findViewById(R.id.btn_personal);
+        mTxtName = (TextView) mContentView.findViewById(R.id.text_account_name);
+        mbtnWADaRen = (RadioButton) mContentView.findViewById(R.id.btn_wanan_daren);
+        mbtnSettingHi = (RadioButton) mContentView.findViewById(R.id.btn_setting_hi_voice);
+        mbtnAboutApp = (RadioButton) mContentView.findViewById(R.id.btn_about_function);
+        mbtnLogout = (RadioButton) mContentView.findViewById(R.id.btn_logout);
+        mImgIcon = (ImageView) mContentView.findViewById(R.id.img_account);
+        mbtnPersonal.setOnClickListener(this);
+        mbtnWADaRen.setOnClickListener(this);
+        mbtnSettingHi.setOnClickListener(this);
+        mbtnAboutApp.setOnClickListener(this);
+        mbtnLogout.setOnClickListener(this);
+        mImgIcon.setOnClickListener(this);
+        if (mAlertDialog == null) {
+            mAlertDialog = new AlertDialog.Builder(mSelf);
+        }
+    }
+
+    public void initData(){
+
     }
 
     /**
@@ -120,25 +139,6 @@ public class HiSettingFragment extends Fragment implements View.OnClickListener 
 
     }
 
-
-    private void setupViews() {
-        mbtnPersonal = (LinearLayout) mContentView.findViewById(R.id.btn_personal);
-        mTxtName = (TextView) mContentView.findViewById(R.id.text_account_name);
-        mbtnWADaRen = (RadioButton) mContentView.findViewById(R.id.btn_wanan_daren);
-        mbtnSettingHi = (RadioButton) mContentView.findViewById(R.id.btn_setting_hi_voice);
-        mbtnAboutApp = (RadioButton) mContentView.findViewById(R.id.btn_about_function);
-        mbtnLogout = (RadioButton) mContentView.findViewById(R.id.btn_logout);
-        mImgIcon = (ImageView) mContentView.findViewById(R.id.img_account);
-        mbtnPersonal.setOnClickListener(this);
-        mbtnWADaRen.setOnClickListener(this);
-        mbtnSettingHi.setOnClickListener(this);
-        mbtnAboutApp.setOnClickListener(this);
-        mbtnLogout.setOnClickListener(this);
-        mImgIcon.setOnClickListener(this);
-        if (mAlertDialog == null) {
-            mAlertDialog = new AlertDialog.Builder(mSelf);
-        }
-    }
 
     @Override
     public void onResume() {
