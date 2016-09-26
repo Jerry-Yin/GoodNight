@@ -80,20 +80,20 @@ public class PullPushLayout extends ScrollView {
 
 
     private void initView() {
-        mHeader = (ViewGroup) findViewById(R.id.rl_top);
-        mHeaderChild = mHeader.getChildAt(0);
-        mContent = findViewById(R.id.ll_content);
-
-        mHeader.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-            @SuppressWarnings("deprecation")
-            @Override
-            public void onGlobalLayout() {
-                mHeader.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                range = mHeader.getHeight();
-                mHeader.getLayoutParams().height = range;
-                mHeaderHeight = range;
-            }
-        });
+//        mHeader = (ViewGroup) findViewById(R.id.rl_top);
+//        mHeaderChild = mHeader.getChildAt(0);
+//        mContent = findViewById(R.id.ll_content);
+//
+//        mHeader.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+//            @SuppressWarnings("deprecation")
+//            @Override
+//            public void onGlobalLayout() {
+//                mHeader.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+//                range = mHeader.getHeight();
+//                mHeader.getLayoutParams().height = range;
+//                mHeaderHeight = range;
+//            }
+//        });
 
     }
 

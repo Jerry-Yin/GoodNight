@@ -36,32 +36,32 @@ public class TestActivity2 extends HiActivity {
 
 
     private void initView() {
-        mLayout = (PullPushLayout) this.findViewById(R.id.layout);
-        mLayout.setOnTouchEventMoveListenre(new PullPushLayout.OnTouchEventMoveListenre() {
-
-            @Override
-            public void onSlideUp(int mOriginalHeaderHeight, int mHeaderHeight) {
-
-            }
-
-            @Override
-            public void onSlideDwon(int mOriginalHeaderHeight, int mHeaderHeight) {
-
-            }
-
-            @Override
-            public void onSlide(int alpha) {
-                int alphaReverse = alphaMax - alpha;
-                if (alphaReverse < 0) {
-                    alphaReverse = 0;
-                }
-//                bgBackDrawable.setAlpha(alphaReverse);
-//                bgShareDrawable.setAlpha(alphaReverse);
-//                bgNavBarDrawable.setAlpha(alpha);
-//                bglineNavBarDrawable.setAlpha(alpha);
-
-            }
-        });
+//        mLayout = (PullPushLayout) this.findViewById(R.id.layout_);
+//        mLayout.setOnTouchEventMoveListenre(new PullPushLayout.OnTouchEventMoveListenre() {
+//
+//            @Override
+//            public void onSlideUp(int mOriginalHeaderHeight, int mHeaderHeight) {
+//
+//            }
+//
+//            @Override
+//            public void onSlideDwon(int mOriginalHeaderHeight, int mHeaderHeight) {
+//
+//            }
+//
+//            @Override
+//            public void onSlide(int alpha) {
+//                int alphaReverse = alphaMax - alpha;
+//                if (alphaReverse < 0) {
+//                    alphaReverse = 0;
+//                }
+////                bgBackDrawable.setAlpha(alphaReverse);
+////                bgShareDrawable.setAlpha(alphaReverse);
+////                bgNavBarDrawable.setAlpha(alpha);
+////                bglineNavBarDrawable.setAlpha(alpha);
+//
+//            }
+//        });
 //        navBar = this.findViewById(R.id.nav_bar);
 //        lineNavBar = this.findViewById(R.id.line_nav_bar);
 //        btnBack = this.findViewById(R.id.iv_back);
