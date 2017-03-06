@@ -25,7 +25,6 @@ public class HiAboutFunction extends HiActivity implements View.OnClickListener{
     private void initView() {
         mTextTitle = (TextView) findViewById(R.id.text_title);
         mTextTitle.setText(R.string.about_app);
-
     }
 
     @Override

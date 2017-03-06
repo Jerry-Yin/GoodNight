@@ -1,7 +1,6 @@
 package com.hdu.team.hiwanan.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,23 +9,25 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.hdu.team.hiwanan.R;
-import com.hdu.team.hiwanan.activity.TestActivity2;
-import com.hdu.team.hiwanan.base.HiBaseFragment;
-import com.hdu.team.hiwanan.util.ToastUtils;
-import com.hdu.team.hiwanan.view.RoundImageView;
+import com.hdu.team.hiwanan.activity.HiCalendarActivity;
+import com.hdu.team.hiwanan.adapter.CusRecyclerViewAdapter;
+import com.hdu.team.hiwanan.constant.HiConfig;
+import com.hdu.team.hiwanan.listener.OnResponseListener;
+import com.hdu.team.hiwanan.model.HiCalendar;
+import com.hdu.team.hiwanan.model.HiMaps;
+import com.hdu.team.hiwanan.util.OkHttpUtils;
+import com.hdu.team.hiwanan.util.common.HiTimesUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,8 +42,13 @@ public class HiCalendarFragment extends Fragment {
     private View mContentView;
     private Activity mSelf;
 
+    /**Views*/
+    private RecyclerView mRecyclerView;
+    private ImageView mImageView;
 
-
+    /**Values*/
+    private List<HiCalendar> mCalendarList;
+    private CusRecyclerViewAdapter mViewAdapter;
 
 
     @Nullable
@@ -63,15 +69,6 @@ public class HiCalendarFragment extends Fragment {
     }
 
     public void initViews() {
-
-    }
-
-
-    private ImageView mImageView;
-
-
-    public void initData() {
-
         final CardView button;
         button = (CardView) mContentView.findViewById(R.id.btn_test);
         mImageView = (ImageView) mContentView.findViewById(R.id.img_calendar);
@@ -79,7 +76,7 @@ public class HiCalendarFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(mSelf, TestActivity2.class);
+                Intent intent = new Intent(mSelf, HiCalendarActivity.class);
                 Pair<View, String> cardPair = new Pair<View, String>(((View) button), getString(R.string.transition));
                 Pair<View, String> imgPair = new Pair<View, String>(((View) mImageView), getString(R.string.transition_img));
 
@@ -101,11 +98,78 @@ public class HiCalendarFragment extends Fragment {
             }
         });
 
+
+        mRecyclerView = (RecyclerView) mContentView.findViewById(R.id.recyclerView_calendar);
+
     }
 
 
+    public void initData() {
+        // TODO: 10/13/16 add data
+        mCalendarList = new ArrayList<>();
+        mViewAdapter = new CusRecyclerViewAdapter(mSelf, mCalendarList);
+        initCalendars();
+    }
+
+    private void initCalendars() {
+        for (int i=0; i<10; i++){
+            HiCalendar calendar = new HiCalendar();
+            calendar.setDate(getString(R.string.date));
+            calendar.setAuthor(getString(R.string.author));
+            calendar.setDay_zodiac(getString(R.string.day_zodiac));
+            calendar.setDay(getString(R.string.day));
+            calendar.setDo_something(getString(R.string.do_something));
+            calendar.setMonth(getString(R.string.month));
+            calendar.setMonth_zodiac(getString(R.string.month_zodiac));
+            calendar.setWords(getString(R.string.words));
+            calendar.setYear_old(getString(R.string.year_old));
+            calendar.setYear_zodiac(getString(R.string.year_zodiac));
+            mCalendarList.add(calendar);
+            mViewAdapter.notifyDataSetChanged();
+        }
+
+//        String curDate = HiTimesUtil.getCurData();
+//        String url = HiConfig.URL_CALENDAR+"?date="+curDate+"&key="+HiConfig.APP_KEY_CALENDAR;
+//        OkHttpUtils.OkHttpGet("www.baidu.com", new OnResponseListener() {
+//            @Override
+//            public void onSuccess(Object result) {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(int errorCode, String error) {
+//
+//            }
+//        });
+
+//        List<HiMaps> parems = new ArrayList<>();
+//        parems.add(new HiMaps("date", curDate));
+//        parems.add(new HiMaps("key", HiConfig.APP_KEY_CALENDAR));
+//        OkHttpUtils.OkHttpPost(HiConfig.URL_CALENDAR, parems, new OnResponseListener() {
+//            @Override
+//            public void onSuccess(Object result) {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(int errorCode, String error) {
+//
+//            }
+//        });
+
+    }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
 }

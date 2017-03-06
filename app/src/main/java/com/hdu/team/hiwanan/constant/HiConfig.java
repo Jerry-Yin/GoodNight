@@ -74,6 +74,13 @@ public class HiConfig {
     public final static String UN_LOCK_SCREEN = "0X12";
 
 
+    /**
+     * 聚合数据提供
+     * 日历数据请求接口
+     * 请求示例：http://japi.juhe.cn/calendar/day?date=2015-1-1&key=您申请的appKey
+     */
+    public static final String APP_KEY_CALENDAR = "ced957858d6d3f18b18c071b837a3966";
+    public static final String URL_CALENDAR = "http://japi.juhe.cn/calendar/day";
 
 
 }

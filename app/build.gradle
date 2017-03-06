@@ -48,4 +48,9 @@ dependencies {
     compile ('com.github.florent37:materialviewpager:1.2.0@aar'){
         transitive = true
     }
+
+    //okhttp
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+
+
 }

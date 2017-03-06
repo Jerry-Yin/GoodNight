@@ -21,6 +21,12 @@
     <color name="title_text_color">#E3F2FD</color>
     <color name="hint_text_color">#ffbebebe</color>
     <color name="white">#ffffff</color>
+    
+    <color name="purple">#702ACC </color>
+    <color name="white_smoke">#F3F3F3</color>
+    <color name="green_sure">#32C25E </color>
+    <color name="green_2">#51B8AE</color>
+    <color name="green_3">#80CBC4</color>
 
     <drawable name="main_button_checked_bg">#BDBDBD</drawable>
     <drawable name="radio_btn_pressed_bg">#BDBDBD</drawable>

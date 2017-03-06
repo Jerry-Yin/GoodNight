@@ -1,64 +1,92 @@
 package com.hdu.team.hiwanan.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
-import android.view.ViewParent;
-import android.widget.Toast;
 
-import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.base.HiActivity;
-import com.hdu.team.hiwanan.util.ToastUtils;
+import com.hdu.team.hiwanan.view.PullPushLayout;
 
 /**
  * Created by JerryYin on 9/18/16.
  */
 public class HiCalendarActivity extends HiActivity {
 
+    private View btnBack;
+    private View btnShare;		//标题分享
+    private View navBar;
+    private View lineNavBar;
 
-    private static final String TAG = "HiCalendarActivity";
-    private MaterialViewPager mViewPager;
+    private PullPushLayout mLayout;
+//    private Drawable bgBackDrawable;
+//    private Drawable bgShareDrawable;
+//    private Drawable bgNavBarDrawable;
+//    private Drawable bglineNavBarDrawable;
+
+    private int alphaMax = 180;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "HiCalendarActivity.onCreate() is called..");
-        setContentView(R.layout.layout_calendar);
-//        mViewPager = (MaterialViewPager) findViewById(R.id.material_viewpager);
-//        initViews();
-//        mViewPager.setOnTouchListener(new View.OnTouchListener() {
+        setContentView(R.layout.layout_test2);
+    }
+
+
+    private void initView() {
+//        mLayout = (PullPushLayout) this.findViewById(R.id.layout_);
+//        mLayout.setOnTouchEventMoveListenre(new PullPushLayout.OnTouchEventMoveListenre() {
+//
 //            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_MOVE:
-//                        ((ViewParent) v.getParent()).requestDisallowInterceptTouchEvent(true);
-//                        break;
-//                    case MotionEvent.ACTION_UP:
-//                    case MotionEvent.ACTION_CANCEL:
-//                        ((ViewParent) v.getParent()).requestDisallowInterceptTouchEvent(false);
-//                        break;
+//            public void onSlideUp(int mOriginalHeaderHeight, int mHeaderHeight) {
+//
+//            }
+//
+//            @Override
+//            public void onSlideDwon(int mOriginalHeaderHeight, int mHeaderHeight) {
+//
+//            }
+//
+//            @Override
+//            public void onSlide(int alpha) {
+//                int alphaReverse = alphaMax - alpha;
+//                if (alphaReverse < 0) {
+//                    alphaReverse = 0;
 //                }
-//                return true;
+////                bgBackDrawable.setAlpha(alphaReverse);
+////                bgShareDrawable.setAlpha(alphaReverse);
+////                bgNavBarDrawable.setAlpha(alpha);
+////                bglineNavBarDrawable.setAlpha(alpha);
+//
 //            }
 //        });
+//        navBar = this.findViewById(R.id.nav_bar);
+//        lineNavBar = this.findViewById(R.id.line_nav_bar);
+//        btnBack = this.findViewById(R.id.iv_back);
+//        btnShare = this.findViewById(R.id.iv_share);
+
+//        bgBackDrawable = btnBack.getBackground();
+//        bgBackDrawable.setAlpha(alphaMax);
+//        bgShareDrawable = btnShare.getBackground();
+//        bgShareDrawable.setAlpha(alphaMax);
+//
+//        bgNavBarDrawable = navBar.getBackground();
+//        bglineNavBarDrawable = lineNavBar.getBackground();
+//        bgNavBarDrawable.setAlpha(0);
+//        bglineNavBarDrawable.setAlpha(0);
+
     }
-
-    private void initViews() {
-
-    }
-
 
     @Override
     public void onClick(View v) {
-//        if (v.getId() == R.id.btn_test)
-//            ToastUtils.showToast(this, "jajajaj", Toast.LENGTH_SHORT);
-//        Log.d(TAG, "JAJAJAJJA");
+
     }
 
-    public void test(View v){
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ActivityCompat.finishAfterTransition(this);
     }
 }

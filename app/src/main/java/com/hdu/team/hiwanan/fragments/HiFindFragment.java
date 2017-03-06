@@ -2,32 +2,19 @@ package com.hdu.team.hiwanan.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.hdu.team.hiwanan.R;
-import com.hdu.team.hiwanan.activity.TestActivity2;
-import com.hdu.team.hiwanan.base.HiBaseFragment;
-import com.hdu.team.hiwanan.util.ToastUtils;
-import com.hdu.team.hiwanan.view.ScrollerTabView;
 
 import java.util.ArrayList;
 import java.util.List;

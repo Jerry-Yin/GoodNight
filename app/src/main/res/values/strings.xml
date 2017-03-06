@@ -68,7 +68,7 @@
     <string name="last_time">还有 00 小时 00 分钟</string>
     <string name="music">铃声</string>
 
-    // 注册部分
+    <!--// 注册部分-->
     <string name="usr_null">用户名不能为空！</string>
     <string name="chk_pwd">请检查密码是否合法（长度6-15）！</string>
     <string name="chk_pwd_confirm">确认密码与之前不一致！</string>
@@ -76,7 +76,7 @@
     <string name="sex_not_nul">请选择性别！</string>
     <string name="regist_success">恭喜，注册成功！</string>
 
-    //登录
+    <!--//登录-->
     <string name="chk_name_pwd">用户名或密码不能为空！</string>
     <string name="hint_login_email">email</string>
     <string name="logout">退出当前账号</string>
@@ -86,5 +86,18 @@
 
     <string name="transition">transition</string>
     <string name="transition_img">transition_img</string>
+
+
+    <!--日历-->
+    <string name="month">八月十二 </string>
+    <string name="year_old">\n丙申年 </string>
+    <string name="year_zodiac">\n[猴年] </string>
+    <string name="month_zodiac">\n丁酉月 </string>
+    <string name="day_zodiac">\n丁酉日</string>
+    <string name="date">2016.&#160; 9.&#160; 27 &#160; 星期二</string>
+    <string name="day">27</string>
+    <string name="do_something">宜绽放</string>
+    <string name="words">我喜欢我,让蔷薇开出一种结果。孤独的沙漠里,一样盛放的赤裸裸。</string>
+    <string name="author">张国荣 &#160; 《我》</string>
 
 </resources>

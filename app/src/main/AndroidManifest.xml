@@ -108,9 +108,8 @@
         </activity>
         <activity android:name=".activity.HiUserInfoActivity"></activity>
 
-        <activity android:name=".activity.HiCalendarActivity"></activity>
         <activity android:name=".activity.TestActivity"></activity>
-        <activity android:name=".activity.TestActivity2"></activity>
+        <activity android:name=".activity.HiCalendarActivity"></activity>
     </application>
 
 </manifest>
