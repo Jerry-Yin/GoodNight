@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,9 +49,10 @@ public class HiHomePageFragment extends Fragment implements View.OnClickListener
     /**
      * View
      */
-    private ImageButton mbtnAddClock;
+//    private ImageButton mbtnAddClock;
     private TextView mTvSleepTime;
     private ListView mListView;
+    private FloatingActionButton mbtnAddClock;
 
     /**
      * Values
@@ -84,7 +86,7 @@ public class HiHomePageFragment extends Fragment implements View.OnClickListener
     }
 
     private void setupViews() {
-        mbtnAddClock = (ImageButton) mContentView.findViewById(R.id.btn_add_clock);
+        mbtnAddClock = (FloatingActionButton) mContentView.findViewById(R.id.btn_add_clock);
         mbtnAddClock.setOnClickListener(this);
 
 //        mTvSleepTime = (TextView) mContentView.findViewById(R.id.text_ready_time_point);
