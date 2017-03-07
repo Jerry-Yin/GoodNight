@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="primary">#3F51B5</color>
-    <color name="primaryDark">#303F9F</color>
+    <!--<color name="primary">#3F51B5</color>-->
+    <!--<color name="primaryDark">#303F9F</color>-->
+    <!--<color name="colorAccent">#FF4081</color>-->
+
+    <color name="primary">#00BFA5</color>
+    <color name="primaryDark">#26A69A</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="test_color">#BDBDBD</color>
@@ -22,7 +26,7 @@
     <color name="hint_text_color">#ffbebebe</color>
     <color name="white">#ffffff</color>
     
-    <color name="purple">#702ACC </color>
+    <!--<color name="purple">#702ACC </color>-->
     <color name="white_smoke">#F3F3F3</color>
     <color name="green_sure">#32C25E </color>
     <color name="green_2">#51B8AE</color>

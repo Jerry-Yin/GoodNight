@@ -10,11 +10,14 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -55,7 +58,7 @@ public class HiLoginActivity extends HiActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!checkUserBefore()){
+        if (!checkUserBefore()) {
             setContentView(R.layout.layout_login);
             initViews();
         }
@@ -63,7 +66,7 @@ public class HiLoginActivity extends HiActivity {
     }
 
     //每次打开前先读取本地数据库，看有无用户信息，有的话直接登录
-    private boolean checkUserBefore(){
+    private boolean checkUserBefore() {
 //        setContentView(R.layout.layout_logo);
         SharedPreferences preferences = getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, MODE_PRIVATE);
         String usr_name = preferences.getString(HiConfig.KEY_USER_NAME, null);
@@ -74,7 +77,7 @@ public class HiLoginActivity extends HiActivity {
             user.setPassword(pwd);
             login(user);
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -89,6 +92,24 @@ public class HiLoginActivity extends HiActivity {
         mbtnRegister.setOnClickListener(this);
         mBtnForgetPwd.setOnClickListener(this);
 
+        //用户输入完毕后软键盘上的回车键，可以进行登录操作
+        mTxtPwd.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int id, KeyEvent event) {
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    checkUser();
+                    return true;
+                }
+                return false;
+            }
+        });
+        mTxtPwd.setOnClickListener(this);
+
+        if (mDialog == null) {
+            mDialog = new AlertDialog.Builder(this).create();
+        }
+
+
         mBtnLockScreen = (Button) findViewById(R.id.btn_start_lock_service);
         mBtnSendBroadcast = (Button) findViewById(R.id.btn_send_broadcast);
         mBtnLockScreen.setOnClickListener(this);
@@ -96,7 +117,7 @@ public class HiLoginActivity extends HiActivity {
         if (mDialog == null) {
             mDialog = new AlertDialog.Builder(this).create();
         }
-        if (mProgressBar == null){
+        if (mProgressBar == null) {
             mProgressBar = new ProgressBar(this);
         }
     }
@@ -139,7 +160,7 @@ public class HiLoginActivity extends HiActivity {
 
     private void lockScreen() {
         PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK , "my tag --- wake_lock");
+        PowerManager.WakeLock wakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "my tag --- wake_lock");
 
 //        wakeLock.acquire();
         if (wakeLock != null)
@@ -171,7 +192,7 @@ public class HiLoginActivity extends HiActivity {
      * @param
      */
     private void login(UserBmob user) {
-        if (mDialog!= null){
+        if (mDialog != null) {
             mDialog.setMessage("登录中...");
             mDialog.setView(mProgressBar);
             mDialog.show();
@@ -206,7 +227,7 @@ public class HiLoginActivity extends HiActivity {
                 case HiRequestCodes.LOGIN_SUCCESS:
                     // 登录成功会返回当前已经登陆的用户
 //                UserBmob userBmob = (UserBmob) result;
-                    if (mDialog!= null){
+                    if (mDialog != null) {
                         mDialog.dismiss();
                     }
                     UserBmob user = (UserBmob) msg.obj;
@@ -214,16 +235,16 @@ public class HiLoginActivity extends HiActivity {
                     Gson gson = new Gson();
                     String json = gson.toJson(user);
                     Log.d(TAG, "json = " + json);
-                    Log.d(TAG, "PWD = "+user.getObjectByKey("password"));
+                    Log.d(TAG, "PWD = " + user.getObjectByKey("password"));
 
-                    if (mTxtPwd != null){
+                    if (mTxtPwd != null) {
                         String pwd = mTxtPwd.getText().toString().trim();
                         user.setPassword(pwd);
                     }
                     String pwd = user.getPassword(user);
-                    if (!TextUtils.isEmpty(pwd)){
+                    if (!TextUtils.isEmpty(pwd)) {
                         saveUsrInfoToLocal(user.getUsername(), pwd);
-                    }else {
+                    } else {
 //                        // TODO: 7/15/16  从服务器返回的用户信息保存 密码如何获取？
 //
                     }
@@ -233,7 +254,7 @@ public class HiLoginActivity extends HiActivity {
                     HiLoginActivity.this.finish();
                     break;
                 case HiRequestCodes.LOGIN_FAIL:
-                    if (mDialog != null){
+                    if (mDialog != null) {
                         mDialog.dismiss();
                     }
 
@@ -246,6 +267,7 @@ public class HiLoginActivity extends HiActivity {
 
     /**
      * 将登录成功的用户信息保存到本地数据库方便下次直接本地读取登录
+     *
      * @param name
      * @param password
      */

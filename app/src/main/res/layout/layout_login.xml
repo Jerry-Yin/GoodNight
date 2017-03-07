@@ -41,14 +41,31 @@
                 android:layout_marginLeft="20dp"
                 android:src="@drawable/btn_setting" />
 
-            <EditText
-                android:id="@+id/txt_account"
+            <!--<EditText-->
+                <!--android:id="@+id/txt_account"-->
+                <!--android:layout_width="250dp"-->
+                <!--android:layout_height="fill_parent"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_toRightOf="@+id/img_login_user"-->
+                <!--android:hint="@string/hint_login_user"-->
+                <!--android:textColorHint="@color/hint_text_color" />-->
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="250dp"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/img_login_user"
-                android:hint="@string/hint_login_user"
-                android:textColorHint="@color/hint_text_color" />
+                android:layout_toRightOf="@id/img_login_user">
+
+                <AutoCompleteTextView
+                    android:id="@+id/txt_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/hint_login_user"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
 
         </RelativeLayout>
 
@@ -65,21 +82,42 @@
                 android:layout_marginLeft="20dp"
                 android:src="@drawable/img_pwd" />
 
-            <EditText
-                android:id="@+id/txt_password"
+            <!--<EditText-->
+                <!--android:id="@+id/txt_password"-->
+                <!--android:layout_width="250dp"-->
+                <!--android:layout_height="fill_parent"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_toRightOf="@+id/img_login_pwd"-->
+                <!--android:hint="@string/hint_login_pwd"-->
+                <!--android:textColorHint="@color/hint_text_color"-->
+                <!--android:inputType="textPassword"/>-->
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/pwd_view"
                 android:layout_width="250dp"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/img_login_pwd"
-                android:hint="@string/hint_login_pwd"
-                android:textColorHint="@color/hint_text_color"
-                android:inputType="textPassword"/>
+                android:layout_toRightOf="@id/img_login_pwd">
+
+                <EditText
+                    android:id="@+id/txt_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_login_pwd"
+                    android:imeActionId="@+id/login"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
 
             <ImageView
                 android:id="@+id/img_forget_pwd"
                 android:layout_width="40dp"
                 android:layout_height="fill_parent"
-                android:layout_toRightOf="@+id/txt_password"
+                android:layout_toRightOf="@+id/pwd_view"
                 android:src="@drawable/img_forget" />
         </RelativeLayout>
 

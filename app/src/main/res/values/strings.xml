@@ -83,6 +83,9 @@
     <string name="account_icon">头像</string>
     <string name="account_level">用户等级</string>
     <string name="user_name">用户名</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
 
     <string name="transition">transition</string>
     <string name="transition_img">transition_img</string>
@@ -99,5 +102,6 @@
     <string name="do_something">宜绽放</string>
     <string name="words">我喜欢我,让蔷薇开出一种结果。孤独的沙漠里,一样盛放的赤裸裸。</string>
     <string name="author">张国荣 &#160; 《我》</string>
+    <string name="action_sign_in_short">Sign in</string>
 
 </resources>
