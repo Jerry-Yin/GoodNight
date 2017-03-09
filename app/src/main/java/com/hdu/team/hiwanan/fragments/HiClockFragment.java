@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -24,7 +23,6 @@ import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiTimePickerActivity;
-import com.hdu.team.hiwanan.base.HiBaseFragment;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.view.HiTimeTabManager;
 
@@ -35,7 +33,7 @@ import java.util.Map;
 /**
  * Created by JerryYin on 11/3/15.
  */
-public class HiHomePageFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class HiClockFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private static final int FLAG_REQUEST_CODE = 001;
     private static final String CREATE_CLOCK = "请选择闹钟时间类型";
@@ -77,7 +75,7 @@ public class HiHomePageFragment extends Fragment implements View.OnClickListener
                 vg.removeView(mContentView);
             }
         } else {
-            mContentView = inflater.inflate(R.layout.layout_home_page, container, false);
+            mContentView = inflater.inflate(R.layout.layout_clock, container, false);
             mSelf = getActivity();
             setupViews();
             initTime();

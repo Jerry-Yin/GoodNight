@@ -1,9 +1,7 @@
 package com.hdu.team.hiwanan.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,9 +16,9 @@ import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.base.HiActivity;
-import com.hdu.team.hiwanan.fragments.HiFindFragment;
 import com.hdu.team.hiwanan.fragments.HiGoodNightFragment;
-import com.hdu.team.hiwanan.fragments.HiHomePageFragment;
+import com.hdu.team.hiwanan.fragments.HiFindFragment;
+import com.hdu.team.hiwanan.fragments.HiClockFragment;
 import com.hdu.team.hiwanan.fragments.HiSettingFragment;
 import com.jauker.widget.BadgeView;
 
@@ -36,8 +34,8 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
      * Views
      */
     private RadioGroup mbuttomGroup;
-    private RadioButton mbtnHomePage;
     private RadioButton mbtnGoodNight;
+    private RadioButton mbtnClock;
     private RadioButton mbtnSleep;
     private RadioButton mbtnSetting;
 
@@ -50,7 +48,7 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
      * Fragments
      */
     private FragmentManager mFragmentManager;
-    private HiHomePageFragment mHomePageFragment;
+    private HiClockFragment mHomePageFragment;
     private HiGoodNightFragment mGoodNightFragment;
     private HiFindFragment mSleepFragment;
     private HiSettingFragment mSettingFragment;
@@ -77,7 +75,7 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
 
         initViews();
 //        initDialog();
-        changeFragment(getHomeFragment(), false);   //初次进入时默认加载第一页
+        changeFragment(getGoodNightFragment(), false);   //初次进入时默认加载第一页
         initButton();
         initBadgeView();
     }
@@ -86,26 +84,26 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
         mFragmentManager = getSupportFragmentManager();
         mtextTitle = (TextView) findViewById(R.id.text_title);
         mbuttomGroup = (RadioGroup) findViewById(R.id.buttom_group);
-        mbtnHomePage = (RadioButton) findViewById(R.id.btn_home_page);
         mbtnGoodNight = (RadioButton) findViewById(R.id.btn_good_night);
-        mbtnSleep = (RadioButton) findViewById(R.id.btn_sleep);
+        mbtnClock = (RadioButton) findViewById(R.id.btn_clock);
+        mbtnSleep = (RadioButton) findViewById(R.id.btn_find);
         mbtnSetting = (RadioButton) findViewById(R.id.btn_setting);
-        mbtnHomePage.setOnClickListener(this);
         mbtnGoodNight.setOnClickListener(this);
+        mbtnClock.setOnClickListener(this);
         mbtnSleep.setOnClickListener(this);
         mbtnSetting.setOnClickListener(this);
         mTitleBar = (RelativeLayout) findViewById(R.id.title_bar);
         mTitleBar.getChildAt(0).setVisibility(View.GONE);
         mTitleBar.getChildAt(2).setVisibility(View.GONE);
 
-        mtextTitle.setText(R.string.home_page);
+        mtextTitle.setText(R.string.good_night);
     }
 
     /**
      * 初始化按钮点击效果，默认第一页
      */
     private void initButton() {
-        mbuttomGroup.check(R.id.btn_home_page);
+        mbuttomGroup.check(R.id.btn_good_night);
     }
 
 //    private void initDialog() {
@@ -127,12 +125,12 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mbtnHomePage.isChecked()) {
-            changeFragment(getHomeFragment(), false);
-            mtextTitle.setText(R.string.home_page);
-        } else if (mbtnGoodNight.isChecked()) {
+        if (mbtnGoodNight.isChecked()) {
             changeFragment(getGoodNightFragment(), false);
             mtextTitle.setText(R.string.good_night);
+        } else if (mbtnClock.isChecked()) {
+            changeFragment(getClockFragment(), false);
+            mtextTitle.setText(R.string.clock);
         } else if (mbtnSleep.isChecked()) {
             changeFragment(getSleepFragment(), false);
             mtextTitle.setText(R.string.sleep);
@@ -145,19 +143,19 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_home_page:
-                mTitleBar.setVisibility(View.VISIBLE);
-                changeFragment(getHomeFragment(), false);
-                mtextTitle.setText(R.string.home_page);
-                break;
-
             case R.id.btn_good_night:
                 mTitleBar.setVisibility(View.VISIBLE);
                 changeFragment(getGoodNightFragment(), false);
                 mtextTitle.setText(R.string.good_night);
                 break;
 
-            case R.id.btn_sleep:
+            case R.id.btn_clock:
+                mTitleBar.setVisibility(View.VISIBLE);
+                changeFragment(getClockFragment(), false);
+                mtextTitle.setText(R.string.clock);
+                break;
+
+            case R.id.btn_find:
                 changeFragment(getSleepFragment(), false);
                 mtextTitle.setText(R.string.sleep);
                 mTitleBar.setVisibility(View.GONE);
@@ -178,9 +176,9 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
     /**
      * 获取fragment实例
      */
-    public HiHomePageFragment getHomeFragment() {
+    public HiClockFragment getClockFragment() {
         if (mHomePageFragment == null) {
-            mHomePageFragment = new HiHomePageFragment();
+            mHomePageFragment = new HiClockFragment();
         }
         return mHomePageFragment;
     }

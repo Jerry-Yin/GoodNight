@@ -11,29 +11,12 @@
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/btn_home_page"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:button="@null"
-            android:drawableTop="@drawable/ic_mood_black_24dp"
-            android:gravity="center"
-            android:paddingLeft="0dp"
-            android:paddingRight="0dp"
-            android:paddingTop="5dp"
-            android:text="@string/home_page"
-            android:textSize="10sp"
-            android:textColor="@color/tab_checked_text_color"
-            android:background="@drawable/tab_checked_btn_bg"/>
-
-
-        <RadioButton
             android:id="@+id/btn_good_night"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:button="@null"
-            android:drawableTop="@drawable/ic_notifications_none_black_24dp"
+            android:drawableTop="@drawable/ic_mood_black_24dp"
             android:gravity="center"
             android:paddingLeft="0dp"
             android:paddingRight="0dp"
@@ -45,7 +28,24 @@
 
 
         <RadioButton
-            android:id="@+id/btn_sleep"
+            android:id="@+id/btn_clock"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/ic_notifications_none_black_24dp"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="5dp"
+            android:text="@string/clock"
+            android:textSize="10sp"
+            android:textColor="@color/tab_checked_text_color"
+            android:background="@drawable/tab_checked_btn_bg"/>
+
+
+        <RadioButton
+            android:id="@+id/btn_find"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -55,7 +55,7 @@
             android:paddingLeft="0dp"
             android:paddingRight="0dp"
             android:paddingTop="5dp"
-            android:text="@string/sleep"
+            android:text="@string/find"
             android:textSize="10sp"
             android:textColor="@color/tab_checked_text_color"
             android:background="@drawable/tab_checked_btn_bg"/>
@@ -105,7 +105,7 @@
             style="?android:attr/borderlessButtonStyle"/>
 
         <Button
-            android:id="@+id/view_sleep"
+            android:id="@+id/view_find"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
