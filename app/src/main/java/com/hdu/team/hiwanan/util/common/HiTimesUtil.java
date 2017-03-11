@@ -30,8 +30,24 @@ public class HiTimesUtil {
         return str;
     }
 
+    /**
+     * 自动补0
+     * @return
+     */
     public static String getCurData() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date curDate = new Date(System.currentTimeMillis());
+        String str = formatter.format(curDate);
+        return str;
+    }
+
+    /**
+     *
+     * 月份日期前面不带0
+     * @return
+     */
+    public static String getCurDataNoZero() {
+        SimpleDateFormat formatter = new SimpleDateFormat("y-M-d");
         Date curDate = new Date(System.currentTimeMillis());
         String str = formatter.format(curDate);
         return str;

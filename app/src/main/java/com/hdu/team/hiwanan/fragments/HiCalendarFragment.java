@@ -19,15 +19,9 @@ import android.widget.ImageView;
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiCalendarActivity;
 import com.hdu.team.hiwanan.adapter.CusRecyclerViewAdapter;
-import com.hdu.team.hiwanan.constant.HiConfig;
-import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.model.HiCalendar;
-import com.hdu.team.hiwanan.model.HiMaps;
-import com.hdu.team.hiwanan.util.OkHttpUtils;
-import com.hdu.team.hiwanan.util.common.HiTimesUtil;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -114,12 +108,15 @@ public class HiCalendarFragment extends Fragment {
     private void initCalendars() {
         for (int i=0; i<10; i++){
             HiCalendar calendar = new HiCalendar();
-            calendar.setDate(getString(R.string.date));
+            calendar.setYear(getString(R.string.year));
+            calendar.setMonth(getString(R.string.month));
+            calendar.setDay(getString(R.string.day));
+            calendar.setWeekend(getString(R.string.weekend));
             calendar.setAuthor(getString(R.string.author));
             calendar.setDay_zodiac(getString(R.string.day_zodiac));
-            calendar.setDay(getString(R.string.day));
-            calendar.setDo_something(getString(R.string.do_something));
-            calendar.setMonth(getString(R.string.month));
+            calendar.setWeekend(getString(R.string.day));
+            calendar.setSuit(getString(R.string.suit));
+            calendar.setMonth(getString(R.string.month_old));
             calendar.setMonth_zodiac(getString(R.string.month_zodiac));
             calendar.setWords(getString(R.string.words));
             calendar.setYear_old(getString(R.string.year_old));

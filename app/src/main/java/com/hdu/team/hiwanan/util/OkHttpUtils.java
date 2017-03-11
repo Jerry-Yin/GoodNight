@@ -2,25 +2,19 @@ package com.hdu.team.hiwanan.util;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.hdu.team.hiwanan.listener.OnResponseListener;
-import com.hdu.team.hiwanan.model.HiCalendar2;
 import com.hdu.team.hiwanan.model.HiMaps;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.BufferedSink;
 
 /**
  * Created by JerryYin on 10/14/16.
@@ -52,20 +46,25 @@ public class OkHttpUtils {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         Log.i(TAG, "exception---" + e.getMessage());
+                        if (listener != null) {
+                            listener.onFailure(e.hashCode(), e.getMessage().toString());
+                        }
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        Log.d(TAG, "response----" + response.body().toString() + "/ " + response.message() + "/ " + response.cacheResponse() + "/ " + response.code() + "/ ");
-                        if (response.cacheResponse() != null) {
+                        Log.d(TAG, "response----" + response.body() + "/ " + response.message() + "/ " + response.cacheResponse() + "/ " + response.code() + "/ ");
+                        if (response.body() != null) {
                             if (listener == null) return;
-                            String result = response.cacheResponse().toString();
+                            String result = response.body().string();
                             listener.onSuccess(result);
                             Log.i(TAG, "cache---" + result);
                         } else {
-                            response.body().string();
                             String str = response.networkResponse().toString();
                             Log.i(TAG, "network---" + str);
+                            if (listener != null) {
+                                listener.onFailure(call.hashCode(), response.body().toString()+" "+str);
+                            }
                         }
                     }
                 });
@@ -111,8 +110,10 @@ public class OkHttpUtils {
         OkHttpClient okHttpClient = new OkHttpClient();
 
         FormBody.Builder builder = new FormBody.Builder();
-        for (HiMaps map : paramsList) {
-            builder.add(map.getKey(), map.getValue());
+        if (paramsList != null) {
+            for (HiMaps map : paramsList) {
+                builder.add(map.getKey(), map.getValue());
+            }
         }
         RequestBody requestBody = builder.build();
 
@@ -132,16 +133,19 @@ public class OkHttpUtils {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d(TAG, "response----" + response.body().toString() + "/ " + response.message() + "/ " + response.cacheResponse() + "/ " + response.code() + "/ ");
-                if (response.cacheResponse() != null) {
+                Log.d(TAG, "response----" + response.body() + "/ " + response.message() + "/ " + response.cacheResponse() + "/ " + response.code() + "/ ");
+                String result = response.body().string();
+                if (result.toString() != null) {
                     if (listener == null) return;
-                    String result = response.cacheResponse().toString();
+//                    String result = response.cacheResponse().toString();
                     listener.onSuccess(result);
                     Log.i(TAG, "cache---" + result);
                 } else {
-                    response.body().string();
                     String str = response.networkResponse().toString();
                     Log.i(TAG, "network---" + str);
+                    if (listener != null) {
+                        listener.onFailure(call.hashCode(), response.body().toString()+" "+str);
+                    }
                 }
             }
         });

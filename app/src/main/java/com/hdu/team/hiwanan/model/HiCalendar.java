@@ -7,17 +7,39 @@ package com.hdu.team.hiwanan.model;
 
 public class HiCalendar {
 
-    private String month;           //月份
+    private String month_old;           //月份
     private String year_old;        //农历年份
     private String year_zodiac;     //生肖
     private String month_zodiac;    //农历月份
     private String day_zodiac;      //日
-    private String date;            //新历日期
-    private String day;             //周几
-    private String do_something;    //宜做事
+
+    private String year;
+    private String month;           //月份
+    private String day;            //新历日期
+    private String weekend;         //周几
+
+    private String suit;    //宜做事
+    private String avoio;   //不适合做事
     private String words;           //名言
     private String author;          //作者
 
+
+//    public HiCalendar(String month_old, String year_old, String year_zodiac, String month_zodiac,
+//                      String day_zodiac, String year, String month, String date, String weekend,
+//                      String suit, String words, String author) {
+//        this.month_old = month_old;
+//        this.year_old = year_old;
+//        this.year_zodiac = year_zodiac;
+//        this.month_zodiac = month_zodiac;
+//        this.day_zodiac = day_zodiac;
+//        this.year = year;
+//        this.month = month;
+//        this.day = day;
+//        this.weekend = weekend;
+//        this.suit = suit;
+//        this.words = words;
+//        this.author = author;
+//    }
 
     public String getMonth() {
         return month;
@@ -59,14 +81,6 @@ public class HiCalendar {
         this.day_zodiac = day_zodiac;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public String getDay() {
         return day;
     }
@@ -75,12 +89,20 @@ public class HiCalendar {
         this.day = day;
     }
 
-    public String getDo_something() {
-        return do_something;
+    public String getWeekend() {
+        return weekend;
     }
 
-    public void setDo_something(String do_something) {
-        this.do_something = do_something;
+    public void setWeekend(String weekend) {
+        this.weekend = weekend;
+    }
+
+    public String getSuit() {
+        return suit;
+    }
+
+    public void setSuit(String suit) {
+        this.suit = suit;
     }
 
     public String getWords() {
@@ -98,4 +120,30 @@ public class HiCalendar {
     public void setAuthor(String author) {
         this.author = author;
     }
+
+    public String getMonth_old() {
+        return month_old;
+    }
+
+    public void setMonth_old(String month_old) {
+        this.month_old = month_old;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getAvoio() {
+        return avoio;
+    }
+
+    public void setAvoio(String avoio) {
+        this.avoio = avoio;
+    }
+
+
 }

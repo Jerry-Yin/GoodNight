@@ -41,7 +41,7 @@ public class HiFindFragment extends Fragment {
      */
     private MyPagerFragmentAdapter mPagerAdapter;
     private List<Fragment> mFragmentList;
-    private final String[] mTitles = new String[]{"单向历","心情","助睡眠"};
+    private final String[] mTitles = new String[]{"日历","心情","助睡眠"};
 
 
 
@@ -75,7 +75,7 @@ public class HiFindFragment extends Fragment {
 
     public void initData() {
         mFragmentList = new ArrayList<>();
-        mFragmentList.add(new HiCalendarFragment());
+        mFragmentList.add(new HiCalendarFragment2());
         mFragmentList.add(new HiFeelingFragment());
         mFragmentList.add(new HiHelpSleepFragment());
     }

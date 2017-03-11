@@ -4,7 +4,6 @@
     android:id="@+id/card_calendar"
     android:layout_width="match_parent"
     android:layout_height="350dp"
-    android:layout_margin="16dp"
     app:cardBackgroundColor="@color/green_2"
     app:cardCornerRadius="5dp"
     app:cardElevation="10dp">
@@ -28,40 +27,45 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text_month"
+                    android:id="@+id/text_month_old"
                     android:layout_width="15sp"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="@string/month"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/month_old"
                     android:textColor="@color/white_smoke"
-                    android:textSize="10sp" />
+                    android:textSize="12sp"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/text_year_old"
                     android:layout_width="15sp"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:gravity="center_horizontal"
                     android:text="@string/year_old"
                     android:textColor="@color/white_smoke"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/text_year_zodiac"
                     android:layout_width="15sp"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:gravity="center_horizontal"
                     android:text="@string/year_zodiac"
                     android:textColor="@color/white_smoke"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/text_month_zodiac"
                     android:layout_width="15sp"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:gravity="center_horizontal"
                     android:text="@string/month_zodiac"
                     android:textColor="@color/white_smoke"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/text_day_zodiac"
@@ -70,19 +74,66 @@
                     android:gravity="center_horizontal"
                     android:text="@string/day_zodiac"
                     android:textColor="@color/white_smoke"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/text_date"
+
+            <LinearLayout
                 android:layout_width="10sp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:gravity="center_horizontal"
-                android:text="@string/date"
-                android:textColor="@color/white_smoke"
-                android:textSize="10sp" />
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <!--<TextView-->
+                <!--android:id="@+id/text_date"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center_horizontal"-->
+                <!--android:text="@string/date"-->
+                <!--android:textColor="@color/white_smoke"-->
+                <!--android:textSize="10sp" />-->
+
+                <TextView
+                    android:id="@+id/text_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:gravity="center"
+                    android:text="@string/year"
+                    android:textColor="@color/white_smoke"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/text_month"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:gravity="center"
+                    android:text="@string/month"
+                    android:textColor="@color/white_smoke"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/text_day1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:gravity="center"
+                    android:text="@string/day"
+                    android:textColor="@color/white_smoke"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/text_weekend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/weekend"
+                    android:textColor="@color/white_smoke"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
 
             <View
                 android:layout_width="1.0dp"
@@ -106,16 +157,33 @@
                     android:textSize="150sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/text_do_something"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_alignParentBottom="true"
                     android:layout_weight="0.2"
-                    android:gravity="center"
-                    android:text="@string/do_something"
-                    android:textColor="@color/white_smoke"
-                    android:textSize="25sp" />
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/text_suit"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/suit"
+                        android:textColor="@color/white_smoke"
+                        android:textSize="15sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/text_avoio"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/avoio"
+                        android:textColor="@color/white_smoke"
+                        android:textSize="15sp" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
