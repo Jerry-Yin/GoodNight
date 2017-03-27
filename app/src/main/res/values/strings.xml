@@ -94,14 +94,21 @@
 
 
     <!--日历-->
-    <string name="month">八月十二 </string>
+    <string name="month_old">八月十二 </string>
     <string name="year_old">\n丙申年 </string>
     <string name="year_zodiac">\n[猴年] </string>
     <string name="month_zodiac">\n丁酉月 </string>
     <string name="day_zodiac">\n丁酉日</string>
-    <string name="date">2016.&#160; 9.&#160; 27 &#160; 星期二</string>
-    <string name="day">27</string>
-    <string name="do_something">宜绽放</string>
+
+    <!--<string name="date">2017.&#160; 00.&#160; 00 &#160;</string>-->
+    <string name="year">2017</string>
+    <string name="month">01</string>
+    <string name="day">01</string>
+    <string name="weekend">星期一</string>
+
+
+    <string name="suit">宜绽放</string>
+    <string name="avoio">不宜绽放</string>
     <string name="words">我喜欢我,让蔷薇开出一种结果。孤独的沙漠里,一样盛放的赤裸裸。</string>
     <string name="author">张国荣 &#160; 《我》</string>
     <string name="action_sign_in_short">Sign in</string>

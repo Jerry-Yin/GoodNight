@@ -86,10 +86,12 @@ public class HiConfig {
     /**
      * 聚合数据提供
      * 日历数据请求接口
+     * 1。 万年历请求api
      * 请求示例：http://japi.juhe.cn/calendar/day?date=2015-1-1&key=您申请的appKey
+     * 注意 * date=yyyy-m-d   (m d  不能前面加0， 个位数救赎个位数)
      */
     public static final String APP_KEY_CALENDAR = "ced957858d6d3f18b18c071b837a3966";
-    public static final String URL_CALENDAR = "http://japi.juhe.cn/calendar/day";
-
+    public static final String URL_CALENDAR = "http://v.juhe.cn/calendar/day";
+    String test = "http://v.juhe.cn/calendar/day?date=2017-3-10&key=ced957858d6d3f18b18c071b837a3966";
 
 }

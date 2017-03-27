@@ -1,46 +1,21 @@
 package com.hdu.team.hiwanan.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by JerryYin on 10/14/16.
  */
 
-public class HiCalendar2 {
+public class HiCalendarData {
     /**
-     * error_code : 0
      * reason : Success
-     * result : {"data":
-     *
-     {
-        "error_code": 0,
-        "reason": "Success",
-        "result": {
-            "data": {
-                "holiday": "元旦",//假日
-                "avoid": "破土.安葬.行丧.开生坟.",//忌
-                "animalsYear": "马",//属相
-                "desc": "1月1日至3日放假调休，共3天。1月4日（星期日）上班。",//假日描述
-                "weekday": "星期四",//周几
-                "suit": "订盟.纳采.造车器.祭祀.祈福.出行.安香.修造.动土.上梁.开市.交易.立券.移徙.入宅.会亲友.安机械.栽种.纳畜.造屋.起基.安床.造畜椆栖.",//宜
-                "lunarYear": "甲午年",//纪年
-                "lunar": "十一月十一",//农历
-                "year-month": "2015-1",//年份和月份
-                "date": "2015-1-1"//具体日期
-            }
-        }
-     }
-     * */
+     * result : {"data":{"avoid":"开市.交易.作灶.纳财.上梁.安床.造屋.造船.","animalsYear":"鸡","weekday":"星期五","suit":"嫁娶.开光.祭祀.祈福.求嗣.出行.出火.入宅.移徙.解除.栽种.伐木.破土.谢土.安葬.","lunarYear":"丁酉年","lunar":"二月十三","year-month":"2017-3","date":"2017-3-10"}}
+     * error_code : 0
+     */
 
-    private int error_code;
     private String reason;
     private ResultBean result;
-
-    public int getError_code() {
-        return error_code;
-    }
-
-    public void setError_code(int error_code) {
-        this.error_code = error_code;
-    }
+    private int error_code;
 
     public String getReason() {
         return reason;
@@ -58,7 +33,18 @@ public class HiCalendar2 {
         this.result = result;
     }
 
-    private class ResultBean {
+    public int getError_code() {
+        return error_code;
+    }
+
+    public void setError_code(int error_code) {
+        this.error_code = error_code;
+    }
+
+    public static class ResultBean {
+        /**
+         * data : {"avoid":"开市.交易.作灶.纳财.上梁.安床.造屋.造船.","animalsYear":"鸡","weekday":"星期五","suit":"嫁娶.开光.祭祀.祈福.求嗣.出行.出火.入宅.移徙.解除.栽种.伐木.破土.谢土.安葬.","lunarYear":"丁酉年","lunar":"二月十三","year-month":"2017-3","date":"2017-3-10"}
+         */
 
         private DataBean data;
 
@@ -70,24 +56,27 @@ public class HiCalendar2 {
             this.data = data;
         }
 
-        private class DataBean {
-            private String holiday;
+        public static class DataBean {
+            /**
+             * avoid : 开市.交易.作灶.纳财.上梁.安床.造屋.造船.
+             * animalsYear : 鸡
+             * weekday : 星期五
+             * suit : 嫁娶.开光.祭祀.祈福.求嗣.出行.出火.入宅.移徙.解除.栽种.伐木.破土.谢土.安葬.
+             * lunarYear : 丁酉年
+             * lunar : 二月十三
+             * year-month : 2017-3
+             * date : 2017-3-10
+             */
+
             private String avoid;
             private String animalsYear;
-            private String desc;
             private String weekday;
             private String suit;
             private String lunarYear;
             private String lunar;
-
-
-            public String getHoliday() {
-                return holiday;
-            }
-
-            public void setHoliday(String holiday) {
-                this.holiday = holiday;
-            }
+            @SerializedName("year-month")
+            private String yearmonth;
+            private String date;
 
             public String getAvoid() {
                 return avoid;
@@ -103,14 +92,6 @@ public class HiCalendar2 {
 
             public void setAnimalsYear(String animalsYear) {
                 this.animalsYear = animalsYear;
-            }
-
-            public String getDesc() {
-                return desc;
-            }
-
-            public void setDesc(String desc) {
-                this.desc = desc;
             }
 
             public String getWeekday() {
@@ -144,8 +125,28 @@ public class HiCalendar2 {
             public void setLunar(String lunar) {
                 this.lunar = lunar;
             }
+
+            public String getYearmonth() {
+                return yearmonth;
+            }
+
+            public void setYearmonth(String yearmonth) {
+                this.yearmonth = yearmonth;
+            }
+
+            public String getDate() {
+                return date;
+            }
+
+            public void setDate(String date) {
+                this.date = date;
+            }
         }
     }
+
+
+
+
 
 
 }
