@@ -38,8 +38,17 @@ public class HiConfig {
      * 闹钟时差（分 秒）
      */
     public static final String DIF_HOURS = "dif_hours";
-    public static final String DIF_MINUTES = "dif_minutes";;
+    public static final String DIF_MINUTES = "dif_minutes";
 
+
+    //TODO:kaikai added constants
+
+    /**
+     * switch of each alarm clock status key name
+     */
+
+    public static final String SWITCH_STATUS = "status";
+    public static final String STATUS_NUM = "status_num";
 
     /**
      * 应用－Bmob相关密钥信息

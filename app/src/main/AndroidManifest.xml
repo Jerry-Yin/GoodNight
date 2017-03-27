@@ -116,6 +116,8 @@
 
         <activity android:name=".activity.TestActivity"></activity>
         <activity android:name=".activity.HiCalendarActivity"></activity>
+        <receiver android:name=".broadcast.HiAlarmClockReceiver"/>
+        <service android:name=".service.HiRingtoneService"/>
     </application>
 
 </manifest>

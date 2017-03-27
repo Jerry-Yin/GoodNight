@@ -69,6 +69,28 @@ public class HiTimeTabManager {
         return map;
     }
 
+    /**
+     * all most the same as the above one, but added another argument.
+     * @param imgId image source id
+     * @param tvCategory clock category
+     * @param time time for clock
+     * @param context used for new switch
+     * @param switchStatus switch status setting when new it.
+     * @return Map<String, Object> map
+     */
+    public static Map<String, Object> createMapTab(int imgId, String tvCategory, String time, Context context, boolean switchStatus){
+        Map<String, Object> map = new HashMap<>();
+        map.put(ICON, imgId);
+        map.put(CATEGORY, tvCategory);
+        map.put(TIME, time);
+        Switch aSwitch = new Switch(context);
+        aSwitch.setChecked(switchStatus);
+        map.put(SWITCH, aSwitch);
+        return map;
+    }
+
+
+
     public static Map<String, Object> createMapTab(int imgId, String tvCategory, String time) {
         Map<String, Object> map = new HashMap<>();
         map.put(ICON, imgId);

@@ -1,7 +1,9 @@
 package com.hdu.team.hiwanan.fragments;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,11 +13,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -23,10 +27,12 @@ import android.widget.TextView;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiTimePickerActivity;
+import com.hdu.team.hiwanan.broadcast.HiAlarmClockReceiver;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.view.HiTimeTabManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +63,8 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
      */
     private BaseAdapter mTimeListAdapter;
     private List<Map<String, Object>> mTimeList;
+    //TODO:kaikai added list value for switch status.
+    private List<Boolean> mSwitchStatusList;
 
     private int mSelItemPosition;   //当前选中的item位置
 
@@ -92,6 +100,10 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 
         mListView = (ListView) mContentView.findViewById(R.id.list_sleep_time);
         mTimeList = getFirstLists();
+        //TODO: kaikai added for initial switch flags
+        mSwitchStatusList = getFirstSwitchStatusList();
+
+
         mTimeListAdapter = new HiTimeListAdapter(mSelf, mTimeList);
         mListView.setAdapter(mTimeListAdapter);
 //        mTimeListAdapter.notifyDataSetChanged();
@@ -114,6 +126,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
      */
     private void initTime() {
         mPreferences = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE);
+
         if (mTimeList.size() != 0) {
             for (int i = 0; i < mTimeList.size(); i++) {
                 long hour = mPreferences.getLong(HiConfig.DIF_HOURS + i, 00);
@@ -124,6 +137,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         }
         mTimeListAdapter.notifyDataSetChanged();
     }
+
 
     @Override
     public void onClick(View v) {
@@ -174,6 +188,55 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         return firstLists;
     }
 
+    public List<Boolean> getFirstSwitchStatusList(){
+        //TODO: init 3 defalut switch flags
+        ArrayList<Boolean> firstLists= new ArrayList<Boolean>();
+        mPreferences = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        int size = mPreferences.getInt(HiConfig.STATUS_NUM, 0);
+
+        //IF it is not the first time to use this app, read the shared preferences data.
+        if(size != 0) {
+            for(int i=0; i<size; i++){
+                firstLists.add(mPreferences.getBoolean(HiConfig.SWITCH_STATUS, false));
+            }
+            Log.d("the size of first list is ","" + firstLists.size());
+        } else {
+            //IF it is the first time to use this app, init and save data to shared preferences.
+            SharedPreferences.Editor editor = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
+            firstLists.add(false);
+            firstLists.add(true);
+            firstLists.add(false);
+
+            editor.putInt(HiConfig.STATUS_NUM,firstLists.size());
+            for(int i=0; i< firstLists.size(); i++){
+                editor.putBoolean(HiConfig.SWITCH_STATUS + i, firstLists.get(i));
+            }
+
+            editor.commit();
+            Log.d("the initial size of first list is ","" + firstLists.size());
+        }
+
+
+
+
+        return  firstLists;
+
+    }
+
+
+    //TODO:kaikai added
+    /**
+     * init switch status
+     * @return
+
+    public List<Boolean> getSwitchStatusList(){
+         List<Boolean> statusList = new ArrayList<>();
+        statusList.add(false);
+        statusList.add(false);
+        statusList.add(false);
+        return statusList;
+    }*/
+
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -185,7 +248,6 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 
         startActivityForResult(intent, FLAG_REQUEST_CODE);
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -235,8 +297,9 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             HiHandler handler = null;
+            SharedPreferences.Editor editor = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
             if (convertView == null) {
                 handler = new HiHandler();
 //                convertView = LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.item_sleep_time, null);
@@ -253,6 +316,64 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
             handler.imgIcon.setImageResource((Integer) mDataList.get(position).get("icon"));
             handler.tvCategory.setText((String) mDataList.get(position).get("category"));
             handler.tvTime.setText((String) mDataList.get(position).get("time"));
+
+            //init the new switch flag
+            //TODO: it it tricky to init without any judgement.
+            mSwitchStatusList.add(false);
+            editor.putInt(HiConfig.STATUS_NUM, mSwitchStatusList.size());
+            editor.putBoolean(HiConfig.SWITCH_STATUS + mSwitchStatusList.size(), false);
+            editor.commit();
+
+            handler.Switch.setChecked( mSwitchStatusList.get(position));
+
+            //TODO:alarm clock switch setting.
+            handler.Switch.setOnCheckedChangeListener(
+                    new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                            Log.d("switch checked","" + isChecked);
+
+                            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(getActivity().ALARM_SERVICE);
+                            Intent alarmIntent = new Intent(getActivity(), HiAlarmClockReceiver.class);
+                            String category = (String) mDataList.get(position).get("category");
+
+                            if (isChecked == true) {
+
+                                int hour = Integer.parseInt(((String) mDataList.get(position).get("time")).split(":")[0].trim());
+                                int minute = Integer.parseInt(((String) mDataList.get(position).get("time")).split(":")[1].trim());
+
+                                Log.i("TAG","hour->" + hour + "; minute->" + minute);
+                                Calendar calendar =  Calendar.getInstance();
+                                calendar.set(Calendar.HOUR_OF_DAY, hour);
+                                calendar.set(Calendar.MINUTE, minute);
+
+                                //设置的时间早于当前时间，则说明应该在第二天响铃
+                                if(Calendar.getInstance().getTimeInMillis() > calendar.getTimeInMillis()) {
+                                    calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
+                                }
+
+                                    alarmIntent.putExtra("switch", isChecked);
+                                alarmIntent.putExtra("category", category);
+
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), position, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                                Log.d("position","" + position);
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pendingIntent);
+
+                            } else {
+                                alarmIntent.putExtra("switch",isChecked);
+                                alarmIntent.putExtra("category", category);
+
+                                //Intent i=new Intent(getActivity(),HiAlarmClockReceiver.class);
+                                //PendingIntent pi = PendingIntent.getBroadcast(getActivity(), position , alarmIntent, 0);
+                                //alarmManager.cancel(pi);//取消闹钟
+                                getContext().sendBroadcast(alarmIntent);
+                            }
+
+                        }
+                    }
+            );
+
             return convertView;
         }
 
