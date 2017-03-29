@@ -1,5 +1,6 @@
 package com.hdu.team.hiwanan.service;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -7,6 +8,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
@@ -20,10 +22,12 @@ import com.hdu.team.hiwanan.activity.HiMainActivity;
  */
 
 public class HiRingtoneService extends Service {
+
     private MediaPlayer mediaPlayer;
     int startId;
     boolean isPlaying;
     //String currentCategory;
+
 
     @Nullable
     @Override
@@ -32,10 +36,16 @@ public class HiRingtoneService extends Service {
 
     }
 
+    @Override
+    public void onCreate() {
 
+        super.onCreate();
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
-        Log.i("local service", "received start id" + startId + ":" + intent);
+        Log.d("local service", "received start id" + startId + ":" + intent);
         boolean state = intent.getExtras().getBoolean("switch");
         //String category = intent.getExtras().getString("category");
           if (state == true) {
@@ -47,7 +57,7 @@ public class HiRingtoneService extends Service {
 
 
         if (!this.isPlaying && startId == 1 ){
-            Log.e("this is no music", "and you want on");
+            Log.d("this is no music", "and you want on");
             mediaPlayer = MediaPlayer.create(this, R.raw.voice);
             mediaPlayer.start();
 
@@ -79,7 +89,7 @@ public class HiRingtoneService extends Service {
 
         }
         else if(this.isPlaying && startId == 0){
-            Log.e("this is music", "and you want off");
+            Log.d("this is music", "and you want off");
             mediaPlayer.stop();
             mediaPlayer.reset();
             this.isPlaying = false;
@@ -87,18 +97,18 @@ public class HiRingtoneService extends Service {
 
         }
         else if(!this.isPlaying && startId == 0) {
-            Log.e("this is no music", "and you want off");
+            Log.d("this is no music", "and you want off");
             this.isPlaying = false;
             this.startId = 0;
         }
         else if(this.isPlaying && startId == 1) {
-            Log.e("this is music", "and you want on");
+            Log.d("this is music", "and you want on");
             this.isPlaying = true;
             this.startId = 0;
 
         }
         else {
-            Log.e(" otherwise", "you reached this");
+            Log.d(" otherwise", "you reached this");
         }
 
 
