@@ -15,9 +15,14 @@
     <!--熄灭屏幕-->
     <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
     <uses-permission android:name="android.permission.DEVICE_POWER"></uses-permission>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.RESTART_PACKAGES"/>
 
     <!-- 取消系统锁屏权限 -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <!-- 锁屏解锁-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
 
     <!-- Bmob -->
 
@@ -94,16 +99,22 @@
 
         <!-- 锁屏界面 全屏显示 -->
         <activity
-            android:name=".activity.HiLockScreenActivity"
+            android:name=".activity.HiScreenLockActivity"
             android:launchMode="singleTask"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <category android:name="android.intent.category.HOME"/>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-        <service android:name=".service.HiLockScreenService" />
+        <service android:name=".service.HiScreenLockService" />
 
         <!-- 为捕获home键而设置的 空的 activity， 不需要显示 (Theme.NoDisplay)； -->
         <!-- 但非锁屏状态下按home，也会调用此home界面。我们只需在home界面onCreate（）里如此设置即可 -->
         <activity
-            android:name=".activity.HiLockScreenHome"
+            android:name=".activity.HiScreenLockHome"
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

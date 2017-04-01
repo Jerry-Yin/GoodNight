@@ -27,11 +27,9 @@ import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.constant.HiRequestCodes;
 import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.model.UserBmob;
-import com.hdu.team.hiwanan.service.HiLockScreenService;
+import com.hdu.team.hiwanan.service.HiScreenLockService;
 import com.hdu.team.hiwanan.util.BmobNetworkUtils;
 import com.hdu.team.hiwanan.util.ToastUtils;
-
-import cn.bmob.v3.BmobUser;
 
 /**
  * Created by JerryYin on 11/12/15.
@@ -140,7 +138,7 @@ public class HiLoginActivity extends HiActivity {
                 break;
 
             case R.id.btn_start_lock_service:
-                Intent intent1 = new Intent(this, HiLockScreenService.class);
+                Intent intent1 = new Intent(this, HiScreenLockService.class);
                 startService(intent1);
                 break;
 
@@ -152,7 +150,6 @@ public class HiLoginActivity extends HiActivity {
                 lockScreen();
                 break;
 
-
             default:
                 break;
         }
@@ -160,8 +157,7 @@ public class HiLoginActivity extends HiActivity {
 
     private void lockScreen() {
         PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "my tag --- wake_lock");
-
+        PowerManager.WakeLock wakeLock = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "HiScreen lock --- wake_lock");
 //        wakeLock.acquire();
         if (wakeLock != null)
             wakeLock.release();

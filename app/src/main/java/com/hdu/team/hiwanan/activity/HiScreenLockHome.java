@@ -22,7 +22,7 @@ import java.util.List;
  * 锁屏状态下 按home键，跳转到此界面，但表现为没反应， 达到屏蔽的效果；
  * 非锁屏状态下按home键，仍然跳抓到此界面，但只需要在onCreate()方法设置即可：
  */
-public class HiLockScreenHome extends Activity {
+public class HiScreenLockHome extends Activity {
 
 
     @Override

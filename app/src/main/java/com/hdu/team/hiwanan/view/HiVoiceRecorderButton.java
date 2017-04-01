@@ -12,6 +12,7 @@ import android.widget.Button;
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.manager.HiMediaRecordManager;
+import com.hdu.team.hiwanan.manager.HiVoiceRecDialogManager;
 import com.hdu.team.hiwanan.util.common.HiTimesUtil;
 
 

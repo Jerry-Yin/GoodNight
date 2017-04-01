@@ -11,7 +11,7 @@ import com.hdu.team.hiwanan.base.HiActivity;
 /**
  * Created by JerryYin on 11/16/15.
  */
-public class HiLockScreenActivity extends HiActivity implements View.OnClickListener {
+public class HiScreenLockActivity extends HiActivity implements View.OnClickListener {
 
     private ImageView mbtnUnLock;
 
@@ -22,9 +22,9 @@ public class HiLockScreenActivity extends HiActivity implements View.OnClickList
 //        openSystemScreenLock();
 
         setContentView(R.layout.layout_lock_screen);
-
-        mbtnUnLock = (ImageView) findViewById(R.id.btn_unlock);
-        mbtnUnLock.setOnClickListener(this);
+//
+//        mbtnUnLock = (ImageView) findViewById(R.id.btn_unlock);
+//        mbtnUnLock.setOnClickListener(this);
     }
 
     /**
@@ -38,9 +38,9 @@ public class HiLockScreenActivity extends HiActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_unlock){
-
-        }
+//        if (v.getId() == R.id.btn_unlock){
+//
+//        }
     }
 
     /**
