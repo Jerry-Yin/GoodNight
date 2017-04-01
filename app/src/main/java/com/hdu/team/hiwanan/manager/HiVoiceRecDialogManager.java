@@ -1,4 +1,4 @@
-package com.hdu.team.hiwanan.view;
+package com.hdu.team.hiwanan.manager;
 
 import android.app.Dialog;
 import android.content.Context;

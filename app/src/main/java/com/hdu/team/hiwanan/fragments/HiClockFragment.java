@@ -29,8 +29,9 @@ import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiTimePickerActivity;
 import com.hdu.team.hiwanan.broadcast.HiAlarmClockReceiver;
 import com.hdu.team.hiwanan.constant.HiConfig;
+import com.hdu.team.hiwanan.model.HiAlarmTab;
 import com.hdu.team.hiwanan.util.HiLog;
-import com.hdu.team.hiwanan.view.HiTimeTabManager;
+import com.hdu.team.hiwanan.manager.HiAlarmTabManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,7 +66,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
      * Values
      */
     private BaseAdapter mTimeListAdapter;
-    private List<Map<String, Object>> mTimeList;
+    private List<HiAlarmTab> mAlarmList;
     //TODO:kaikai added list value for switch status.
     private List<Boolean> mSwitchStatusList;
 
@@ -102,12 +103,12 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 //        mTvSleepTime.setOnClickListener(this);
 
         mListView = (ListView) mContentView.findViewById(R.id.list_sleep_time);
-        mTimeList = getFirstLists();
+        mAlarmList = getFirstLists();
         //TODO: kaikai added for initial switch flags
         mSwitchStatusList = getFirstSwitchStatusList();
 
 
-        mTimeListAdapter = new HiTimeListAdapter(mSelf, mTimeList);
+        mTimeListAdapter = new HiTimeListAdapter(mSelf, mAlarmList);
         mListView.setAdapter(mTimeListAdapter);
 //        mTimeListAdapter.notifyDataSetChanged();
         mListView.setOnItemClickListener(this);
@@ -130,12 +131,12 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
     private void initTime() {
         mPreferences = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE);
 
-        if (mTimeList.size() != 0) {
-            for (int i = 0; i < mTimeList.size(); i++) {
+        if (mAlarmList.size() != 0) {
+            for (int i = 0; i < mAlarmList.size(); i++) {
                 long hour = mPreferences.getLong(HiConfig.DIF_HOURS + i, 00);
                 long minute = mPreferences.getLong(HiConfig.DIF_MINUTES + i, 00);
                 String time = hour + " : " + minute;
-                mTimeList.get(i).put("time",time);
+                mAlarmList.get(i).setTime(time);
             }
         }
         mTimeListAdapter.notifyDataSetChanged();
@@ -152,8 +153,8 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
                 .setItems(clock_category, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Map<String, Object> map = HiTimeTabManager.createMapTab(R.drawable.ic_access_alarm_black_24dp, (String) clock_category[which], "00 : 00", mSelf);
-                        mTimeList.add(map);
+                        HiAlarmTab map = HiAlarmTabManager.createMapTab(mAlarmList.size(), R.drawable.ic_access_alarm_black_24dp, (String) clock_category[which], "00 : 00", false, 0);
+                        mAlarmList.add(map);
                         mTimeListAdapter.notifyDataSetChanged();
                     }
                 })
@@ -179,15 +180,15 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
      * 初次加载三条时间表
      * 每一个map表示一条tab
      */
-    public List<Map<String, Object>> getFirstLists() {
-        List<Map<String, Object>> firstLists = new ArrayList<>();
+    public List<HiAlarmTab> getFirstLists() {
+        List<HiAlarmTab> firstLists = new ArrayList<>();
         //TODO 添加三条初始化的tab
-        Map<String, Object> map1 = HiTimeTabManager.createMapTab(R.drawable.ic_access_alarm_black_24dp, HiTimeTabManager.CATEGORY_READY, "10 : 00", mSelf);
-        Map<String, Object> map2 = HiTimeTabManager.createMapTab(R.drawable.ic_access_alarm_black_24dp, HiTimeTabManager.CATEGORY_SLEEP, "10 : 30", mSelf);
-        Map<String, Object> map3 = HiTimeTabManager.createMapTab(R.drawable.ic_access_alarm_black_24dp, HiTimeTabManager.CATEGORY_GETUP, "08 : 00", mSelf);
-        firstLists.add(map1);
-        firstLists.add(map2);
-        firstLists.add(map3);
+        HiAlarmTab tab1 = HiAlarmTabManager.createMapTab(0, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_READY, "10 : 00");
+        HiAlarmTab tab2 = HiAlarmTabManager.createMapTab(1, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_READY, "10 : 30");
+        HiAlarmTab tab3 = HiAlarmTabManager.createMapTab(2, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_READY, "08 : 00");
+        firstLists.add(tab1);
+        firstLists.add(tab2);
+        firstLists.add(tab3);
         return firstLists;
     }
 
@@ -242,7 +243,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         mSelItemPosition = position;
         Intent intent = new Intent(mSelf, HiTimePickerActivity.class);
-        intent.putExtra("category", mTimeList.get(position).get("category").toString());
+        intent.putExtra("category", mAlarmList.get(position).getCategory());
         intent.putExtra("ItemPosition", position);
         //TODO 选择时间，返回时间值，设定相应条目
 
@@ -256,7 +257,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
             int hour = data.getIntExtra("hour", 00);
             int minute = data.getIntExtra("minute", 00);
             String selTime = hour + " : " + minute;
-            mTimeList.get(mSelItemPosition).put("time", selTime);
+            mAlarmList.get(mSelItemPosition).setTime(selTime);
             mTimeListAdapter.notifyDataSetChanged();
         }
 
@@ -266,7 +267,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 
         private Context mContext;
         private LayoutInflater inflater;
-        private List<Map<String, Object>> mDataList;
+        private List<HiAlarmTab> mDataList;
 
         private class HiHandler {
             private ImageView imgIcon;
@@ -275,7 +276,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
             private Switch Switch;
         }
 
-        public HiTimeListAdapter(Context c, List<Map<String, Object>> dataList) {
+        public HiTimeListAdapter(Context c, List<HiAlarmTab> dataList) {
             this.mContext = c;
             this.inflater = LayoutInflater.from(c);
             this.mDataList = dataList;
@@ -313,9 +314,9 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
             } else {
                 handler = (HiHandler) convertView.getTag();
             }
-            handler.imgIcon.setImageResource((Integer) mDataList.get(position).get("icon"));
-            handler.tvCategory.setText((String) mDataList.get(position).get("category"));
-            handler.tvTime.setText((String) mDataList.get(position).get("time"));
+            handler.imgIcon.setImageResource((Integer) mDataList.get(position).getIcon());
+            handler.tvCategory.setText((String) mDataList.get(position).getCategory());
+            handler.tvTime.setText((String) mDataList.get(position).getTime());
 
             //init the new switch flag
             //TODO: it it tricky to init without any judgement.
@@ -336,12 +337,13 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 
                             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(mSelf.ALARM_SERVICE);
                             Intent alarmIntent = new Intent(getActivity(), HiAlarmClockReceiver.class);
-                            String category = (String) mDataList.get(position).get("category");
+                            String category = (String) mDataList.get(position).getCategory();
 
                             if (isChecked) {
-
-                                int hour = Integer.parseInt(((String) mDataList.get(position).get("time")).split(":")[0].trim());
-                                int minute = Integer.parseInt(((String) mDataList.get(position).get("time")).split(":")[1].trim());
+                                String h = mDataList.get(position).getTime().split(":")[0].trim();
+                                String m = mDataList.get(position).getTime().split(":")[1].trim();
+                                int hour = Integer.parseInt(h);
+                                int minute = Integer.parseInt(m);
 
                                 HiLog.i(TAG,"hour->" + hour + "; minute->" + minute);
                                 Calendar calendar =  Calendar.getInstance();
@@ -361,6 +363,10 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
                                 HiLog.d(TAG, "position " + position);
                                 alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pendingIntent);
 
+//                                ELAPSED_REALTIME：         从设备启动之后开始算起，度过了某一段特定时间后，激活Pending Intent，但不会唤醒设备。其中设备睡眠的时间也会包含在内。
+//                                ELAPSED_REALTIME_WAKEUP：  从设备启动之后开始算起，度过了某一段特定时间后唤醒设备。
+//                                RTC：                      在某一个特定时刻激活Pending Intent，但不会唤醒设备。
+//                                RTC_WAKEUP：               在某一个特定时刻唤醒设备并激活Pending Intent。
                             } else {
                                 alarmIntent.putExtra("id", position);
                                 alarmIntent.putExtra("switch",isChecked);

@@ -6,15 +6,17 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 
 import com.hdu.team.hiwanan.broadcast.HiBroadcastReceiver;
+import com.hdu.team.hiwanan.util.HiLog;
 
 
 /**
  * Created by JerryYin on 11/16/15.
  * 通过此服务定时发送广播，启动锁频
  */
-public class HiLockScreenService extends Service {
+public class HiScreenLockService extends Service {
 
 
+    private static final String TAG = "HiScreenLockService";
     private Intent mStartIntent;
     private IntentFilter mIntentFilter;
     private HiBroadcastReceiver mReceiver;
@@ -55,9 +57,9 @@ public class HiLockScreenService extends Service {
         mReceiver = new HiBroadcastReceiver();
         registerReceiver(mReceiver, mIntentFilter);
 
-        System.out.println("service onStart and action is " + intent.getAction());
-        System.out.println("service onStart and startId is " + startId);
-
+        if (intent != null) {
+            HiLog.d(TAG, "service onStart and action is " + intent.getAction() + " startId is " + startId);
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
