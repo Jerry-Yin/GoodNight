@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="regist" type="id">恭喜，注册成功！</item>
+    <item name="category" type="id">铃声类别</item>
+    <item name="ringtone" type="id">铃声选择</item>
 </resources>

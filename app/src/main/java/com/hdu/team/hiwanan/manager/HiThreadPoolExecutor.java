@@ -70,22 +70,21 @@ class HiThreadPoolExecutor extends ThreadPoolExecutor {
      * @param id
      */
     private void stopCurPlayingExcept(int id) {
-        HiBlockingQueue<HiAlarmTask> queue = (HiBlockingQueue<HiAlarmTask>) getQueue();
-        Log.d(TAG, "getQueue.size: "+queue.size());
-        Iterator iterator = queue.iterator();
-        if (iterator != null && iterator.hasNext()) {
-            HiAlarmTask task = (HiAlarmTask) iterator.next();
-            MediaPlayer player = task.getPlayer();
-
-            //this is not the current task
-            if (!(task.getTaskId() == id) && player.isPlaying())
-                task.shutdown();
-        }
+//        HiBlockingQueue<HiAlarmTask> queue = (HiBlockingQueue<HiAlarmTask>) getQueue();
+//        Log.d(TAG, "getQueue.size: "+queue.size());
+//        Iterator iterator = queue.iterator();
+//        if (iterator != null && iterator.hasNext()) {
+//            HiAlarmTask task = (HiAlarmTask) iterator.next();
+//            MediaPlayer player = task.getPlayer();
+//
+//            //this is not the current task
+//            if (!(task.getTaskId() == id) && player.isPlaying())
+//                task.shutdown();
+//        }
 
         for (HiAlarmTask t : mTaskList){
             if (!(t.getTaskId() == id) && t.getPlayer().isPlaying())
                 t.shutdown();
-
         }
     }
 

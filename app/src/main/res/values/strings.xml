@@ -113,4 +113,12 @@
     <string name="author">张国荣 &#160; 《我》</string>
     <string name="action_sign_in_short">Sign in</string>
 
+    <string name="category">类型</string>
+    <string-array name="category_values">
+        <item>预备时间</item>
+        <item>入睡时间</item>
+        <item>起床时间</item>
+    </string-array>
+
+
 </resources>

@@ -2,9 +2,19 @@ package com.hdu.team.hiwanan.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -14,10 +24,17 @@ import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.util.HiToast;
 import com.hdu.team.hiwanan.util.common.HiTimesUtil;
 
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by JerryYin on 11/23/15.
  */
-public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTimeChangedListener {
+public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTimeChangedListener, AdapterView.OnItemSelectedListener{
 
 
     /** Views*/
@@ -27,6 +44,10 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
     private TextView mTvLastTime;
     private TextView mTvTitle;
 
+    //TODO:new view for spinner category and ringtone, just for testing
+    private Spinner mRingtone;
+    private Spinner mCategory;
+
     /** Values*/
     private Intent mIntent;
     private int mItemPosition;  //前面点击的Item索引
@@ -34,6 +55,12 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
     private long mHours = 00;       //临时变量，用于记录时差
     private long mMinutes = 00;
 
+    private long mRingtoneId = 0; //用于存放铃声的id
+    private long mCategoryId = 0; //用于存放铃声种类的id
+
+    private List<Uri> ringtoneList = new ArrayList<>();
+    RingtoneManager manager = new RingtoneManager(this);
+    MediaPlayer preview = new MediaPlayer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +88,36 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         mTvTitle.setText(mIntent.getStringExtra("category"));
         mBtnCancel.setImageResource(R.drawable.ic_clea);
         mBtnDone.setImageResource(R.drawable.ic_done);
+        //TODO:find the spinner from layout.
+        mRingtone = (Spinner)findViewById(R.id.ringtone);
+        mCategory = (Spinner)findViewById(R.id.category);
 
+        List titleList = new ArrayList();
+
+
+        Cursor cursor = manager.getCursor();
+        //TODO:获取系统所有铃声列表
+        while(cursor.moveToNext()) {
+            String title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
+            titleList.add(title);
+            Uri ringtoneUri = manager.getRingtoneUri(cursor.getPosition());
+            ringtoneList.add(ringtoneUri);
+        }
+
+        ArrayAdapter categoryAdapter= ArrayAdapter.createFromResource(this, R.array.category_values, R.layout.hi_spinner_item);
+        categoryAdapter.setDropDownViewResource(R.layout.hi_spinner_dropdown);
+
+        ArrayAdapter ringtoneAdapter = new ArrayAdapter(this,R.layout.hi_spinner_item, titleList);
+        ringtoneAdapter.setDropDownViewResource(R.layout.hi_spinner_dropdown);
+
+        mCategory.setAdapter(categoryAdapter);
+        mCategory.setSelection(0,true);
+
+        mRingtone.setAdapter(ringtoneAdapter);
+        mRingtone.setSelection(0,true);
+
+        mCategory.setOnItemSelectedListener(this);
+        mRingtone.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -112,5 +168,56 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
 
 
 
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+      switch (parent.getId()) {
+          case R.id.ringtone:
+              mRingtoneId = id;
+              Uri uri = manager.getRingtoneUri((int)id);
+
+              try {
+                  if (preview.isPlaying()) {
+                      preview.stop();
+                      preview.reset();
+                     // preview.release();
+                      preview.setLooping(false);
+                      preview.setDataSource(this,uri);
+                      preview.prepare();
+                      preview.start();
+
+                  } else {
+                      preview.setDataSource(this,uri);
+                      preview.prepare();
+                      preview.setLooping(false);
+                      preview.start();
+                      Log.d("duration", "" + preview.getDuration());
+
+                  }
+
+              } catch (IOException e) {
+                  e.printStackTrace();
+              }
+
+              Log.d("selected ringtone", "" + id);
+              break;
+          case R.id.category:
+              mCategoryId = id;
+              Log.d("selected category", "" + id);
+              break;
+          default:
+              break;
+      }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

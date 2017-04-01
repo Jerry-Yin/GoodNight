@@ -63,6 +63,7 @@ public class HiRingtoneService2 extends Service {
 
         HiAlarmTask alarmTask = mTaskPoolManager.getTaskById(id);
         if (alarmTask == null) {
+            // TODO:here we need to add the media id to set which ringtone should be playing.
             alarmTask = new HiAlarmTask(getApplicationContext(), id, R.raw.voice);
         }
 //        if (intent.hasExtra("category")) {
@@ -78,6 +79,7 @@ public class HiRingtoneService2 extends Service {
             mTaskPoolManager.executeTask(alarmTask);
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            //点击通知栏跳转到主界面
             Intent intentMain = new Intent(this.getApplicationContext(), HiMainActivity.class);
             PendingIntent pendingMainIntent = PendingIntent.getActivity(this, 0, intentMain, 0);
 

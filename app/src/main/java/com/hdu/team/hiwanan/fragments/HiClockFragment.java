@@ -359,7 +359,9 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 
                                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), position, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                                 HiLog.d(TAG, "position " + position);
-                                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pendingIntent);
+                                //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pendingIntent);
+                                //TODO:重复闹钟设定,每天重复
+                                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
 
                             } else {
                                 alarmIntent.putExtra("id", position);
