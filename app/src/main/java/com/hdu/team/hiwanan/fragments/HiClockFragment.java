@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiTimePickerActivity;
 import com.hdu.team.hiwanan.broadcast.HiAlarmClockReceiver;
 import com.hdu.team.hiwanan.constant.HiConfig;
+import com.hdu.team.hiwanan.constant.HiRequestCodes;
+import com.hdu.team.hiwanan.database.HiGoodNightDB;
 import com.hdu.team.hiwanan.model.HiAlarmTab;
 import com.hdu.team.hiwanan.util.HiLog;
 import com.hdu.team.hiwanan.manager.HiAlarmTabManager;
@@ -44,10 +47,11 @@ import java.util.Map;
 public class HiClockFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private static final String TAG = "HiClockFragment";
-;
+    private HiGoodNightDB mGoodNightDB;
+
     private static final int FLAG_REQUEST_CODE = 001;
-    private static final String CREATE_CLOCK = "请选择闹钟时间类型";
-    private CharSequence[] clock_category = new CharSequence[]{"预备时间", "入睡时间", "早起时间"};
+    //private static final String CREATE_CLOCK = "请选择闹钟时间类型";
+    //private CharSequence[] clock_category = new CharSequence[]{"预备时间", "入睡时间", "早起时间"};
     /**
      * Constants
      */
@@ -81,6 +85,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         if (null != mContentView) {
             ViewGroup vg = (ViewGroup) mContentView.getParent();
             if (null != vg) {
@@ -89,23 +94,50 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         } else {
             mContentView = inflater.inflate(R.layout.layout_clock, container, false);
             mSelf = getActivity();
+            mGoodNightDB = HiGoodNightDB.getInstance(mSelf);
+            // first time using check.
+            if (isFirstLoadCheck()) {
+                //if it is the first time user open this app, create 3 default alarm tab items.
+                //int id, int icon, String category, String time, boolean on, int musicId)
+                HiAlarmTab tab1 = new HiAlarmTab(0, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_READY, "10:00", false, 0);
+                HiAlarmTab tab2 = new HiAlarmTab(1, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_SLEEP, "10:30", false, 0);
+                HiAlarmTab tab3 = new HiAlarmTab(2, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_GETUP, "08:00", false, 0);
+
+                mGoodNightDB.saveAlarmTab(tab1);
+                mGoodNightDB.saveAlarmTab(tab2);
+                mGoodNightDB.saveAlarmTab(tab3);
+            }
+
             setupViews();
-            initTime();
         }
         return mContentView;
+    }
+
+    /**
+     * @author Kaikai,Fu
+     * to check if the user is the first time to open this app.
+     * @return
+     */
+    private boolean isFirstLoadCheck(){
+        mPreferences = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        boolean firstLoad = mPreferences.getBoolean(HiConfig.FIRST_LOAD, true);
+
+        if(firstLoad) {
+            SharedPreferences.Editor editor = mPreferences.edit();
+            editor.putBoolean(HiConfig.FIRST_LOAD, false);
+            editor.commit();
+        }
+
+        return firstLoad;
     }
 
     private void setupViews() {
         mbtnAddClock = (FloatingActionButton) mContentView.findViewById(R.id.btn_add_clock);
         mbtnAddClock.setOnClickListener(this);
-
-//        mTvSleepTime = (TextView) mContentView.findViewById(R.id.text_ready_time_point);
-//        mTvSleepTime.setOnClickListener(this);
-
         mListView = (ListView) mContentView.findViewById(R.id.list_sleep_time);
-        mAlarmList = getFirstLists();
-        //TODO: kaikai added for initial switch flags
-        mSwitchStatusList = getFirstSwitchStatusList();
+
+        //load the data from db.
+        mAlarmList = mGoodNightDB.queryAllAlarmTabs();
 
 
         mTimeListAdapter = new HiTimeListAdapter(mSelf, mAlarmList);
@@ -117,30 +149,13 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
     @Override
     public void onResume() {
         super.onResume();
-        initTime();
+        //initTime();
+        //TODO: refresh view if data changed, can add a standalone method to handle this task.
+        setupViews();
         mTimeListAdapter.notifyDataSetChanged();
+
     }
 
-
-    /**
-     * todo
-     * 界面初始化，进入界面从sp数据库中判断是否有已经设定好的时间tab数，如果有，就拿出来设置；没有就默认；
-     * 判断时需要判断多个tab item 的数据，并一次设定界面
-     * 遍历mTimeList，
-     */
-    private void initTime() {
-        mPreferences = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE);
-
-        if (mAlarmList.size() != 0) {
-            for (int i = 0; i < mAlarmList.size(); i++) {
-                long hour = mPreferences.getLong(HiConfig.DIF_HOURS + i, 00);
-                long minute = mPreferences.getLong(HiConfig.DIF_MINUTES + i, 00);
-                String time = hour + " : " + minute;
-                mAlarmList.get(i).setTime(time);
-            }
-        }
-        mTimeListAdapter.notifyDataSetChanged();
-    }
 
 
     @Override
@@ -148,24 +163,32 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         switch (v.getId()) {
             case R.id.btn_add_clock:
                 // todo 添加闹钟（类型，时间）
-                AlertDialog.Builder builder = new AlertDialog.Builder(mSelf);
-                builder.setTitle(CREATE_CLOCK)
-                .setItems(clock_category, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        HiAlarmTab map = HiAlarmTabManager.createMapTab(mAlarmList.size(), R.drawable.ic_access_alarm_black_24dp, (String) clock_category[which], "00 : 00", false, 0);
-                        mAlarmList.add(map);
-                        mTimeListAdapter.notifyDataSetChanged();
-                    }
-                })
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mTimeListAdapter.notifyDataSetChanged();
-                    }
-                })
-                .create().show();
+//                AlertDialog.Builder builder = new AlertDialog.Builder(mSelf);
+//                builder.setTitle(CREATE_CLOCK)
+//                .setItems(clock_category, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        HiAlarmTab map = HiAlarmTabManager.createMapTab(mAlarmList.size(), R.drawable.ic_access_alarm_black_24dp, (String) clock_category[which], "00 : 00", false, 0);
+//                        mAlarmList.add(map);
+//                        mTimeListAdapter.notifyDataSetChanged();
+//                    }
+//                })
+//                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        mTimeListAdapter.notifyDataSetChanged();
+//                    }
+//                })
+//                .create().show();
 
+                //TODO:kaikai transfer alarm clock creating to HiTimePickerActivity.
+                Intent intent = new Intent(mSelf, HiTimePickerActivity.class);
+                //flag for identify the request is create or modify the alarm clock;
+                intent.putExtra(HiConfig.REQUEST_TYPE, HiConfig.CREATE_REQUEST);
+                startActivity(intent);
+
+                //here didn't finish the activity for still living after create or modified the alarm clock.
+                //mSelf.finish();
                 break;
 
             case R.id.text_ready_time_point:
@@ -176,92 +199,35 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         }
     }
 
-    /**
-     * 初次加载三条时间表
-     * 每一个map表示一条tab
-     */
-    public List<HiAlarmTab> getFirstLists() {
-        List<HiAlarmTab> firstLists = new ArrayList<>();
-        //TODO 添加三条初始化的tab
-        HiAlarmTab tab1 = HiAlarmTabManager.createMapTab(0, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_READY, "10 : 00");
-        HiAlarmTab tab2 = HiAlarmTabManager.createMapTab(1, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_READY, "10 : 30");
-        HiAlarmTab tab3 = HiAlarmTabManager.createMapTab(2, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_READY, "08 : 00");
-        firstLists.add(tab1);
-        firstLists.add(tab2);
-        firstLists.add(tab3);
-        return firstLists;
-    }
-
-    public List<Boolean> getFirstSwitchStatusList(){
-        //TODO: init 3 defalut switch flags
-        ArrayList<Boolean> firstLists= new ArrayList<Boolean>();
-        mPreferences = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        int size = mPreferences.getInt(HiConfig.STATUS_NUM, 0);
-
-        //IF it is not the first time to use this app, read the shared preferences data.
-        if(size != 0) {
-            for(int i=0; i<size; i++){
-                firstLists.add(mPreferences.getBoolean(HiConfig.SWITCH_STATUS, false));
-            }
-            HiLog.d("the size of first list is ","" + firstLists.size());
-        } else {
-            //IF it is the first time to use this app, init and save data to shared preferences.
-            SharedPreferences.Editor editor = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
-            firstLists.add(false);
-            firstLists.add(true);
-            firstLists.add(false);
-
-            editor.putInt(HiConfig.STATUS_NUM,firstLists.size());
-            for(int i=0; i< firstLists.size(); i++){
-                editor.putBoolean(HiConfig.SWITCH_STATUS + i, firstLists.get(i));
-            }
-
-            editor.commit();
-            HiLog.d("the initial size of first list is ","" + firstLists.size());
-        }
-
-        return  firstLists;
-
-    }
-
-
-    //TODO:kaikai added
-    /**
-     * init switch status
-     * @return
-
-    public List<Boolean> getSwitchStatusList(){
-         List<Boolean> statusList = new ArrayList<>();
-        statusList.add(false);
-        statusList.add(false);
-        statusList.add(false);
-        return statusList;
-    }*/
-
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
         mSelItemPosition = position;
+//        Intent intent = new Intent(mSelf, HiTimePickerActivity.class);
+//        intent.putExtra("category", mAlarmList.get(position).getCategory());
+//        intent.putExtra("ItemPosition", position);
+//        //TODO 选择时间，返回时间值，设定相应条目
+//
+//        startActivityForResult(intent, FLAG_REQUEST_CODE);
         Intent intent = new Intent(mSelf, HiTimePickerActivity.class);
-        intent.putExtra("category", mAlarmList.get(position).getCategory());
-        intent.putExtra("ItemPosition", position);
-        //TODO 选择时间，返回时间值，设定相应条目
-
-        startActivityForResult(intent, FLAG_REQUEST_CODE);
+        intent.putExtra(HiConfig.REQUEST_TYPE, HiConfig.MODIFY_REQUEST);
+        intent.putExtra("id", id);
+        startActivity(intent);
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //接收设定时间后的时间
-        if (requestCode == FLAG_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            int hour = data.getIntExtra("hour", 00);
-            int minute = data.getIntExtra("minute", 00);
-            String selTime = hour + " : " + minute;
-            mAlarmList.get(mSelItemPosition).setTime(selTime);
-            mTimeListAdapter.notifyDataSetChanged();
-        }
 
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        //接收设定时间后的时间
+//        /**if (requestCode == FLAG_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+//            int hour = data.getIntExtra("hour", 00);
+//            int minute = data.getIntExtra("minute", 00);
+//            String selTime = hour + " : " + minute;
+//            mAlarmList.get(mSelItemPosition).setTime(selTime);
+//            mTimeListAdapter.notifyDataSetChanged();
+//        }**/
+//
+//    }
 
     class HiTimeListAdapter extends BaseAdapter {
 
@@ -300,7 +266,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             HiHandler handler = null;
-            SharedPreferences.Editor editor = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
+            //SharedPreferences.Editor editor = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
             if (convertView == null) {
                 handler = new HiHandler();
 //                convertView = LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.item_sleep_time, null);
@@ -314,19 +280,11 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
             } else {
                 handler = (HiHandler) convertView.getTag();
             }
+
             handler.imgIcon.setImageResource((Integer) mDataList.get(position).getIcon());
             handler.tvCategory.setText((String) mDataList.get(position).getCategory());
             handler.tvTime.setText((String) mDataList.get(position).getTime());
-
-            //init the new switch flag
-            //TODO: it it tricky to init without any judgement.
-            mSwitchStatusList.add(false);
-            editor.putInt(HiConfig.STATUS_NUM, mSwitchStatusList.size());
-            editor.putBoolean(HiConfig.SWITCH_STATUS + mSwitchStatusList.size(), false);
-            editor.commit();
-
-            handler.Switch.setChecked( mSwitchStatusList.get(position));
-
+            handler.Switch.setChecked(mDataList.get(position).isOn());
             //TODO:alarm clock switch setting.
             handler.Switch.setOnCheckedChangeListener(
                     new CompoundButton.OnCheckedChangeListener() {
@@ -364,6 +322,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
                                 //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pendingIntent);
                                 //TODO:重复闹钟设定,每天重复
                                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
+                                saveSwitchStatus(position, isChecked);
 
 //                                ELAPSED_REALTIME：         从设备启动之后开始算起，度过了某一段特定时间后，激活Pending Intent，但不会唤醒设备。其中设备睡眠的时间也会包含在内。
 //                                ELAPSED_REALTIME_WAKEUP：  从设备启动之后开始算起，度过了某一段特定时间后唤醒设备。
@@ -373,7 +332,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
                                 alarmIntent.putExtra("id", position);
                                 alarmIntent.putExtra("switch",isChecked);
                                 alarmIntent.putExtra("category", category);
-
+                                saveSwitchStatus(position, isChecked);
                                 //Intent i=new Intent(getActivity(),HiAlarmClockReceiver.class);
                                 //PendingIntent pi = PendingIntent.getBroadcast(getActivity(), position , alarmIntent, 0);
                                 //alarmManager.cancel(pi);//取消闹钟
@@ -386,7 +345,12 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 
             return convertView;
         }
+        private boolean saveSwitchStatus(int id, boolean status){
+            HiAlarmTab tab = mGoodNightDB.queryAlarmTab(id);
+            tab.setOn(status);
 
+            return mGoodNightDB.updateAlarmTab(tab);
+        }
 
     }
 

@@ -55,5 +55,4 @@ public class HiRequestCodes {
      */
     public static final int COUNT_DOWN = 0X30;
 
-
 }

@@ -26,6 +26,7 @@ public class HiGoodNightDB {
 
     private HiGoodNightDB(Context context) {
         mOpenHelper = new HiDatabaseOpenHelper(context);
+//        db = mOpenHelper.getWritableDatabase();
     }
 
     public static synchronized HiGoodNightDB getInstance(Context context) {
@@ -41,7 +42,7 @@ public class HiGoodNightDB {
         db = mOpenHelper.getWritableDatabase();
         if (tab != null) {
             ContentValues cv = new ContentValues();
-            cv.put(HiAlarmTab.AlarmEntry.CLOUMN_ID, tab.getId());
+            cv.put(HiAlarmTab.AlarmEntry.COLUMN_ID, tab.getId());
             cv.put(HiAlarmTab.AlarmEntry.COLUMN_ICON, tab.getIcon());
             cv.put(HiAlarmTab.AlarmEntry.COLUMN_CATEGORY, tab.getCategory());
             cv.put(HiAlarmTab.AlarmEntry.COLUMN_TIME, tab.getTime());
@@ -51,6 +52,7 @@ public class HiGoodNightDB {
             success = true;
         }
         db.close();
+        db = null;
         return success;
     }
 
@@ -61,9 +63,11 @@ public class HiGoodNightDB {
      * @return
      */
     public int deleteAlarmTab(int id) {
-        db = mOpenHelper.getWritableDatabase();
-        int result = db.delete(HiAlarmTab.AlarmEntry.TABLE_NAME, HiAlarmTab.AlarmEntry.CLOUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        if (db == null)
+            db = mOpenHelper.getWritableDatabase();
+        int result = db.delete(HiAlarmTab.AlarmEntry.TABLE_NAME, HiAlarmTab.AlarmEntry.COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
         db.close();
+        db = null;
         return result;
 
     }
@@ -75,13 +79,18 @@ public class HiGoodNightDB {
      * @return
      */
     public HiAlarmTab queryAlarmTab(int id) {
-        db = mOpenHelper.getReadableDatabase();
-        HiAlarmTab tab = null;
+        if (db == null)
+            db = mOpenHelper.getReadableDatabase();
+        HiAlarmTab tab = new HiAlarmTab();
 //        String sql = "SELECT * FROM " + HiAlarmTab.AlarmEntry.TABLE_NAME +" WHERE " + HiAlarmTab.AlarmEntry.CLOUMN_ID + " = "+ id;
 //        db.execSQL(sql);
-        Cursor cursor = db.rawQuery("SELECT * FROM "+ HiAlarmTab.AlarmEntry.TABLE_NAME +" WHERE " + HiAlarmTab.AlarmEntry.CLOUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        //Cursor cursor = db.rawQuery("SELECT * FROM "+ HiAlarmTab.AlarmEntry.TABLE_NAME + " WHERE " + HiAlarmTab.AlarmEntry.COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        Cursor cursor = db.query(HiAlarmTab.AlarmEntry.TABLE_NAME,new String[]{HiAlarmTab.AlarmEntry.COLUMN_ID,HiAlarmTab.AlarmEntry.COLUMN_ICON,HiAlarmTab.AlarmEntry.COLUMN_CATEGORY,
+                HiAlarmTab.AlarmEntry.COLUMN_TIME, HiAlarmTab.AlarmEntry.COLUMN_SWITCH,HiAlarmTab.AlarmEntry.COLUMN_MUSIC},
+        HiAlarmTab.AlarmEntry.COLUMN_ID + "=?",new String[]{String.valueOf(id)}, null,null,null);
+        int size = cursor.getCount();
         if (cursor.moveToFirst()){
-            tab.setId(cursor.getInt(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.CLOUMN_ID)));
+            tab.setId(cursor.getInt(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_ID)));
             tab.setIcon(cursor.getInt(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_ICON)));
             tab.setCategory(cursor.getString(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_CATEGORY)));
             tab.setTime(cursor.getString(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_TIME)));
@@ -90,6 +99,7 @@ public class HiGoodNightDB {
         }
         cursor.close();
         db.close();
+        db = null;
         return tab;
     }
 
@@ -99,13 +109,14 @@ public class HiGoodNightDB {
      * @return
      */
     public List<HiAlarmTab> queryAllAlarmTabs() {
-        db = mOpenHelper.getReadableDatabase();
+        if (db == null)
+            db = mOpenHelper.getReadableDatabase();
         List<HiAlarmTab> alarmTabs = new ArrayList<>();
         Cursor cursor = db.query(HiAlarmTab.AlarmEntry.TABLE_NAME, null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 HiAlarmTab tab = new HiAlarmTab();
-                tab.setId(cursor.getInt(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.CLOUMN_ID)));
+                tab.setId(cursor.getInt(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_ID)));
                 tab.setIcon(cursor.getInt(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_ICON)));
                 tab.setCategory(cursor.getString(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_CATEGORY)));
                 tab.setTime(cursor.getString(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_TIME)));
@@ -116,6 +127,7 @@ public class HiGoodNightDB {
             cursor.close();
         }
         db.close();
+        db = null;
         return alarmTabs;
     }
 
@@ -128,15 +140,32 @@ public class HiGoodNightDB {
         if (tab == null)
             return false;
         int id = tab.getId();
-        db = mOpenHelper.getWritableDatabase();
+        if (db == null)
+            db = mOpenHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(HiAlarmTab.AlarmEntry.CLOUMN_ID, id);
+        cv.put(HiAlarmTab.AlarmEntry.COLUMN_ID, id);
         cv.put(HiAlarmTab.AlarmEntry.COLUMN_ICON, tab.getIcon());
         cv.put(HiAlarmTab.AlarmEntry.COLUMN_CATEGORY, tab.getCategory());
         cv.put(HiAlarmTab.AlarmEntry.COLUMN_TIME, tab.getTime());
-        cv.put(HiAlarmTab.AlarmEntry.COLUMN_SWITCH, tab.isOn());
+        cv.put(HiAlarmTab.AlarmEntry.COLUMN_SWITCH, tab.isOn() ? 1 : 0);
         cv.put(HiAlarmTab.AlarmEntry.COLUMN_MUSIC, tab.getMusicId());
-        db.update(HiAlarmTab.AlarmEntry.TABLE_NAME, cv, HiAlarmTab.AlarmEntry.CLOUMN_ID + "= ?", new String[]{String.valueOf(id)});
+        db.update(HiAlarmTab.AlarmEntry.TABLE_NAME, cv, HiAlarmTab.AlarmEntry.COLUMN_ID + "= ?", new String[]{String.valueOf(id)});
+        db.close();
+        db = null;
         return true;
+    }
+
+    /**
+     * retrieve the db size
+     * @return size
+     */
+    public int getDbSize() {
+        if (db == null)
+            db = mOpenHelper.getReadableDatabase();
+        Cursor cursor = db.query(HiAlarmTab.AlarmEntry.TABLE_NAME,null, null, null, null, null, null);
+        int size = cursor.getCount();
+        db.close();
+        db = null;
+        return size;
     }
 }

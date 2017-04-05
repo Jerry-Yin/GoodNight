@@ -60,8 +60,9 @@ public class HiAlarmTab {
      * "music"      integer  (R.raw.music)
      */
     public static abstract class AlarmEntry implements BaseColumns{
+        public static final String BLANK = " ";
         public static final String TABLE_NAME = "alarm";
-        public static final String CLOUMN_ID = "id";
+        public static final String COLUMN_ID = "id";
         public static final String COLUMN_ICON = "icon";
         public static final String COLUMN_CATEGORY= "category";
         public static final String COLUMN_TIME = "time";

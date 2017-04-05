@@ -19,14 +19,14 @@ public class HiDatabaseOpenHelper extends SQLiteOpenHelper{
     private static final String TEXT_TYPE = "TEXT";
     private static final String INTEGER_TYPE = "INTEGER";
     private static final String COMMA_SEP = ",";
-    private static final String CREATE_ALAREM = "CREATE TABLE "+ HiAlarmTab.AlarmEntry.TABLE_NAME + "( " +
-            HiAlarmTab.AlarmEntry._ID + "INTEGER PRIMARY KEY," +
-            HiAlarmTab.AlarmEntry.CLOUMN_ID + INTEGER_TYPE + COMMA_SEP +
-            HiAlarmTab.AlarmEntry.COLUMN_ICON + INTEGER_TYPE + COMMA_SEP +
-            HiAlarmTab.AlarmEntry.COLUMN_CATEGORY + TEXT_TYPE + COMMA_SEP +
-            HiAlarmTab.AlarmEntry.COLUMN_TIME + TEXT_TYPE + COMMA_SEP +
-            HiAlarmTab.AlarmEntry.COLUMN_SWITCH + INTEGER_TYPE + COMMA_SEP +
-            HiAlarmTab.AlarmEntry.COLUMN_MUSIC + INTEGER_TYPE + " )";
+    private static final String CREATE_ALARM = "CREATE TABLE "+ HiAlarmTab.AlarmEntry.TABLE_NAME + "( " +
+            HiAlarmTab.AlarmEntry._ID + HiAlarmTab.AlarmEntry.BLANK +"INTEGER PRIMARY KEY AUTOINCREMENT," +
+            HiAlarmTab.AlarmEntry.COLUMN_ID + HiAlarmTab.AlarmEntry.BLANK + INTEGER_TYPE + COMMA_SEP +
+            HiAlarmTab.AlarmEntry.COLUMN_ICON + HiAlarmTab.AlarmEntry.BLANK + INTEGER_TYPE + COMMA_SEP +
+            HiAlarmTab.AlarmEntry.COLUMN_CATEGORY + HiAlarmTab.AlarmEntry.BLANK + TEXT_TYPE + COMMA_SEP +
+            HiAlarmTab.AlarmEntry.COLUMN_TIME + HiAlarmTab.AlarmEntry.BLANK + TEXT_TYPE + COMMA_SEP +
+            HiAlarmTab.AlarmEntry.COLUMN_SWITCH + HiAlarmTab.AlarmEntry.BLANK + INTEGER_TYPE + COMMA_SEP +
+            HiAlarmTab.AlarmEntry.COLUMN_MUSIC + HiAlarmTab.AlarmEntry.BLANK + INTEGER_TYPE + " )";
 
     private static final String DELETE_ALARM = "DROP TABLE IF EXISTS "+ HiAlarmTab.AlarmEntry.TABLE_NAME;
 
@@ -38,7 +38,7 @@ public class HiDatabaseOpenHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_ALAREM);
+        db.execSQL(CREATE_ALARM);
     }
 
 

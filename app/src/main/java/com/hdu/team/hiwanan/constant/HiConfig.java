@@ -94,4 +94,20 @@ public class HiConfig {
     public static final String URL_CALENDAR = "http://v.juhe.cn/calendar/day";
     String test = "http://v.juhe.cn/calendar/day?date=2017-3-10&key=ced957858d6d3f18b18c071b837a3966";
 
+    /**
+     * @author Kaikai
+     * 闹钟设置相关
+     * 确定闹钟修改还是新建行为
+     */
+
+    public static final String REQUEST_TYPE = "TYPE";
+    public static final int CREATE_REQUEST =  0x31;
+    public static final int MODIFY_REQUEST = 0x32;
+
+    /**
+     * @author Kaikai
+     * 判断是否第一次使用本软件
+     */
+    public static final String FIRST_LOAD = "FIRST_LOAD";
+
 }
