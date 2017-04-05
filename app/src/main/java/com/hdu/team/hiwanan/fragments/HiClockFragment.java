@@ -348,7 +348,6 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         private boolean saveSwitchStatus(int id, boolean status){
             HiAlarmTab tab = mGoodNightDB.queryAlarmTab(id);
             tab.setOn(status);
-
             return mGoodNightDB.updateAlarmTab(tab);
         }
 

@@ -1,18 +1,13 @@
 package com.hdu.team.hiwanan.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -30,20 +25,19 @@ import com.hdu.team.hiwanan.util.HiToast;
 import com.hdu.team.hiwanan.util.common.HiTimesUtil;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by JerryYin on 11/23/15.
  */
-public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTimeChangedListener, AdapterView.OnItemSelectedListener{
+public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTimeChangedListener, AdapterView.OnItemSelectedListener {
 
 
-    private  static final String TAG = "HiTimePickerActivity";
-    /** Views*/
+    private static final String TAG = "HiTimePickerActivity";
+    /**
+     * Views
+     */
     private ImageView mBtnCancel;
     private ImageView mBtnDone;
     private TimePicker mTimePicker;
@@ -51,10 +45,12 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
     //private TextView mTvTitle;
 
     //TODO:new view for spinner category and ringtone, just for testing
-    private Spinner mRingtone;
-    private Spinner mCategory;
+    private Spinner mSpRingtone;
+    private Spinner mSpCategory;
 
-    /** Values*/
+    /**
+     * Values
+     */
     private Intent mIntent;
     private int mItemPosition;  //前面点击的Item索引
 
@@ -75,6 +71,7 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         setContentView(R.layout.layout_time_picker);
 
         setupViews();
+        initData();
 
     }
 
@@ -89,8 +86,8 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         mTimePicker.setIs24HourView(true);      //设置制式为24格式
         mTvLastTime = (TextView) findViewById(R.id.text_last_time);
 
-        mRingtone = (Spinner)findViewById(R.id.ringtone);
-        mCategory = (Spinner)findViewById(R.id.category);
+        mSpRingtone = (Spinner) findViewById(R.id.sp_ringtone);
+        mSpCategory = (Spinner) findViewById(R.id.sp_category);
 
         //获取前面传递过来的值
         mIntent = getIntent();
@@ -102,10 +99,11 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         mBtnDone.setImageResource(R.drawable.ic_done);
         //TODO:find the spinner from layout.
 
+    }
 
+
+    private void initData() {
         List titleList = new ArrayList();
-
-
         Cursor cursor = mRingtoneManager.getCursor();
         //TODO:获取系统所有铃声列表
         if (cursor.moveToFirst()) {
@@ -117,54 +115,52 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
             }
         }
 
-        ArrayAdapter categoryAdapter= ArrayAdapter.createFromResource(this, R.array.category_values, R.layout.hi_spinner_item);
+        ArrayAdapter categoryAdapter = ArrayAdapter.createFromResource(this, R.array.category_values, R.layout.hi_spinner_item);
         categoryAdapter.setDropDownViewResource(R.layout.hi_spinner_dropdown);
 
-        ArrayAdapter ringtoneAdapter = new ArrayAdapter(this,R.layout.hi_spinner_item, titleList);
+        ArrayAdapter ringtoneAdapter = new ArrayAdapter(this, R.layout.hi_spinner_item, titleList);
         ringtoneAdapter.setDropDownViewResource(R.layout.hi_spinner_dropdown);
 
-        mCategory.setAdapter(categoryAdapter);
+        mSpCategory.setAdapter(categoryAdapter);
+        mSpRingtone.setAdapter(ringtoneAdapter);
 
+        if (mIntent.getExtras().getInt(HiConfig.REQUEST_TYPE, 0) == HiConfig.MODIFY_REQUEST) {
+            // if it is the modify request, load the data which user set before.
+            long id = mIntent.getExtras().getLong("id", 0);
+            HiAlarmTab tab = mDbManager.queryAlarmTab((int) id);
 
-        mRingtone.setAdapter(ringtoneAdapter);
+            if (Build.VERSION.SDK_INT > 24) {
+                // the time picker set hour / minute is supported only since android 24.
+                String time = tab.getTime();
+                int hour = Integer.parseInt(time.split(":")[0].trim());
+                int minute = Integer.parseInt(time.split(":")[1].trim());
+                mTimePicker.setHour(hour);
+                mTimePicker.setMinute(minute);
+            }
+            String category = tab.getCategory();
+            if ("预备时间".equalsIgnoreCase(category)) {
+                mCategoryId = 0;
+            } else if ("入睡时间".equalsIgnoreCase(category)) {
+                mCategoryId = 1;
+            } else if ("起床时间".equalsIgnoreCase(category)) {
+                mCategoryId = 2;
+            }
+            mSpCategory.setSelection((int) mCategoryId, true);
+            mRingtoneId = tab.getMusicId();
+            mSpRingtone.setSelection((int) mRingtoneId, true);
 
-        if(mIntent.getExtras().getInt(HiConfig.REQUEST_TYPE, 0) == HiConfig.MODIFY_REQUEST){
-         // if it is the modify request, load the data which user set before.
-         long id = mIntent.getExtras().getLong("id", 0);
-         HiAlarmTab tab = mDbManager.queryAlarmTab((int) id);
-
-         if(Build.VERSION.SDK_INT > 24) {
-         // the time picker set hour / minute is supported only since android 24.
-         String time = tab.getTime();
-         int hour = Integer.parseInt(time.split(":")[0].trim());
-         int minute = Integer.parseInt(time.split(":")[1].trim());
-         mTimePicker.setHour(hour);
-         mTimePicker.setMinute(minute);
-         }
-         String category = tab.getCategory();
-         if("预备时间".equalsIgnoreCase(category)) {
-             mCategoryId = 0;
-         } else if("入睡时间".equalsIgnoreCase(category)) {
-             mCategoryId = 1;
-         } else if("起床时间".equalsIgnoreCase(category)) {
-             mCategoryId = 2;
-         }
-         mCategory.setSelection((int) mCategoryId, true);
-         mRingtoneId = tab.getMusicId();
-         mRingtone.setSelection((int) mRingtoneId, true);
-
-         } else {
-            mCategory.setSelection(0, true);
-            mRingtone.setSelection(0, true);
+        } else {
+            mSpCategory.setSelection(0, true);
+            mSpRingtone.setSelection(0, true);
         }
 
-        mCategory.setOnItemSelectedListener(this);
-        mRingtone.setOnItemSelectedListener(this);
+        mSpCategory.setOnItemSelectedListener(this);
+        mSpRingtone.setOnItemSelectedListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_title_back:
                 //取消选择
                 this.finish();
@@ -191,21 +187,20 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
                 //int id, int icon, String category, String time, boolean switch status, int music id;
 
                 int requestCode = mIntent.getExtras().getInt(HiConfig.REQUEST_TYPE, 0);
-                switch(requestCode) {
-                    case HiConfig.CREATE_REQUEST :
+                switch (requestCode) {
+                    case HiConfig.CREATE_REQUEST:
                         addAlarmClock();
                         break;
                     case HiConfig.MODIFY_REQUEST:
                         long id = mIntent.getExtras().getLong("id", 0);
                         //load the data which user set before.
 
-                        modifyAlarmClock((int)id);
+                        modifyAlarmClock((int) id);
                         break;
                     default:
                         HiToast.showToast(HiTimePickerActivity.this, "Opps, Something happens!");
                         break;
                 }
-
 
 
                 break;
@@ -221,9 +216,9 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         int id = mDbManager.getDbSize();
         int icon = R.drawable.ic_access_alarm_black_24dp;
         String category = getResources().getStringArray(R.array.category_values)[(int) mCategoryId];
-        String hour = mTimePicker.getCurrentHour() < 10 ? "0" + mTimePicker.getCurrentHour(): String.valueOf(mTimePicker.getCurrentHour());
-        String minute = mTimePicker.getCurrentMinute() < 10 ? "0" + mTimePicker.getCurrentMinute(): String.valueOf(mTimePicker.getCurrentMinute());
-        String time = hour + ":" +minute;
+        String hour = mTimePicker.getCurrentHour() < 10 ? "0" + mTimePicker.getCurrentHour() : String.valueOf(mTimePicker.getCurrentHour());
+        String minute = mTimePicker.getCurrentMinute() < 10 ? "0" + mTimePicker.getCurrentMinute() : String.valueOf(mTimePicker.getCurrentMinute());
+        String time = hour + ":" + minute;
         boolean on = false;//default true;
         int musicId = (int) mRingtoneId;
         HiAlarmTab alarmTab = new HiAlarmTab(id, icon, category, time, on, musicId);
@@ -237,13 +232,13 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         this.finish();
     }
 
-    private void modifyAlarmClock(int id){
+    private void modifyAlarmClock(int id) {
         HiAlarmTab alarmTab = mDbManager.queryAlarmTab(id);
         String category = getResources().getStringArray(R.array.category_values)[(int) mCategoryId];
         alarmTab.setCategory(category);
-        String hour = mTimePicker.getCurrentHour() < 10 ? "0" + mTimePicker.getCurrentHour(): String.valueOf(mTimePicker.getCurrentHour());
-        String minute = mTimePicker.getCurrentMinute() < 10 ? "0" + mTimePicker.getCurrentMinute(): String.valueOf(mTimePicker.getCurrentMinute());
-        String time = hour + ":" +minute;
+        String hour = mTimePicker.getCurrentHour() < 10 ? "0" + mTimePicker.getCurrentHour() : String.valueOf(mTimePicker.getCurrentHour());
+        String minute = mTimePicker.getCurrentMinute() < 10 ? "0" + mTimePicker.getCurrentMinute() : String.valueOf(mTimePicker.getCurrentMinute());
+        String time = hour + ":" + minute;
         alarmTab.setTime(time);
         alarmTab.setMusicId((int) mRingtoneId);
         //TODO:to force trigger it by user, we set default status is false.
@@ -253,7 +248,7 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
 
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
-        HiToast.showToast(HiTimePickerActivity.this,"已将" + category + "修改为" + time);
+        HiToast.showToast(HiTimePickerActivity.this, "已将" + category + "修改为" + time);
         this.finish();
     }
 
@@ -264,61 +259,60 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
 //        String days = bundle.get("days").toString();
         mHours = bundle.getLong("hours");
         mMinutes = bundle.getLong("minutes");
-        String text = "还有 "+mHours+" 小时 "+mMinutes+" 分钟";
+        String text = "还有 " + mHours + " 小时 " + mMinutes + " 分钟";
         mTvLastTime.setText(text);
-
 
 
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-      switch (parent.getId()) {
-          case R.id.ringtone:
-              mRingtoneId = id;
-              Uri uri = mRingtoneManager.getRingtoneUri((int)id);
+        switch (parent.getId()) {
+            case R.id.sp_ringtone:
+                mRingtoneId = id;
+                Uri uri = mRingtoneManager.getRingtoneUri((int) id);
 
-              try {
-                  if (mPreviewPlayer.isPlaying()) {
-                      mPreviewPlayer.stop();
-                      mPreviewPlayer.reset();
-                     // preview.release();
-                      mPreviewPlayer.setLooping(false);
-                      mPreviewPlayer.setDataSource(this,uri);
-                      mPreviewPlayer.prepare();
-                      mPreviewPlayer.start();
-                      mPreviewPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                          @Override
-                          public void onCompletion(MediaPlayer mp) {
-                              mp.stop();
-                          }
-                      });
-                      HiLog.d("isLooping", "" + mPreviewPlayer.isLooping());
-                  } else {
-                      mPreviewPlayer.reset();
-                      mPreviewPlayer.setDataSource(this,uri);
-                      mPreviewPlayer.prepare();
-                      mPreviewPlayer.setLooping(false);
-                      mPreviewPlayer.start();
-                      mPreviewPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                          @Override
-                          public void onCompletion(MediaPlayer mp) {
-                              mp.stop();
-                          }
-                      });
-                      HiLog.d("isLooping", "" + mPreviewPlayer.isLooping());
-                  }
+                try {
+                    if (mPreviewPlayer.isPlaying()) {
+                        mPreviewPlayer.stop();
+                        mPreviewPlayer.reset();
+                        // preview.release();
+                        mPreviewPlayer.setLooping(false);
+                        mPreviewPlayer.setDataSource(this, uri);
+                        mPreviewPlayer.prepare();
+                        mPreviewPlayer.start();
+                        mPreviewPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                mp.stop();
+                            }
+                        });
+                        HiLog.d("isLooping", "" + mPreviewPlayer.isLooping());
+                    } else {
+                        mPreviewPlayer.reset();
+                        mPreviewPlayer.setDataSource(this, uri);
+                        mPreviewPlayer.prepare();
+                        mPreviewPlayer.setLooping(false);
+                        mPreviewPlayer.start();
+                        mPreviewPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                mp.stop();
+                            }
+                        });
+                        HiLog.d("isLooping", "" + mPreviewPlayer.isLooping());
+                    }
 
-              } catch (IOException e) {
-                  e.printStackTrace();
-              }
-              break;
-          case R.id.category:
-              mCategoryId = id;
-              break;
-          default:
-              break;
-      }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.sp_category:
+                mCategoryId = id;
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -328,7 +322,7 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
 
     @Override
     protected void onDestroy() {
-        if (mPreviewPlayer !=null) {
+        if (mPreviewPlayer != null) {
             mPreviewPlayer.release();
         }
         super.onDestroy();
