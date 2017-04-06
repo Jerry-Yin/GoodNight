@@ -110,4 +110,11 @@ public class HiConfig {
      */
     public static final String FIRST_LOAD = "FIRST_LOAD";
 
+
+    /**
+     * 系统点亮和熄灭屏幕的广播
+     * 其中锁屏广播action我们自定义，因为高版本不允许直接发送系统这条锁屏的广播
+     */
+    public static final String ACTION_SCREEN_ON = "android.intent.action.SCREEN_ON";
+    public static final String ACTION_SCREEN_OFF = "android.intent.action.SCREEN_OFF_hi";
 }

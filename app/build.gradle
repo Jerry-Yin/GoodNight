@@ -21,6 +21,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+//
+//    dexOptions{
+//        preDexLibraries = false
+//    }
 }
 
 dependencies {
@@ -50,8 +54,9 @@ dependencies {
     }
 
     //okhttp
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+//    compile 'com.squareup.okhttp3:okhttp:3.4.1'
 //    compile 'com.github.bumptech.glide:3.7.0'
 
 
 }
+

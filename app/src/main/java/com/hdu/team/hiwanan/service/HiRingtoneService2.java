@@ -102,7 +102,7 @@ public class HiRingtoneService2 extends Service {
             notificationManager.notify(0, notificationPopup);
 
 
-        } else if (!state) {
+        } else {
             mTaskPoolManager.removeTask(alarmTask);
         }
 

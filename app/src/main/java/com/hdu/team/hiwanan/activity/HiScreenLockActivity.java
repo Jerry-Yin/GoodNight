@@ -3,6 +3,7 @@ package com.hdu.team.hiwanan.activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.hdu.team.hiwanan.R;
@@ -19,8 +20,7 @@ public class HiScreenLockActivity extends HiActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        openSystemScreenLock();
-
+        openSystemScreenLock();
         setContentView(R.layout.layout_lock_screen);
 //
 //        mbtnUnLock = (ImageView) findViewById(R.id.btn_unlock);
@@ -31,10 +31,10 @@ public class HiScreenLockActivity extends HiActivity implements View.OnClickList
      * 启动自己的锁屏之前，先打开系统的锁屏
      * 要在setContentView()前面；
      */
-//    private void openSystemScreenLock() {
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-//    }
+    private void openSystemScreenLock() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+    }
 
     @Override
     public void onClick(View v) {
@@ -45,12 +45,10 @@ public class HiScreenLockActivity extends HiActivity implements View.OnClickList
 
     /**
      * 屏蔽返回键
+     * return false;
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK){
-//            return true;
-//        }
-        return super.onKeyDown(keyCode, event);
+        return false;
     }
 }

@@ -9,23 +9,20 @@
     <!-- 申明权限 操作SD卡 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-feature android:name="android.hardware.Camera" />
-
     <!--熄灭屏幕-->
     <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
     <uses-permission android:name="android.permission.DEVICE_POWER"></uses-permission>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.RESTART_PACKAGES"/>
-
     <!-- 取消系统锁屏权限 -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <!-- 锁屏解锁-->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
 
     <!-- Bmob -->
-
 
     <!-- 允许联网 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -98,18 +95,17 @@
             android:windowSoftInputMode="stateVisible|adjustResize" />
 
         <!-- 锁屏界面 全屏显示 -->
+        <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen"-->
         <activity
             android:name=".activity.HiScreenLockActivity"
             android:launchMode="singleTask"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar.Fullscreen"
             android:excludeFromRecents="true">
             <intent-filter>
                 <category android:name="android.intent.category.HOME"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service android:name=".service.HiScreenLockService" />
 
         <!-- 为捕获home键而设置的 空的 activity， 不需要显示 (Theme.NoDisplay)； -->
         <!-- 但非锁屏状态下按home，也会调用此home界面。我们只需在home界面onCreate（）里如此设置即可 -->
@@ -124,13 +120,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.HiUserInfoActivity"></activity>
-
         <activity android:name=".activity.TestActivity"></activity>
         <activity android:name=".activity.HiCalendarActivity"></activity>
-        <receiver android:name=".broadcast.HiAlarmClockReceiver"/>
-        <service android:name=".service.HiRingtoneService"/>
 
+        <service android:name=".service.HiRingtoneService"/>
         <service android:name=".service.HiRingtoneService2"/>
+        <service android:name=".service.HiScreenLockService" />
+
+        <receiver android:name=".broadcast.HiAlarmClockReceiver"/>
     </application>
 
 </manifest>

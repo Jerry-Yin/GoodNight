@@ -33,8 +33,11 @@ import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.constant.HiRequestCodes;
 import com.hdu.team.hiwanan.database.HiGoodNightDB;
 import com.hdu.team.hiwanan.model.HiAlarmTab;
+import com.hdu.team.hiwanan.service.HiScreenLockService;
 import com.hdu.team.hiwanan.util.HiLog;
 import com.hdu.team.hiwanan.manager.HiAlarmTabManager;
+import com.hdu.team.hiwanan.util.HiNotificationUtil;
+import com.hdu.team.hiwanan.util.HiToast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -153,6 +156,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         //TODO: refresh view if data changed, can add a standalone method to handle this task.
         setupViews();
         mTimeListAdapter.notifyDataSetChanged();
+        mSelf.startService(new Intent(mSelf, HiScreenLockService.class));
 
     }
 
@@ -323,7 +327,6 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
                                 //TODO:重复闹钟设定,每天重复
                                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
                                 saveSwitchStatus(position, isChecked);
-
 //                                ELAPSED_REALTIME：         从设备启动之后开始算起，度过了某一段特定时间后，激活Pending Intent，但不会唤醒设备。其中设备睡眠的时间也会包含在内。
 //                                ELAPSED_REALTIME_WAKEUP：  从设备启动之后开始算起，度过了某一段特定时间后唤醒设备。
 //                                RTC：                      在某一个特定时刻激活Pending Intent，但不会唤醒设备。
@@ -339,6 +342,12 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
                                 getContext().sendBroadcast(alarmIntent);
                             }
 
+//                            if (!HiNotificationUtil.isNotificationListenEnabled(mSelf)) {
+//                                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+//                                startActivity(intent);
+//                            } else {
+//                                HiToast.showToast(mSelf, "已成功开启通知服务权限");
+//                            }
                         }
                     }
             );

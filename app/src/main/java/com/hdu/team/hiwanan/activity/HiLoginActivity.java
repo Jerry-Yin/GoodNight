@@ -56,10 +56,10 @@ public class HiLoginActivity extends HiActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        if (!checkUserBefore()) {
+        if (!checkUserBefore()) {
             setContentView(R.layout.layout_login);
             initViews();
-//        }
+        }
 //        HiFullScreenTools.updateFullscreenStatus(this, false);
     }
 
@@ -138,16 +138,15 @@ public class HiLoginActivity extends HiActivity {
                 break;
 
             case R.id.btn_start_lock_service:
-                Intent intent1 = new Intent(this, HiScreenLockService.class);
-                startService(intent1);
+//                Intent intent1 = new Intent(this, HiScreenLockService.class);
+//                startService(intent1);
                 break;
 
             case R.id.btn_send_broadcast:
                 // 发送锁屏广播（显示锁屏界面）
-                Intent i2 = new Intent(Intent.ACTION_SCREEN_OFF);
-//                i2.setAction()
+                Intent i2 = new Intent(HiConfig.ACTION_SCREEN_OFF);
                 sendBroadcast(i2);
-                lockScreen();
+//                lockScreen();
                 break;
 
             default:

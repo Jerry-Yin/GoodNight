@@ -10,6 +10,7 @@ import android.os.PowerManager;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiMainActivity;
+import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.util.HiLog;
 
 import java.security.PublicKey;
@@ -31,7 +32,7 @@ public class HiAlarmTask implements Runnable {
 
 
     public HiAlarmTask(Context c, int taskId, int musicId) {
-        this.context = context;
+        this.context = c;
         this.taskId = taskId;
         if (player == null){
             player = MediaPlayer.create(c, musicId);
@@ -60,6 +61,15 @@ public class HiAlarmTask implements Runnable {
     public void run() {
         HiLog.d(TAG, "alarmTask"+taskId +" is start...");
         player.start();
+        sendScreenLockBroadcast();
+    }
+
+    /**
+     * 闹钟响起的时候发送锁屏广播，启动锁屏
+     */
+    private void sendScreenLockBroadcast() {
+        Intent i2 = new Intent(HiConfig.ACTION_SCREEN_OFF);
+        context.sendBroadcast(i2);
     }
 
 
