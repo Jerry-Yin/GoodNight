@@ -173,4 +173,20 @@ public class HiGoodNightDB {
         db = null;
         return size;
     }
+
+    /**
+     * clear all the tabs if exits
+     */
+    public boolean clearAlarmTab() {
+        if (db == null)
+            db = mOpenHelper.getWritableDatabase();
+        String sql = "DELETE FROM "+HiAlarmTab.AlarmEntry.TABLE_NAME;
+        String sql1 = "UPDATEsqlite_sequence SETseq=0 WHEREname="+HiAlarmTab.AlarmEntry.TABLE_NAME;
+        String sql2 = "DELETE FROM sqlite_sequence";
+        db.execSQL(sql);
+        db.execSQL(sql2);
+        db.close();
+        db = null;
+        return true;
+    }
 }

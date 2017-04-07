@@ -49,7 +49,7 @@ import java.util.Map;
 /**
  * Created by JerryYin on 11/3/15.
  */
-public class HiClockFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class HiClockFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private static final String TAG = "HiClockFragment";
     private HiGoodNightDB mGoodNightDB;
@@ -101,6 +101,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
             mContentView = inflater.inflate(R.layout.layout_clock, container, false);
             mSelf = getActivity();
             mGoodNightDB = HiGoodNightDB.getInstance(mSelf);
+            mAlarmTaskPoolManager = HiAlarmTaskPoolManager.getInstance();
             // first time using check.
             if (isFirstLoadCheck()) {
                 //if it is the first time user open this app, create 3 default alarm tab items.
@@ -113,7 +114,6 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
                 mGoodNightDB.saveAlarmTab(tab2);
                 mGoodNightDB.saveAlarmTab(tab3);
 
-                mAlarmTaskPoolManager = HiAlarmTaskPoolManager.getInstance();
                 mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab1.getId(), tab1.getMusicId()));
                 mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab2.getId(), tab1.getMusicId()));
                 mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab3.getId(), tab1.getMusicId()));
@@ -154,7 +154,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         mTimeListAdapter = new HiTimeListAdapter(mSelf, mAlarmList);
         mListView.setAdapter(mTimeListAdapter);
 //        mTimeListAdapter.notifyDataSetChanged();
-        mListView.setOnItemClickListener(this);
+        mListView.setOnItemLongClickListener(this);
     }
 
     @Override
@@ -225,6 +225,45 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         intent.putExtra(HiConfig.REQUEST_TYPE, HiConfig.MODIFY_REQUEST);
         intent.putExtra("id", id);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mSelf);
+        builder.setMessage("移除此闹钟")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        removeAlarmTab(position);
+                        dialog.dismiss();
+                    }
+                })
+                .setNeutralButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
+
+        return false;
+    }
+
+    /**
+     * delete tab from view & db & taskPool
+     * @param position
+     */
+    private void removeAlarmTab(int position) {
+        mGoodNightDB.deleteAlarmTab(position);
+
+        mAlarmTaskPoolManager.removeTask(mAlarmTaskPoolManager.getTaskById(position));
+
+        mAlarmList.remove(position);
+        mTimeListAdapter.notifyDataSetChanged();
+
+        if (mAlarmList.size() == 0)
+            mGoodNightDB.clearAlarmTab();
     }
 
 //    @Override

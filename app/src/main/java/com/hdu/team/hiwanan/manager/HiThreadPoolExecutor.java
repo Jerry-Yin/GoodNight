@@ -66,6 +66,8 @@ class HiThreadPoolExecutor extends ThreadPoolExecutor {
      */
     @Override
     public boolean remove(Runnable task) {
+        if (mTaskList.contains(task))
+            mTaskList.remove(task);
         return super.remove(task);
     }
 
