@@ -341,12 +341,15 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
                     new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                             HiLog.d("switch checked","" + isChecked);
 
                             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(mSelf.ALARM_SERVICE);
                             Intent alarmIntent = new Intent(getActivity(), HiAlarmClockReceiver.class);
                             String category = (String) mDataList.get(position).getCategory();
+
+                            alarmIntent.putExtra("id", position);
+                            alarmIntent.putExtra("switch", isChecked);
+                            alarmIntent.putExtra("category", category);
 
                             if (isChecked) {
                                 String h = mDataList.get(position).getTime().split(":")[0].trim();
@@ -364,31 +367,23 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
                                     calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
                                 }
 
-                                alarmIntent.putExtra("id", position);
-                                alarmIntent.putExtra("switch", isChecked);
-                                alarmIntent.putExtra("category", category);
-
                                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), position, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                                 HiLog.d(TAG, "position " + position);
                                 //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pendingIntent);
                                 //TODO:重复闹钟设定,每天重复
                                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
-                                saveSwitchStatus(position, isChecked);
+
 //                                ELAPSED_REALTIME：         从设备启动之后开始算起，度过了某一段特定时间后，激活Pending Intent，但不会唤醒设备。其中设备睡眠的时间也会包含在内。
 //                                ELAPSED_REALTIME_WAKEUP：  从设备启动之后开始算起，度过了某一段特定时间后唤醒设备。
 //                                RTC：                      在某一个特定时刻激活Pending Intent，但不会唤醒设备。
 //                                RTC_WAKEUP：               在某一个特定时刻唤醒设备并激活Pending Intent。
                             } else {
-                                alarmIntent.putExtra("id", position);
-                                alarmIntent.putExtra("switch",isChecked);
-                                alarmIntent.putExtra("category", category);
-                                saveSwitchStatus(position, isChecked);
                                 //Intent i=new Intent(getActivity(),HiAlarmClockReceiver.class);
                                 //PendingIntent pi = PendingIntent.getBroadcast(getActivity(), position , alarmIntent, 0);
                                 //alarmManager.cancel(pi);//取消闹钟
                                 getContext().sendBroadcast(alarmIntent);
                             }
-
+                            updateSwitchDb(position, isChecked);
 //                            if (!HiNotificationUtil.isNotificationListenEnabled(mSelf)) {
 //                                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
 //                                startActivity(intent);
@@ -401,12 +396,20 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 
             return convertView;
         }
-        private boolean saveSwitchStatus(int id, boolean status){
-            HiAlarmTab tab = mGoodNightDB.queryAlarmTab(id);
-            tab.setOn(status);
-            return mGoodNightDB.updateAlarmTab(tab);
-        }
 
+
+    }
+
+    /**
+     * update switch status to db when status changed
+     * @param id
+     * @param on
+     */
+    private void updateSwitchDb(int id, boolean on) {
+        HiAlarmTab tab = mAlarmList.get(id);
+        tab.setOn(on);
+        mTimeListAdapter.notifyDataSetChanged();
+        mGoodNightDB.updateAlarmTab(tab);
     }
 
 
