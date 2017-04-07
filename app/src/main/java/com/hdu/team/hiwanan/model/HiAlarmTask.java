@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.PowerManager;
 
 import com.hdu.team.hiwanan.R;
@@ -13,6 +14,7 @@ import com.hdu.team.hiwanan.activity.HiMainActivity;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.util.HiLog;
 
+import java.io.IOException;
 import java.security.PublicKey;
 
 /**
@@ -28,15 +30,41 @@ public class HiAlarmTask implements Runnable {
     private int taskId;         //任务id = 闹钟id = position
     private MediaPlayer player; //媒体播放器
     private int musicId;        //musicId
+    private String musicUrl;
 
 
-
+    /**
+     * create task by musicID
+     * @param c
+     * @param taskId
+     * @param musicId
+     */
     public HiAlarmTask(Context c, int taskId, int musicId) {
         this.context = c;
         this.taskId = taskId;
-        if (player == null){
-            player = MediaPlayer.create(c, musicId);
-        }
+        this.musicId = musicId;
+        this.musicUrl = null;
+        if (player != null)
+            player = null;
+        player = MediaPlayer.create(c, musicId);
+
+    }
+
+    /**
+     * create tasj by musicUrl
+     * @param c
+     * @param taskId
+     * @param musicUrl
+     */
+    public HiAlarmTask(Context c, int taskId, String musicUrl) {
+        this.context = c;
+        this.taskId = taskId;
+        this.musicId = 0;
+        this.musicUrl = musicUrl;
+        if (player != null)
+            player = null;
+        player = MediaPlayer.create(c, Uri.parse(musicUrl));
+
     }
 
     public int getTaskId() {
@@ -60,7 +88,12 @@ public class HiAlarmTask implements Runnable {
     @Override
     public void run() {
         HiLog.d(TAG, "alarmTask"+taskId +" is start...");
-        player.start();
+        try {
+            player.prepare();
+            player.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         sendScreenLockBroadcast();
     }
 

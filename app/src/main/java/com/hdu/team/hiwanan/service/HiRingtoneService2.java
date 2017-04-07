@@ -62,9 +62,12 @@ public class HiRingtoneService2 extends Service {
         // create alarmtask if is not null
 
         HiAlarmTask alarmTask = mTaskPoolManager.getTaskById(id);
+        HiLog.i(TAG, "getTaskById: " + id);
+        HiLog.i(TAG, "task: " + alarmTask);
         if (alarmTask == null) {
             // TODO:here we need to add the media id to set which ringtone should be playing.
             alarmTask = new HiAlarmTask(getApplicationContext(), id, R.raw.voice);
+            HiLog.i(TAG, "new alarmTask: " + id + "R.raw.voice");
         }
 //        if (intent.hasExtra("category")) {
 //            category = intent.getStringExtra("category");

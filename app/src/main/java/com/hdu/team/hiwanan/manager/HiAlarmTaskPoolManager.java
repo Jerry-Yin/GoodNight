@@ -1,5 +1,6 @@
 package com.hdu.team.hiwanan.manager;
 
+import com.hdu.team.hiwanan.model.HiAlarmTab;
 import com.hdu.team.hiwanan.model.HiAlarmTask;
 import com.hdu.team.hiwanan.util.HiLog;
 
@@ -53,6 +54,14 @@ public class HiAlarmTaskPoolManager {
             mInstance = new HiAlarmTaskPoolManager();
         }
         return mInstance;
+    }
+
+    public boolean addTask(HiAlarmTask task){
+        if (task == null)
+            return false;
+        else
+            executor.add(task);
+            return true;
     }
 
     /**

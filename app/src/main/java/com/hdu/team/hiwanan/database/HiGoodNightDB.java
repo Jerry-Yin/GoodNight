@@ -4,8 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.hdu.team.hiwanan.model.HiAlarmTab;
+import com.hdu.team.hiwanan.util.HiLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,8 @@ import java.util.List;
 
 public class HiGoodNightDB {
 
+
+    private static final String TAG = "HiGoodNightDB";
     private static HiGoodNightDB mInstance;
     private SQLiteDatabase db;
     private HiDatabaseOpenHelper mOpenHelper;
@@ -40,6 +44,7 @@ public class HiGoodNightDB {
     public boolean saveAlarmTab(HiAlarmTab tab) {
         boolean success = false;
         db = mOpenHelper.getWritableDatabase();
+        HiLog.d(TAG, "id : "+tab.getId()+ " " +tab.getCategory() + " music: "+ tab.getMusicId() );
         if (tab != null) {
             ContentValues cv = new ContentValues();
             cv.put(HiAlarmTab.AlarmEntry.COLUMN_ID, tab.getId());

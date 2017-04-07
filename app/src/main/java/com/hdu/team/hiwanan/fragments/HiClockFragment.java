@@ -32,7 +32,9 @@ import com.hdu.team.hiwanan.broadcast.HiAlarmClockReceiver;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.constant.HiRequestCodes;
 import com.hdu.team.hiwanan.database.HiGoodNightDB;
+import com.hdu.team.hiwanan.manager.HiAlarmTaskPoolManager;
 import com.hdu.team.hiwanan.model.HiAlarmTab;
+import com.hdu.team.hiwanan.model.HiAlarmTask;
 import com.hdu.team.hiwanan.service.HiScreenLockService;
 import com.hdu.team.hiwanan.util.HiLog;
 import com.hdu.team.hiwanan.manager.HiAlarmTabManager;
@@ -80,6 +82,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
     private int mSelItemPosition;   //当前选中的item位置
 
     private SharedPreferences mPreferences;
+    private HiAlarmTaskPoolManager mAlarmTaskPoolManager;
 
     public Activity getmSelf() {
         return mSelf;
@@ -102,13 +105,18 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
             if (isFirstLoadCheck()) {
                 //if it is the first time user open this app, create 3 default alarm tab items.
                 //int id, int icon, String category, String time, boolean on, int musicId)
-                HiAlarmTab tab1 = new HiAlarmTab(0, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_READY, "10:00", false, 0);
-                HiAlarmTab tab2 = new HiAlarmTab(1, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_SLEEP, "10:30", false, 0);
-                HiAlarmTab tab3 = new HiAlarmTab(2, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_GETUP, "08:00", false, 0);
+                HiAlarmTab tab1 = new HiAlarmTab(0, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_READY, "10:00", false, R.raw.voice);
+                HiAlarmTab tab2 = new HiAlarmTab(1, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_SLEEP, "10:30", false, R.raw.voice);
+                HiAlarmTab tab3 = new HiAlarmTab(2, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_GETUP, "08:00", false, R.raw.voice);
 
                 mGoodNightDB.saveAlarmTab(tab1);
                 mGoodNightDB.saveAlarmTab(tab2);
                 mGoodNightDB.saveAlarmTab(tab3);
+
+                mAlarmTaskPoolManager = HiAlarmTaskPoolManager.getInstance();
+                mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab1.getId(), tab1.getMusicId()));
+                mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab2.getId(), tab1.getMusicId()));
+                mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab3.getId(), tab1.getMusicId()));
             }
 
             setupViews();

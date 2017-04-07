@@ -19,7 +19,9 @@ import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.base.HiActivity;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.database.HiGoodNightDB;
+import com.hdu.team.hiwanan.manager.HiAlarmTaskPoolManager;
 import com.hdu.team.hiwanan.model.HiAlarmTab;
+import com.hdu.team.hiwanan.model.HiAlarmTask;
 import com.hdu.team.hiwanan.util.HiLog;
 import com.hdu.team.hiwanan.util.HiToast;
 import com.hdu.team.hiwanan.util.common.HiTimesUtil;
@@ -47,6 +49,9 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
     //TODO:new view for spinner category and ringtone, just for testing
     private Spinner mSpRingtone;
     private Spinner mSpCategory;
+    private List<String> mRingtoneLists;
+    private ArrayAdapter mCategoryAdapter;
+    private ArrayAdapter mRingtoneAdapter;
 
     /**
      * Values
@@ -60,10 +65,13 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
     private long mRingtoneId = 0; //用于存放铃声的id
     private long mCategoryId = 0; //用于存放铃声种类的id
 
-    HiGoodNightDB mDbManager = HiGoodNightDB.getInstance(this);
+    private HiGoodNightDB mDbManager ;
+    private HiAlarmTaskPoolManager mAlarmTaskPoolManager;
+    
+    private RingtoneManager mRingtoneManager;//ringtone manager 用户获取系统默认的铃声列表
+    private MediaPlayer mPreviewPlayer;     //用于铃声选择时播放试听
 
-    RingtoneManager mRingtoneManager = new RingtoneManager(this);//ringtone manager 用户获取系统默认的铃声列表
-    MediaPlayer mPreviewPlayer = new MediaPlayer();//用于铃声选择时播放试听
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,31 +107,46 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         mBtnDone.setImageResource(R.drawable.ic_done);
         //TODO:find the spinner from layout.
 
+        mDbManager = HiGoodNightDB.getInstance(this);
+        mRingtoneManager = new RingtoneManager(this);
+        mPreviewPlayer = new MediaPlayer();
+        
+        mAlarmTaskPoolManager = HiAlarmTaskPoolManager.getInstance();
     }
 
-
-    private void initData() {
-        List titleList = new ArrayList();
+    private void initRingtones() {
+        mRingtoneLists = new ArrayList<>();
         Cursor cursor = mRingtoneManager.getCursor();
         //TODO:获取系统所有铃声列表
         if (cursor.moveToFirst()) {
             while (cursor.moveToNext()) {
                 String title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
-                titleList.add(title);
+                mRingtoneLists.add(title);
                 //Uri ringtoneUri = manager.getRingtoneUri(cursor.getPosition());
                 //ringtoneList.add(ringtoneUri);
             }
         }
+    }
 
-        ArrayAdapter categoryAdapter = ArrayAdapter.createFromResource(this, R.array.category_values, R.layout.hi_spinner_item);
-        categoryAdapter.setDropDownViewResource(R.layout.hi_spinner_dropdown);
+    private void initData() {
+        initRingtones();
 
-        ArrayAdapter ringtoneAdapter = new ArrayAdapter(this, R.layout.hi_spinner_item, titleList);
-        ringtoneAdapter.setDropDownViewResource(R.layout.hi_spinner_dropdown);
+        mCategoryAdapter = ArrayAdapter.createFromResource(this, R.array.category_values, R.layout.hi_spinner_item);
+        mRingtoneAdapter = new ArrayAdapter(this, R.layout.hi_spinner_item, mRingtoneLists);
 
-        mSpCategory.setAdapter(categoryAdapter);
-        mSpRingtone.setAdapter(ringtoneAdapter);
+        mCategoryAdapter.setDropDownViewResource(R.layout.hi_spinner_dropdown);
+        mRingtoneAdapter.setDropDownViewResource(R.layout.hi_spinner_dropdown);
 
+        mSpCategory.setAdapter(mCategoryAdapter);
+        mSpRingtone.setAdapter(mRingtoneAdapter);
+
+        initSelection();
+
+        mSpCategory.setOnItemSelectedListener(this);
+        mSpRingtone.setOnItemSelectedListener(this);
+    }
+
+    private void initSelection() {
         if (mIntent.getExtras().getInt(HiConfig.REQUEST_TYPE, 0) == HiConfig.MODIFY_REQUEST) {
             // if it is the modify request, load the data which user set before.
             long id = mIntent.getExtras().getLong("id", 0);
@@ -154,8 +177,6 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
             mSpRingtone.setSelection(0, true);
         }
 
-        mSpCategory.setOnItemSelectedListener(this);
-        mSpRingtone.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -220,15 +241,16 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         String minute = mTimePicker.getCurrentMinute() < 10 ? "0" + mTimePicker.getCurrentMinute() : String.valueOf(mTimePicker.getCurrentMinute());
         String time = hour + ":" + minute;
         boolean on = false;//default true;
-        int musicId = (int) mRingtoneId;
-        HiAlarmTab alarmTab = new HiAlarmTab(id, icon, category, time, on, musicId);
-        mDbManager.saveAlarmTab(alarmTab);
+        HiLog.d(TAG, "new tab, musicid : "+mRingtoneId);
+        HiAlarmTab alarmTab = new HiAlarmTab(id, icon, category, time, on, (int) mRingtoneId);
+        HiLog.d(TAG, "save tab : "+mDbManager.saveAlarmTab(alarmTab));
 
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
 
 //                HiToast.showToast(HiTimePickerActivity.this, "已将" + mIntent.getStringExtra("category") + "设定为从现在起 " + mHours + " 小时 " + mMinutes + " 分钟后");
         HiToast.showToast(HiTimePickerActivity.this, "已将" + category + "设置为" + time);
+        mAlarmTaskPoolManager.addTask(new HiAlarmTask(this, alarmTab.getId(), String.valueOf(mRingtoneManager.getRingtoneUri(alarmTab.getMusicId()))));
         this.finish();
     }
 
@@ -249,6 +271,7 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
         HiToast.showToast(HiTimePickerActivity.this, "已将" + category + "修改为" + time);
+        mAlarmTaskPoolManager.addTask(new HiAlarmTask(this, alarmTab.getId(), String.valueOf(mRingtoneManager.getRingtoneUri(alarmTab.getMusicId()))));
         this.finish();
     }
 
@@ -269,8 +292,9 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.sp_ringtone:
-                mRingtoneId = id;
-                Uri uri = mRingtoneManager.getRingtoneUri((int) id);
+                mRingtoneId = position;
+                HiLog.d(TAG, "selected musicid : "+mRingtoneId);
+                Uri uri = mRingtoneManager.getRingtoneUri(position);
 
                 try {
                     if (mPreviewPlayer.isPlaying()) {

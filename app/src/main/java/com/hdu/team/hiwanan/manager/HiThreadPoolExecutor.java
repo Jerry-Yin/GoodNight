@@ -44,6 +44,11 @@ class HiThreadPoolExecutor extends ThreadPoolExecutor {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
     }
 
+    public void add(Runnable task){
+        if (!mTaskList.contains(task))
+            mTaskList.add((HiAlarmTask) task);
+//        super.execute();
+    }
 
     @Override
     public void execute(Runnable command) {
@@ -100,6 +105,9 @@ class HiThreadPoolExecutor extends ThreadPoolExecutor {
      */
     public HiAlarmTask getTaskById(int taskId) {
         HiAlarmTask task = null;
+
+        // TODO: 4/7/17  [question: mTaskList is null ?]
+
         for (HiAlarmTask t : mTaskList){
             if (t.getTaskId() == taskId)
                 task = t;
