@@ -2,8 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="45dp"
-    android:background="#E0E0E0">
+    android:background="@color/content_color">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
+        android:background="@color/test_color">
+    </View>
     <RadioGroup
         android:id="@+id/buttom_group"
         android:layout_width="match_parent"
