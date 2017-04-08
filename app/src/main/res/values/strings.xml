@@ -122,7 +122,7 @@
     </string-array>
 
     <string name="reply">回复</string>
-    <string name="user_demo">@User Name</string>
+    <string name="user_demo">User Name</string>
     <string name="comma">:</string>
 
 </resources>

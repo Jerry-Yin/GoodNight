@@ -307,7 +307,7 @@ public class BmobNetworkUtils {
      *
      * @param date
      */
-    public static void queryCalendar(final String date, final OnResponseListener listener) {
+    public static void queryCalendar(final String date, final OnResponseListener<List<Calendar>> listener) {
         new Thread(new Runnable() {
             @Override
             public void run() {

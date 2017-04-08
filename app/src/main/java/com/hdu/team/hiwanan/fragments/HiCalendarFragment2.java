@@ -29,11 +29,14 @@ import android.widget.TextView;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.model.HiCalendarData;
+import com.hdu.team.hiwanan.model.bmob.Calendar;
 import com.hdu.team.hiwanan.network.BmobNetworkUtils;
 import com.hdu.team.hiwanan.util.HiLog;
 import com.hdu.team.hiwanan.util.OkHttpUtils;
 import com.hdu.team.hiwanan.util.common.GsonUtils;
 import com.hdu.team.hiwanan.util.common.HiTimesUtil;
+
+import java.util.List;
 
 
 /**
@@ -223,9 +226,9 @@ public class HiCalendarFragment2 extends Fragment {
     private void initCalendarSums() {
         // TODO: 4/8/17 init by today date
         String today = HiTimesUtil.getCurDate();
-        BmobNetworkUtils.queryCalendar(today, new OnResponseListener() {
+        BmobNetworkUtils.queryCalendar(today, new OnResponseListener<List<Calendar>>() {
             @Override
-            public void onSuccess(Object result) {
+            public void onSuccess(List<Calendar> result) {
                 HiLog.d(TAG, result.toString());
             }
 
