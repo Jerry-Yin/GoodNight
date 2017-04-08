@@ -2,8 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -72,13 +70,72 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@id/comment_content"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="55dp"
-        android:layout_weight="1"
-        android:text="This is a comment demo. Hahaha!"
-        android:textColor="@color/cardview_dark_background"
-        android:textSize="16sp" />
+        android:orientation="horizontal"
+        android:layout_weight="0.1"
+        >
+        <TextView
+            android:id="@id/main_comment_reply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reply"/>
+        <TextView
+            android:id="@id/main_comment_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:textColor="@color/blue"
+            android:text="@string/user_demo"
+            />
+        <TextView
+            android:id="@id/main_comment_comma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comma"
+
+            />
+        <TextView
+            android:id="@id/comment_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="This is a comment demo. Hahaha!"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@id/sub_comment"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal"
+        android:layout_weight="0.1"
+        android:background="@color/white_smoke"
+        >
+
+        <TextView
+            android:id="@id/sub_comment_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/user_demo"
+            android:textColor="@color/blue" />
+
+        <TextView
+            android:id="@id/sub_comment_comma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comma"
+            />
+
+        <TextView
+            android:id="@id/sub_comment_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="This is sup Comment for testing." />
+    </LinearLayout>
+
 </LinearLayout>
