@@ -19,8 +19,8 @@ import com.hdu.team.hiwanan.base.HiActivity;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.constant.HiRequestCodes;
 import com.hdu.team.hiwanan.listener.OnResponseListener;
-import com.hdu.team.hiwanan.model.UserBmob;
-import com.hdu.team.hiwanan.util.BmobNetworkUtils;
+import com.hdu.team.hiwanan.model.bmob.UserBmob;
+import com.hdu.team.hiwanan.network.BmobNetworkUtils;
 import com.hdu.team.hiwanan.util.ToastUtils;
 
 /**

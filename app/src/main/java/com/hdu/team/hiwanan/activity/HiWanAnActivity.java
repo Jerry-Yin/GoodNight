@@ -27,7 +27,7 @@ import com.hdu.team.hiwanan.constant.HiRequestCodes;
 import com.hdu.team.hiwanan.listener.OnProgressListener;
 import com.hdu.team.hiwanan.manager.HiMediaPlayerManager;
 import com.hdu.team.hiwanan.model.RecorderVoice;
-import com.hdu.team.hiwanan.util.BmobNetworkUtils;
+import com.hdu.team.hiwanan.network.BmobNetworkUtils;
 import com.hdu.team.hiwanan.util.common.HiTimesUtil;
 import com.hdu.team.hiwanan.util.common.AmrFileUtil;
 import com.hdu.team.hiwanan.util.common.FileUtils;
@@ -87,7 +87,7 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
             @Override
             public void onFinish(float times, String filePath) {
                 //录音完成调用
-                RecorderVoice recorderVoice = new RecorderVoice(filePath, times, HiTimesUtil.getCurDataTime());
+                RecorderVoice recorderVoice = new RecorderVoice(filePath, times, HiTimesUtil.getCurDateTime());
                 mDataLists.add(recorderVoice);
                 mAdapter.notifyDataSetChanged();
                 int position = mDataLists.size()-1;

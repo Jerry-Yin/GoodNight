@@ -1,4 +1,4 @@
-package com.hdu.team.hiwanan.model;
+package com.hdu.team.hiwanan.model.bmob;
 
 import android.util.Log;
 

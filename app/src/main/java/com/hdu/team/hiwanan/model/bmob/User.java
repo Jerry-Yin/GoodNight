@@ -1,4 +1,4 @@
-package com.hdu.team.hiwanan.model;
+package com.hdu.team.hiwanan.model.bmob;
 
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobUser;

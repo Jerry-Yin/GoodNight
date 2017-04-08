@@ -25,9 +25,8 @@ import com.hdu.team.hiwanan.activity.HiLoginActivity;
 import com.hdu.team.hiwanan.activity.HiMainActivity;
 import com.hdu.team.hiwanan.activity.HiUserInfoActivity;
 import com.hdu.team.hiwanan.activity.HiVoiceSettingActivity;
-import com.hdu.team.hiwanan.base.HiBaseFragment;
 import com.hdu.team.hiwanan.constant.HiConfig;
-import com.hdu.team.hiwanan.model.UserBmob;
+import com.hdu.team.hiwanan.model.bmob.UserBmob;
 import com.hdu.team.hiwanan.util.HiSharedPreferenceUtil;
 import com.hdu.team.hiwanan.util.ImageLoaderUtil;
 

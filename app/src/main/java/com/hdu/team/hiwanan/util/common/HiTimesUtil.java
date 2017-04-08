@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.constant.HiRequestCodes;
 
 import java.text.ParseException;
@@ -23,7 +22,7 @@ public class HiTimesUtil {
      *
      * @return
      */
-    public static String getCurDataTime() {
+    public static String getCurDateTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date curDate = new Date(System.currentTimeMillis());
         String str = formatter.format(curDate);
@@ -34,7 +33,7 @@ public class HiTimesUtil {
      * 自动补0
      * @return
      */
-    public static String getCurData() {
+    public static String getCurDate() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date curDate = new Date(System.currentTimeMillis());
         String str = formatter.format(curDate);
@@ -46,7 +45,7 @@ public class HiTimesUtil {
      * 月份日期前面不带0
      * @return
      */
-    public static String getCurDataNoZero() {
+    public static String getCurDateNoZero() {
         SimpleDateFormat formatter = new SimpleDateFormat("y-M-d");
         Date curDate = new Date(System.currentTimeMillis());
         String str = formatter.format(curDate);
@@ -72,8 +71,8 @@ public class HiTimesUtil {
         Bundle bundle = new Bundle();
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date curDate = format.parse(getCurDataTime());
-            Date endDate = format.parse(getCurData() + " " + h + ":" + m + ":00");
+            Date curDate = format.parse(getCurDateTime());
+            Date endDate = format.parse(getCurDate() + " " + h + ":" + m + ":00");
             long diff = endDate.getTime() - curDate.getTime();      //得到的是 微妙 级别的差值
 
             long days = diff / (1000 * 60 * 60 * 24);

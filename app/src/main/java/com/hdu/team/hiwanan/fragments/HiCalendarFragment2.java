@@ -11,6 +11,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.model.HiCalendarData;
+import com.hdu.team.hiwanan.network.BmobNetworkUtils;
 import com.hdu.team.hiwanan.util.HiLog;
 import com.hdu.team.hiwanan.util.OkHttpUtils;
 import com.hdu.team.hiwanan.util.common.GsonUtils;
@@ -130,12 +132,8 @@ public class HiCalendarFragment2 extends Fragment {
         mScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                HiLog.d(TAG, "view: "+v.getId());
-//                HiLog.d(TAG, "scrollX: "+scrollX);
                 HiLog.d(TAG, "scrollY: "+scrollY);
-//                HiLog.d(TAG, "oldX: "+oldScrollX);
                 HiLog.d(TAG, "oldY: "+oldScrollY);
-
 //                mDistanceY += scrollY > oldScrollY ? scrollY-oldScrollY : 0;
                 mDistanceY = scrollY;
                 int titleHeight = mTabLayout.getBottom();
@@ -180,7 +178,7 @@ public class HiCalendarFragment2 extends Fragment {
      * "{\"reason\":\"Success\",\"result\":{\"data\":{\"avoid\":\"开光.嫁娶.\",\"animalsYear\":\"鸡\",\"weekday\":\"星期六\",\"suit\":\"破屋.坏垣.求医.治病.余事勿取.\",\"lunarYear\":\"丁酉年\",\"lunar\":\"二月十四\",\"year-month\":\"2017-3\",\"date\":\"2017-3-11\"}},\"error_code\":0}"
      */
     private void initCalendars() {
-        String date = HiTimesUtil.getCurDataNoZero();
+        String date = HiTimesUtil.getCurDateNoZero();
         HiLog.d(TAG, date);
 
 
@@ -215,8 +213,28 @@ public class HiCalendarFragment2 extends Fragment {
             }
         });
 
+        initCalendarSums();
+
     }
 
+    /**
+     * 初始化日历的（点赞数 + 评论数 + 分享数）
+     */
+    private void initCalendarSums() {
+        // TODO: 4/8/17 init by today date
+        String today = HiTimesUtil.getCurDate();
+        BmobNetworkUtils.queryCalendar(today, new OnResponseListener() {
+            @Override
+            public void onSuccess(Object result) {
+                HiLog.d(TAG, result.toString());
+            }
+
+            @Override
+            public void onFailure(int errorCode, String error) {
+                HiLog.d(TAG, errorCode + error);
+            }
+        });
+    }
 
 
     @Override

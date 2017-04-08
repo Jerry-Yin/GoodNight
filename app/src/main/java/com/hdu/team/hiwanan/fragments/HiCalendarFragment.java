@@ -125,7 +125,7 @@ public class HiCalendarFragment extends Fragment {
             mViewAdapter.notifyDataSetChanged();
         }
 
-//        String curDate = HiTimesUtil.getCurData();
+//        String curDate = HiTimesUtil.getCurDate();
 //        String url = HiConfig.URL_CALENDAR+"?date="+curDate+"&key="+HiConfig.APP_KEY_CALENDAR;
 //        OkHttpUtils.OkHttpGet("www.baidu.com", new OnResponseListener() {
 //            @Override

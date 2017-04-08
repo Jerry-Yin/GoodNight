@@ -66,7 +66,7 @@ public class HiVoiceRecorderButton extends Button implements HiMediaRecordManage
             @Override
             public boolean onLongClick(View v) {
                 mReady = true;
-                mHiMediaRecordManager.prepareAudio(HiTimesUtil.getCurDataTime());
+                mHiMediaRecordManager.prepareAudio(HiTimesUtil.getCurDateTime());
                 return false;
             }
         });
