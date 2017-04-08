@@ -73,6 +73,9 @@ public class HiCalendarFragment2 extends Fragment {
     private TextView words;           //名言
     private TextView author;          //作者
 
+    private TextView likeSum; //点赞总数
+    private TextView commentSum; // 评论总数
+    private TextView shareSum; //分享总数
 
 
 
@@ -117,6 +120,11 @@ public class HiCalendarFragment2 extends Fragment {
         avoio = (TextView) mContentView.findViewById(R.id.text_avoio);
         words = (TextView) mContentView.findViewById(R.id.text_words);
         author = (TextView) mContentView.findViewById(R.id.text_author);
+
+        //calendar comment summary
+        likeSum = (TextView) mContentView.findViewById(R.id.thumb_summary);
+        commentSum = (TextView) mContentView.findViewById(R.id.comment_summary);
+        shareSum = (TextView) mContentView.findViewById(R.id.share_summary);
 
     }
 
@@ -229,11 +237,21 @@ public class HiCalendarFragment2 extends Fragment {
         BmobNetworkUtils.queryCalendar(today, new OnResponseListener<List<Calendar>>() {
             @Override
             public void onSuccess(List<Calendar> result) {
+                Message message = new Message();
+                message.what = HiResponseCodes.SUMMAY_OK;
+                if (result != null && result.size() != 0) {
+                    message.obj = result.get(0);
+                }
+                mHandler.sendMessage(message);
                 HiLog.d(TAG, result.toString());
             }
 
             @Override
             public void onFailure(int errorCode, String error) {
+                Message message = new Message();
+                message.what = HiResponseCodes.SUMMAY_FAIL;
+                message.obj = errorCode + error;
+                mHandler.sendMessage(message);
                 HiLog.d(TAG, errorCode + error);
             }
         });
@@ -272,6 +290,15 @@ public class HiCalendarFragment2 extends Fragment {
 
                     break;
 
+                case HiResponseCodes.SUMMAY_OK:
+                    Calendar calendar = (Calendar) msg.obj;
+                    HiLog.e("Kaikai" + calendar.getLike());
+                    setSummary(calendar);
+                    break;
+
+                case HiResponseCodes.SUMMAY_FAIL:
+                    break;
+
                 default:
                     break;
             }
@@ -304,6 +331,11 @@ public class HiCalendarFragment2 extends Fragment {
 //        author.setText("");
     }
 
+    private void setSummary(Calendar calendar) {
+        likeSum.setText(String.valueOf(calendar.getLike()));
+        commentSum.setText(String.valueOf(calendar.getComment()));
+        shareSum.setText(String.valueOf(calendar.getShare()));
+    }
 
     @Override
     public void onDestroy() {
