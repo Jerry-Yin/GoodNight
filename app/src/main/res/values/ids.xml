@@ -16,4 +16,13 @@
     <item name="comment_date" type="id">日期</item>
     <item name="comment_content" type="id">评论内容</item>
     <item name="comment_thumb" type="id">被赞数</item>
+    <item name="main_comment_reply" type="id">主评论回复标志</item>
+    <item name="main_comment_user" type="id">主评论被回复用户</item>
+    <item name="main_comment_comma" type="id">主评论冒号标志</item>
+    <!--副评论-->
+    <item name="sub_comment" type="id">主评论组建</item>
+    <item name="sub_comment_user" type="id">副评论被回复用户</item>
+    <item name="sub_comment_comma" type="id">副评论冒号标志</item>
+    <item name="sub_comment_content" type="id">副评论内容</item>
+
 </resources>

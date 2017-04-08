@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="90dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     android:orientation="vertical"
@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="2"
+        android:layout_weight="0.8"
         android:weightSum="1">
         <com.hdu.team.hiwanan.view.RoundImageView
             android:id="@id/user_image"
@@ -20,27 +20,27 @@
             />
 
         <LinearLayout
-            android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_gravity="center"
-            android:layout_weight="1">
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@id/nick_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textStyle="bold"
                 android:text="User Name"
-                />
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@id/comment_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Year and Month"
-                android:textSize="10sp"
-                />
+                android:textSize="10sp" />
 
         </LinearLayout>
 
@@ -70,14 +70,70 @@
 
         </LinearLayout>
     </LinearLayout>
-<TextView
-    android:id="@id/comment_content"
-    android:layout_weight="1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="55dp"
-    android:textColor="#000000"
-    android:textStyle="bold"
-    android:text="This is a comment demo. Hahaha!"
-    />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="0.1"
+        >
+        <TextView
+            android:id="@id/main_comment_reply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reply"/>
+        <TextView
+            android:id="@id/main_comment_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:textColor="@color/blue"
+            android:text="@string/user_demo"
+            />
+        <TextView
+            android:id="@id/main_comment_comma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comma"
+
+            />
+        <TextView
+            android:id="@id/comment_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:text="This is a comment demo. Hahaha!"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@id/sub_comment"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal"
+        android:layout_weight="0.1"
+        android:background="@color/white_smoke"
+        >
+
+        <TextView
+            android:id="@id/sub_comment_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/user_demo"
+            android:textColor="@color/blue" />
+
+        <TextView
+            android:id="@id/sub_comment_comma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comma"
+            />
+
+        <TextView
+            android:id="@id/sub_comment_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="This is sup Comment for testing." />
+    </LinearLayout>
 </LinearLayout>
