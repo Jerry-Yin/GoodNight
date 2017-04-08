@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
-                android:background="@color/cyan"/>
+                android:background="@color/cyan" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/btn_test"
@@ -35,21 +35,27 @@
 
             </android.support.v7.widget.CardView>
 
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginTop="5dp"
-                android:background="@color/btn_out_color1" />
+                android:orientation="vertical">
 
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:background="@color/test_color"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="5dp"/>
+                <include
+                    android:id="@+id/layout_summary"
+                    layout="@layout/layout_comment_summary" />
+
+                <include layout="@layout/layout_comment_item" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_marginTop="80dp"
+                    android:background="@color/test_color" />
+            </LinearLayout>
+
 
         </LinearLayout>
 
