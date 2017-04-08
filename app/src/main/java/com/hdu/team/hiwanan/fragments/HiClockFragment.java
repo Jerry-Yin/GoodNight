@@ -153,7 +153,8 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 
         mTimeListAdapter = new HiTimeListAdapter(mSelf, mAlarmList);
         mListView.setAdapter(mTimeListAdapter);
-//        mTimeListAdapter.notifyDataSetChanged();
+        mTimeListAdapter.notifyDataSetChanged();
+        mListView.setOnItemClickListener(this);
         mListView.setOnItemLongClickListener(this);
     }
 

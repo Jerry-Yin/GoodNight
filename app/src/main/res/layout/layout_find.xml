@@ -5,18 +5,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab_layout"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabIndicatorColor="@color/colorAccent"
-        app:tabSelectedTextColor="@color/colorAccent"
-        app:tabMode="fixed"
-        app:tabGravity="fill"
-        app:tabTextColor="@color/title_color"
-        >
+        android:layout_height="wrap_content">
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="@color/colorAccent"
+            app:tabSelectedTextColor="@color/colorAccent"
+            app:tabMode="fixed"
+            app:tabGravity="fill"
+            app:tabTextColor="@color/title_color"
+            >
+        </android.support.design.widget.TabLayout>
 
-    </android.support.design.widget.TabLayout>
+        <include
+            android:id="@+id/title_view_share"
+            layout="@layout/layout_title_bar_share"
+            android:visibility="gone"/>
+    </FrameLayout>
+
+
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"

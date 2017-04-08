@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context="com.hdu.team.hiwanan.activity.HiUserInfoActivity">
 
-    <include layout="@layout/title_bar_layout"
+    <include layout="@layout/layout_title_bar"
         android:layout_marginTop="25dp"
         android:layout_height="45dp"
         android:layout_width="match_parent">

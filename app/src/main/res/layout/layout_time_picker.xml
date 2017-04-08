@@ -7,7 +7,7 @@
 
     >
 
-    <include layout="@layout/title_bar_layout" />
+    <include layout="@layout/layout_title_bar" />
 
     <TextView
         android:id="@+id/text_last_time"
