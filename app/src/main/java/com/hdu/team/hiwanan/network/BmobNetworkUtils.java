@@ -11,6 +11,7 @@ import com.hdu.team.hiwanan.model.bmob.Comment;
 import com.hdu.team.hiwanan.model.bmob.User;
 import com.hdu.team.hiwanan.model.bmob.UserBmob;
 import com.hdu.team.hiwanan.listener.OnDownloadListener;
+import com.hdu.team.hiwanan.util.HiLog;
 
 import java.io.File;
 import java.util.List;
@@ -410,7 +411,6 @@ public class BmobNetworkUtils {
         }).start();
     }
 
-
     public static void queryComment(final int id, final OnResponseListener<List<Comment>> listener) {
         new Thread(new Runnable() {
             @Override
@@ -434,6 +434,28 @@ public class BmobNetworkUtils {
         }).start();
     }
 
+    public static boolean updateCalendar(final Calendar calendar) {
+        if (calendar == null) {
+            return false;
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                calendar.update(calendar.getObjectId(), new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+                        if (e == null) {
+                            HiLog.d("update calendar success");
+                        } else {
+                            HiLog.e(e.getMessage());
+                        }
+                    }
+                });
+            }
+        }).start();
+        return true;
+    }
+
     /**
      * query all the bmobObject where "key" in table = value
      *
@@ -441,7 +463,8 @@ public class BmobNetworkUtils {
      * @param value    值
      * @param listener
      */
-    public static void queryComment(final String key, final Object value, final OnResponseListener<List<Comment>> listener) {
+    public static void queryComment(final String key, final Object value,
+                                    final OnResponseListener<List<Comment>> listener) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -465,13 +488,14 @@ public class BmobNetworkUtils {
     }
 
 
-    /**
-     * query all the bmobObject where "key" in table = value
-     * @param key       查询字段 (例如：objectId, id...)
-     * @param value     值
-     * @param listener
-     * @param <T>
-     */
+/**
+ * query all the bmobObject where "key" in table = value
+ *
+ * @param key       查询字段 (例如：objectId, id...)
+ * @param value     值
+ * @param listener
+ * @param <T>
+ */
 //    public static <T extends BmobObject> void queryBmobObject(final String key, final Object value, final OnResponseListener<List<T>> listener){
 //        new Thread(new Runnable() {
 //            @Override

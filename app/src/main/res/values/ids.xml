@@ -5,6 +5,7 @@
     <item name="sp_ringtone" type="id">铃声选择</item>
 
     <!--评价总数-->
+    <item name="linear_thumb" type="id">点赞</item>
     <item name="thumb_summary" type="id">点赞总数</item>
     <item name="comment_summary" type="id">评论总数</item>
     <item name="share_summary" type="id">分享总数</item>

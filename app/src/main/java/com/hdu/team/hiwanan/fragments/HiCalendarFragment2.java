@@ -4,6 +4,7 @@ package com.hdu.team.hiwanan.fragments;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,7 +52,7 @@ import java.util.List;
  * Created by JerryYin on 3/9/17.
  */
 
-public class HiCalendarFragment2 extends Fragment {
+public class HiCalendarFragment2 extends Fragment implements View.OnClickListener {
 
     /**
      * Constants
@@ -59,6 +60,7 @@ public class HiCalendarFragment2 extends Fragment {
     private View mContentView;
     private static final java.lang.String TAG = "HiCalendarFragment2";
     private Activity mSelf;
+    private SharedPreferences mSharedPreferences;
 
     /**
      * Views
@@ -86,6 +88,9 @@ public class HiCalendarFragment2 extends Fragment {
     private TextView likeSum; //点赞总数
     private TextView commentSum; // 评论总数
     private TextView shareSum; //分享总数
+    private LinearLayout likeSummay;
+
+    private Calendar mCalendarObj; //用于更新calendar数据
 
     private RecyclerView mRecyclerView;
     private List<Comment> mCommentDataList = new ArrayList<>();
@@ -101,6 +106,9 @@ public class HiCalendarFragment2 extends Fragment {
     private float mDistanceY;   //滑动高度
     private int mTabHeight;     //标题栏高度
     public int mWhichTab = 0;   //标识位，确定该显示哪个标题
+    private String mToday = HiTimesUtil.getCurDate();
+    private boolean mThumbed = false; //是否对日历点过赞
+
 
     @Nullable
     @Override
@@ -112,6 +120,8 @@ public class HiCalendarFragment2 extends Fragment {
             }
         } else {
             mSelf = getActivity();
+            mSharedPreferences = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE);
+            mThumbed = mSharedPreferences.getBoolean(mToday, false);
             mContentView = inflater.inflate(R.layout.layout_calendar2, null);
             initViews();
             HiLog.d(TAG, "main : " + Thread.currentThread().getId());
@@ -137,6 +147,13 @@ public class HiCalendarFragment2 extends Fragment {
 
         //calendar comment summary
         likeSum = (TextView) mContentView.findViewById(R.id.thumb_summary);
+        likeSummay = (LinearLayout) mContentView.findViewById(R.id.linear_thumb);
+
+        if (mThumbed) {
+            likeSum.setTextColor(Color.RED);
+        }
+        likeSum.setOnClickListener(this);
+        likeSummay.setOnClickListener(this);
         commentSum = (TextView) mContentView.findViewById(R.id.comment_summary);
         shareSum = (TextView) mContentView.findViewById(R.id.share_summary);
 
@@ -324,8 +341,11 @@ public class HiCalendarFragment2 extends Fragment {
 
                 case HiResponseCodes.SUMMAY_OK:
                     Calendar calendar = (Calendar) msg.obj;
-                    HiLog.e("Kaikai" + calendar.getLike());
-                    setSummary(calendar);
+                    //HiLog.e("Kaikai" + calendar.getLike());
+                    if (calendar != null) {
+                        mCalendarObj = calendar;
+                        setSummary(calendar);
+                    }
                     break;
 
                 case HiResponseCodes.SUMMAY_FAIL:
@@ -333,7 +353,7 @@ public class HiCalendarFragment2 extends Fragment {
 
                 case HiResponseCodes.COMMENT_OK:
                     List<Comment> list = (List<Comment>) msg.obj;
-                    for (Comment c : list){
+                    for (Comment c : list) {
                         mCommentDataList.add(c);
                     }
                     mRecyclerViewAdapter.notifyDataSetChanged();
@@ -416,10 +436,10 @@ public class HiCalendarFragment2 extends Fragment {
                     super.handleMessage(msg);
                     switch (msg.what) {
                         case HiResponseCodes.USER_BMOB_OK:
-                            HiLog.d(TAG, "holder2 : "+holder.toString());
+                            HiLog.d(TAG, "holder2 : " + holder.toString());
                             UserBmob user = (UserBmob) msg.obj;
                             ImageLoaderUtil.displayDrawableImage(user.getIcon(), holder.img_icon);
-                            HiLog.d(TAG, "nick name : "+user.getUsername());
+                            HiLog.d(TAG, "nick name : " + user.getUsername());
 //                            holder.tv_nick_name.setText(user.getUsername());
                             break;
 
@@ -428,9 +448,9 @@ public class HiCalendarFragment2 extends Fragment {
                             break;
 
                         case HiResponseCodes.COMMENT_OK:
-                            HiLog.d(TAG, "holder3 : "+holder.toString());
+                            HiLog.d(TAG, "holder3 : " + holder.toString());
                             Comment c = (Comment) msg.obj;
-                            HiLog.d(TAG, "words2 : "+c.getWords());
+                            HiLog.d(TAG, "words2 : " + c.getWords());
                             holder.tv_word2.setText(c.getWords());
                             break;
 
@@ -445,7 +465,7 @@ public class HiCalendarFragment2 extends Fragment {
             Comment comment = mCommentList.get(position);
             holder.tv_nick_name.setText(comment.getUser());
             String userId = comment.getUserid();
-            HiLog.d(TAG, "holder1 : "+holder.toString());
+            HiLog.d(TAG, "holder1 : " + holder.toString());
             BmobNetworkUtils.queryUserBmob(BmobNetworkUtils.KEY_OBJECT_ID, userId, new OnResponseListener<List<UserBmob>>() {
                 @Override
                 public void onSuccess(List<UserBmob> result) {
@@ -548,6 +568,41 @@ public class HiCalendarFragment2 extends Fragment {
         message.what = what;
         message.obj = result;
         handler.sendMessage(message);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.thumb_summary:
+                thumbClicked();
+                break;
+            case R.id.linear_thumb:
+                thumbClicked();
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 点赞操作
+     */
+    private void thumbClicked() {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        if (mThumbed == false) {
+            int origin = Integer.valueOf(likeSum.getText().toString());
+            origin++;
+            likeSum.setText(String.valueOf(origin));
+            likeSum.setTextColor(Color.RED);
+            editor.putBoolean(mToday, true);
+            editor.commit();
+            mThumbed = true;
+            HiLog.e(mCalendarObj.getObjectId());
+            mCalendarObj.setLike(origin);
+            boolean success = BmobNetworkUtils.updateCalendar(mCalendarObj);
+            HiLog.e(success + "");
+
+        }
     }
 }
 
