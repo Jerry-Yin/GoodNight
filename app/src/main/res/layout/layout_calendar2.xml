@@ -47,13 +47,14 @@
                     android:id="@+id/layout_summary"
                     layout="@layout/layout_comment_summary" />
 
-                <include layout="@layout/layout_item_comment" />
+                <include layout="@layout/layout_item_comment"
+                    android:visibility="gone"/>
 
                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rcy_comment"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/test_color" />
+                    android:layout_height="800dp"
+                    android:layout_marginTop="10dp"/>
             </LinearLayout>
 
 

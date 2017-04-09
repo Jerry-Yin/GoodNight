@@ -15,7 +15,7 @@
             android:id="@id/img_user"
             android:layout_width="45dp"
             android:layout_height="match_parent"
-            android:src="@drawable/demo_header" />
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -35,10 +35,10 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/txt_comment_date"
+                android:id="@+id/txt_comment_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Year and Month"
+                android:text="00:00"
                 android:textColor="@color/test_color"
                 android:textSize="10sp" />
 
@@ -61,7 +61,7 @@
                 android:src="@drawable/thumb_up" />
 
             <TextView
-                android:id="@+id/txt_comment_thumb"
+                android:id="@+id/txt_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -83,7 +83,7 @@
             android:layout_height="wrap_content"
             android:text="@string/reply"/>
         <TextView
-            android:id="@+id/txt_main_comment_user"
+            android:id="@+id/txt_last_user1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -98,7 +98,7 @@
 
             />
         <TextView
-            android:id="@+id/txt_comment_content"
+            android:id="@+id/txt_word1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#000000"
@@ -107,16 +107,15 @@
             />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/layout_sub_comment"
+        android:id="@+id/layout_comment_sub"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:orientation="horizontal"
         android:layout_weight="0.1"
-        android:background="@color/white_smoke"
-        >
+        android:background="@color/white_smoke">
 
         <TextView
-            android:id="@+id/txt_sub_comment_user"
+            android:id="@+id/txt_last_user2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -131,7 +130,7 @@
             />
 
         <TextView
-            android:id="@+id/txt_last_comment_content"
+            android:id="@+id/txt_word2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="15sp"

@@ -12,8 +12,8 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +24,7 @@ import com.hdu.team.hiwanan.adapter.CusRecyclerViewAdapter;
 import com.hdu.team.hiwanan.constant.HiResponseCodes;
 import com.hdu.team.hiwanan.model.HiCalendar;
 
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -33,12 +34,16 @@ import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.model.HiCalendarData;
 import com.hdu.team.hiwanan.model.bmob.Calendar;
 import com.hdu.team.hiwanan.model.bmob.Comment;
+import com.hdu.team.hiwanan.model.bmob.UserBmob;
 import com.hdu.team.hiwanan.network.BmobNetworkUtils;
 import com.hdu.team.hiwanan.util.HiLog;
+import com.hdu.team.hiwanan.util.ImageLoaderUtil;
 import com.hdu.team.hiwanan.util.OkHttpUtils;
 import com.hdu.team.hiwanan.util.common.GsonUtils;
 import com.hdu.team.hiwanan.util.common.HiTimesUtil;
+import com.hdu.team.hiwanan.view.RoundImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -78,10 +83,18 @@ public class HiCalendarFragment2 extends Fragment {
     private TextView words;           //名言
     private TextView author;          //作者
 
-    private RecyclerView mRecyclerView;
-//    private List<Calendar>
+    private TextView likeSum; //点赞总数
+    private TextView commentSum; // 评论总数
+    private TextView shareSum; //分享总数
 
-    /**Values*/
+    private RecyclerView mRecyclerView;
+    private List<Comment> mCommentDataList = new ArrayList<>();
+    private RecyclerViewAdapter mRecyclerViewAdapter;
+
+
+    /**
+     * Values
+     */
     private HiCalendar mCalendar;
     private CusRecyclerViewAdapter mViewAdapter;
 
@@ -101,7 +114,6 @@ public class HiCalendarFragment2 extends Fragment {
             mSelf = getActivity();
             mContentView = inflater.inflate(R.layout.layout_calendar2, null);
             initViews();
-            initData();
             HiLog.d(TAG, "main : " + Thread.currentThread().getId());
         }
         return mContentView;
@@ -123,6 +135,23 @@ public class HiCalendarFragment2 extends Fragment {
         words = (TextView) mContentView.findViewById(R.id.text_words);
         author = (TextView) mContentView.findViewById(R.id.text_author);
 
+        //calendar comment summary
+        likeSum = (TextView) mContentView.findViewById(R.id.thumb_summary);
+        commentSum = (TextView) mContentView.findViewById(R.id.comment_summary);
+        shareSum = (TextView) mContentView.findViewById(R.id.share_summary);
+
+        mRecyclerView = (RecyclerView) mContentView.findViewById(R.id.rcy_comment);
+        mRecyclerViewAdapter = new RecyclerViewAdapter(mSelf, mCommentDataList);
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mSelf));
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
+        showWhichTab();
     }
 
 
@@ -131,6 +160,27 @@ public class HiCalendarFragment2 extends Fragment {
         mTabHeight = mScrollView.getBottom();
         initCalendars();
         initScroll();
+        initComments();
+    }
+
+    /**
+     * 查询今天所有的评论数据
+     * yyyy-mm-dd
+     */
+    private void initComments() {
+        String today = HiTimesUtil.getCurDate();
+        BmobNetworkUtils.queryComment(BmobNetworkUtils.KEY_DATE, today, new OnResponseListener<List<Comment>>() {
+            @Override
+            public void onSuccess(List<Comment> result) {
+                if (result != null)
+                    handMessage(mHandler, HiResponseCodes.COMMENT_OK, result);
+            }
+
+            @Override
+            public void onFailure(int errorCode, String error) {
+                handMessage(mHandler, HiResponseCodes.COMMENT_NO, errorCode + error);
+            }
+        });
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -188,7 +238,6 @@ public class HiCalendarFragment2 extends Fragment {
         String date = HiTimesUtil.getCurDateNoZero();
         HiLog.d(TAG, date);
 
-
 //      请求示例：http://japi.juhe.cn/calendar/day?date=2015-1-1&key=您申请的appKey
         String url = HiConfig.URL_CALENDAR + "?date=" + date + "&key=" + HiConfig.APP_KEY_CALENDAR;
         OkHttpUtils.OkHttpGet(url, new OnResponseListener() {
@@ -233,21 +282,18 @@ public class HiCalendarFragment2 extends Fragment {
         BmobNetworkUtils.queryCalendar(today, new OnResponseListener<List<Calendar>>() {
             @Override
             public void onSuccess(List<Calendar> result) {
+                if (result != null && result.size() != 0) {
+                    handMessage(mHandler, HiResponseCodes.SUMMAY_OK, result.get(0));
+                }
                 HiLog.d(TAG, result.toString());
             }
 
             @Override
             public void onFailure(int errorCode, String error) {
+                handMessage(mHandler, HiResponseCodes.SUMMAY_FAIL, errorCode + error);
                 HiLog.d(TAG, errorCode + error);
             }
         });
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        showWhichTab();
     }
 
     private void showWhichTab() {
@@ -273,6 +319,27 @@ public class HiCalendarFragment2 extends Fragment {
                     break;
 
                 case HiResponseCodes.CALENDAR_FAIL:
+
+                    break;
+
+                case HiResponseCodes.SUMMAY_OK:
+                    Calendar calendar = (Calendar) msg.obj;
+                    HiLog.e("Kaikai" + calendar.getLike());
+                    setSummary(calendar);
+                    break;
+
+                case HiResponseCodes.SUMMAY_FAIL:
+                    break;
+
+                case HiResponseCodes.COMMENT_OK:
+                    List<Comment> list = (List<Comment>) msg.obj;
+                    for (Comment c : list){
+                        mCommentDataList.add(c);
+                    }
+                    mRecyclerViewAdapter.notifyDataSetChanged();
+                    break;
+
+                case HiResponseCodes.COMMENT_NO:
 
                     break;
 
@@ -309,6 +376,12 @@ public class HiCalendarFragment2 extends Fragment {
 //        author.setText("");
     }
 
+    private void setSummary(Calendar calendar) {
+        likeSum.setText(String.valueOf(calendar.getLike()));
+        commentSum.setText(String.valueOf(calendar.getComment()));
+        shareSum.setText(String.valueOf(calendar.getShare()));
+    }
+
 
     @Override
     public void onDestroy() {
@@ -320,37 +393,161 @@ public class HiCalendarFragment2 extends Fragment {
     class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.CustomViewHolder> {
 
         private Context mContext;
-        private List<Comment> mComments;
+        private List<Comment> mCommentList;
+        private Handler mCommentHandler;
 
-        //CustomViewHolder，用于缓存，提高效率
-        public class CustomViewHolder extends RecyclerView.ViewHolder {
-            private TextView id;
-            private TextView date;
-            private TextView userId;
-            private TextView like;
-            private TextView words;
-            private TextView lastId;
-
-            public CustomViewHolder(View itemView) {
-                super(itemView);
-//                text = (TextView) itemView.findViewById(R.id.text_view);
-            }
+        public RecyclerViewAdapter(Context mContext, List<Comment> mCommentList) {
+            this.mContext = mContext;
+            this.mCommentList = mCommentList;
         }
 
         @Override
         public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return null;
+            View view = LayoutInflater.from(mContext).inflate(R.layout.layout_item_comment, parent, false);
+            CustomViewHolder holder = new CustomViewHolder(view);
+            return holder;
         }
 
         @Override
-        public void onBindViewHolder(CustomViewHolder holder, int position) {
+        public void onBindViewHolder(final CustomViewHolder holder, int position) {
+            mCommentHandler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    super.handleMessage(msg);
+                    switch (msg.what) {
+                        case HiResponseCodes.USER_BMOB_OK:
+                            HiLog.d(TAG, "holder2 : "+holder.toString());
+                            UserBmob user = (UserBmob) msg.obj;
+                            ImageLoaderUtil.displayDrawableImage(user.getIcon(), holder.img_icon);
+                            HiLog.d(TAG, "nick name : "+user.getUsername());
+//                            holder.tv_nick_name.setText(user.getUsername());
+                            break;
+
+                        case HiResponseCodes.USER_BMOB_NO:
+
+                            break;
+
+                        case HiResponseCodes.COMMENT_OK:
+                            HiLog.d(TAG, "holder3 : "+holder.toString());
+                            Comment c = (Comment) msg.obj;
+                            HiLog.d(TAG, "words2 : "+c.getWords());
+                            holder.tv_word2.setText(c.getWords());
+                            break;
+
+                        case HiResponseCodes.COMMENT_NO:
+
+                            break;
+
+                    }
+                }
+            };
+
+            Comment comment = mCommentList.get(position);
+            holder.tv_nick_name.setText(comment.getUser());
+            String userId = comment.getUserid();
+            HiLog.d(TAG, "holder1 : "+holder.toString());
+            BmobNetworkUtils.queryUserBmob(BmobNetworkUtils.KEY_OBJECT_ID, userId, new OnResponseListener<List<UserBmob>>() {
+                @Override
+                public void onSuccess(List<UserBmob> result) {
+                    if (result != null && result.size() > 0) {
+                        handMessage(mCommentHandler, HiResponseCodes.USER_BMOB_OK, result.get(0));
+                    }
+                }
+
+                @Override
+                public void onFailure(int errorCode, String error) {
+                    handMessage(mCommentHandler, HiResponseCodes.USER_BMOB_NO, errorCode + "|" + error);
+                }
+            });
+
+            String[] now = HiTimesUtil.getCurTime().split(":");             //hh:mm
+            String[] time = comment.getTime().split(":");     //hh:mm:ss
+            if (HiTimesUtil.isjustNow(now, time)) {
+                holder.tv_time.setText("刚刚");
+            } else {
+                holder.tv_time.setText(time[0] + "." + time[1]);
+            }
+
+            holder.tv_like.setText(String.valueOf(comment.getLike()));
+            holder.tv_word1.setText(comment.getWords());
+            if (comment.getLastid() < 0) {
+                //单条评论
+//                holder.tv_reply.setVisibility(View.INVISIBLE);
+//                holder.tv_last_usr1.setVisibility(View.GONE);
+//                holder.tv_signal1.setVisibility(View.GONE);
+//                holder.layout_sub.setVisibility(View.GONE);
+            } else {
+                holder.tv_reply.setVisibility(View.VISIBLE);
+                holder.tv_last_usr1.setVisibility(View.VISIBLE);
+                holder.tv_signal1.setVisibility(View.VISIBLE);
+                holder.layout_sub.setVisibility(View.VISIBLE);
+
+                holder.tv_last_usr1.setText(comment.getLastName());
+                holder.tv_last_usr2.setText(comment.getLastName());
+
+                BmobNetworkUtils.queryComment(BmobNetworkUtils.KEY_ID, comment.getLastid(), new OnResponseListener<List<Comment>>() {
+                    @Override
+                    public void onSuccess(List<Comment> result) {
+                        if (result != null && result.size() > 0) {
+                            handMessage(mCommentHandler, HiResponseCodes.COMMENT_OK, result.get(0));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int errorCode, String error) {
+                        handMessage(mCommentHandler, HiResponseCodes.COMMENT_NO, errorCode + "|" + error);
+                    }
+                });
+            }
+
 
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return mCommentList.size();
         }
+
+        //CustomViewHolder，用于缓存，提高效率
+        public class CustomViewHolder extends RecyclerView.ViewHolder {
+            private RoundImageView img_icon;
+            private TextView tv_nick_name;
+            private TextView tv_time;
+            private TextView tv_like;
+            private TextView tv_reply;
+            private TextView tv_last_usr1;
+            private TextView tv_signal1;
+            private TextView tv_word1;
+
+            private LinearLayout layout_sub;
+            private TextView tv_last_usr2;
+            private TextView tv_signal2;
+            private TextView tv_word2;
+
+            public CustomViewHolder(View itemView) {
+                super(itemView);
+                img_icon = (RoundImageView) itemView.findViewById(R.id.img_user);
+                tv_nick_name = (TextView) itemView.findViewById(R.id.txt_nick_name);
+                tv_time = (TextView) itemView.findViewById(R.id.txt_comment_time);
+                tv_like = (TextView) itemView.findViewById(R.id.txt_like);
+                tv_reply = (TextView) itemView.findViewById(R.id.txt_reply);
+                tv_last_usr1 = (TextView) itemView.findViewById(R.id.txt_last_user1);
+                tv_signal1 = (TextView) itemView.findViewById(R.id.txt_signal);
+                tv_word1 = (TextView) itemView.findViewById(R.id.txt_word1);
+                layout_sub = (LinearLayout) itemView.findViewById(R.id.layout_comment_sub);
+                tv_last_usr2 = (TextView) itemView.findViewById(R.id.txt_last_user2);
+                tv_signal2 = (TextView) itemView.findViewById(R.id.txt_signal2);
+                tv_word2 = (TextView) itemView.findViewById(R.id.txt_word2);
+            }
+        }
+    }
+
+
+    public <T> void handMessage(Handler handler, int what, T result) {
+        Message message = new Message();
+        message.what = what;
+        message.obj = result;
+        handler.sendMessage(message);
     }
 }
 

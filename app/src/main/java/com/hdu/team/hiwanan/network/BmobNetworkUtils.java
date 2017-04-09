@@ -1,24 +1,29 @@
 package com.hdu.team.hiwanan.network;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 
 import com.hdu.team.hiwanan.listener.OnProgressListener;
 import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.model.bmob.Calendar;
+import com.hdu.team.hiwanan.model.bmob.Comment;
 import com.hdu.team.hiwanan.model.bmob.User;
 import com.hdu.team.hiwanan.model.bmob.UserBmob;
 import com.hdu.team.hiwanan.listener.OnDownloadListener;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
@@ -28,6 +33,32 @@ import cn.bmob.v3.listener.UploadFileListener;
  * 采用 Bmob 方式的网络请求工具类
  */
 public class BmobNetworkUtils {
+
+
+    /**
+     * 查询会用到的字段名称---- 对应着Bmob后台服务器所有表的 字段名称
+     */
+    public static final String KEY_OBJECT_ID = "objectId";
+    public static final String KEY_ID = "id";
+    /**
+     * Calendar表
+     */
+    public static final String KEY_DATE = "date";
+    public static final String KEY_ABSTRACTS = "abstracts";
+    public static final String KEY_STR = "str";
+    public static final String KEY_ORIGIN = "origin";
+    public static final String KEY_SHARE = "share";
+    public static final String KEY_LIKE = "like";
+    public static final String KEY_COMMENT = "comment";
+    /**
+     * Comment表
+     */
+    public static final String KEY_LAST_ID = "lastid";
+    public static final String KEY_LAST_NAME = "lastname";
+    public static final String KEY_USER = "user";
+    public static final String KEY_WORDS = "words";
+    public static final String KEY_TIME = "time";
+
 
     /** ---------------------------------------- Bmob云服务器 “用户信息” 数据操作模块 --------------------------------*/
     /**
@@ -130,6 +161,51 @@ public class BmobNetworkUtils {
         }).start();
     }
 
+//    /**
+//     * 查询用户
+//     * @param objectId
+//     * @return
+//     */
+//    public static void queryUser(final String objectId, final OnResponseListener<List<UserBmob>>) {
+//        final UserBmob[] user = {null};
+//        final BmobQuery<UserBmob> query = new BmobQuery<>();
+//        final QueryListener<UserBmob> listener = new QueryListener<UserBmob>() {
+//            @Override
+//            public void done(UserBmob userBmob, BmobException e) {
+//                user[0] = userBmob;
+//            }
+//        };
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                query.getObject(objectId, listener);
+//            }
+//        }).start();
+//    }
+
+
+    public static void queryUserBmob(final String key, final String value, final OnResponseListener<List<UserBmob>> listener) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                BmobQuery<UserBmob> query = new BmobQuery<UserBmob>();
+                query.addWhereEqualTo(key, value);
+                query.findObjects(new FindListener<UserBmob>() {
+                    @Override
+                    public void done(List<UserBmob> list, BmobException e) {
+                        if (e == null) {
+                            if (listener != null) {
+                                listener.onSuccess(list);
+                            }
+                        } else {
+                            if (listener != null)
+                                listener.onFailure(e.getErrorCode(), e.getMessage());
+                        }
+                    }
+                });
+            }
+        }).start();
+    }
 
     /**
      * 下载文件存储到本地的方法
@@ -172,48 +248,6 @@ public class BmobNetworkUtils {
                         }
                     }
                 });
-            }
-        }).start();
-    }
-
-
-    /**
-     * 上传单一文件的方法
-     *
-     * @param filePath
-     * @param listener
-     */
-    public static void uploadFile(final String filePath, final OnProgressListener listener) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                File file = new File(filePath);
-                final BmobFile bmobFile = new BmobFile(file);
-                bmobFile.uploadblock(new UploadFileListener() {
-                                         @Override
-                                         public void done(BmobException e) {
-                                             if (e == null) {
-                                                 //bmobFile.getFileUrl()--返回的上传文件的完整地址
-                                                 if (listener != null) {
-                                                     listener.onSuccess(bmobFile.getFileUrl());
-                                                 }
-                                             } else {
-                                                 if (listener != null) {
-                                                     listener.onFailure(e.getErrorCode(), e.getMessage());
-                                                 }
-                                             }
-                                         }
-
-                                         @Override
-                                         public void onProgress(Integer value) {
-                                             super.onProgress(value);
-                                             // 返回的上传进度（百分比）
-                                             if (listener != null) {
-                                                 listener.onProgress(value);
-                                             }
-                                         }
-                                     }
-                );
             }
         }).start();
     }
@@ -266,6 +300,51 @@ public class BmobNetworkUtils {
         }).start();
     }
 
+    /**
+     * ---------------------------------------- Bmob云服务器 “文件操作” 数据操作模块 --------------------------------
+     */
+
+    /**
+     * 上传单一文件的方法
+     *
+     * @param filePath
+     * @param listener
+     */
+    public static void uploadFile(final String filePath, final OnProgressListener listener) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                File file = new File(filePath);
+                final BmobFile bmobFile = new BmobFile(file);
+                bmobFile.uploadblock(new UploadFileListener() {
+                                         @Override
+                                         public void done(BmobException e) {
+                                             if (e == null) {
+                                                 //bmobFile.getFileUrl()--返回的上传文件的完整地址
+                                                 if (listener != null) {
+                                                     listener.onSuccess(bmobFile.getFileUrl());
+                                                 }
+                                             } else {
+                                                 if (listener != null) {
+                                                     listener.onFailure(e.getErrorCode(), e.getMessage());
+                                                 }
+                                             }
+                                         }
+
+                                         @Override
+                                         public void onProgress(Integer value) {
+                                             super.onProgress(value);
+                                             // 返回的上传进度（百分比）
+                                             if (listener != null) {
+                                                 listener.onProgress(value);
+                                             }
+                                         }
+                                     }
+                );
+            }
+        }).start();
+    }
+
 
     /**
      * ---------------------------------------- Bmob云服务器 “日历 & 评论” 数据操作模块 --------------------------------
@@ -273,6 +352,7 @@ public class BmobNetworkUtils {
 
     /**
      * 上传
+     *
      * @param calendar
      * @param listener
      * @return
@@ -331,5 +411,88 @@ public class BmobNetworkUtils {
     }
 
 
+    public static void queryComment(final int id, final OnResponseListener<List<Comment>> listener) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                BmobQuery<Comment> query = new BmobQuery<Comment>();
+                query.addWhereEqualTo("id", id);
+                query.findObjects(new FindListener<Comment>() {
+                    @Override
+                    public void done(List<Comment> list, BmobException e) {
+                        if (e == null) {
+                            if (listener != null) {
+                                listener.onSuccess(list);
+                            }
+                        } else {
+                            if (listener != null)
+                                listener.onFailure(e.getErrorCode(), e.getMessage());
+                        }
+                    }
+                });
+            }
+        }).start();
+    }
+
+    /**
+     * query all the bmobObject where "key" in table = value
+     *
+     * @param key      查询字段 (例如：objectId, id...)
+     * @param value    值
+     * @param listener
+     */
+    public static void queryComment(final String key, final Object value, final OnResponseListener<List<Comment>> listener) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                BmobQuery<Comment> query = new BmobQuery<Comment>();
+                query.addWhereEqualTo(key, value);
+                query.findObjects(new FindListener<Comment>() {
+                    @Override
+                    public void done(List<Comment> list, BmobException e) {
+                        if (e == null) {
+                            if (listener != null) {
+                                listener.onSuccess(list);
+                            }
+                        } else {
+                            if (listener != null)
+                                listener.onFailure(e.getErrorCode(), e.getMessage());
+                        }
+                    }
+                });
+            }
+        }).start();
+    }
+
+
+    /**
+     * query all the bmobObject where "key" in table = value
+     * @param key       查询字段 (例如：objectId, id...)
+     * @param value     值
+     * @param listener
+     * @param <T>
+     */
+//    public static <T extends BmobObject> void queryBmobObject(final String key, final Object value, final OnResponseListener<List<T>> listener){
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                BmobQuery<T> query = new BmobQuery<T>();
+//                query.addWhereEqualTo(key, value);
+//                query.findObjects(new FindListener<T>() {
+//                    @Override
+//                    public void done(List<T> list, BmobException e) {
+//                        if (e == null) {
+//                            if (listener != null) {
+//                                listener.onSuccess(list);
+//                            }
+//                        } else {
+//                            if (listener != null)
+//                                listener.onFailure(e.getErrorCode(), e.getMessage());
+//                        }
+//                    }
+//                });
+//            }
+//        }).start();
+//    }
 
 }

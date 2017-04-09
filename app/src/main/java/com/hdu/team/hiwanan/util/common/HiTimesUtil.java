@@ -31,6 +31,7 @@ public class HiTimesUtil {
 
     /**
      * 自动补0
+     *
      * @return
      */
     public static String getCurDate() {
@@ -41,8 +42,8 @@ public class HiTimesUtil {
     }
 
     /**
-     *
      * 月份日期前面不带0
+     *
      * @return
      */
     public static String getCurDateNoZero() {
@@ -100,6 +101,7 @@ public class HiTimesUtil {
 
     /**
      * 倒计时工具
+     *
      * @param time
      * @param handler
      */
@@ -109,11 +111,11 @@ public class HiTimesUtil {
                 @Override
                 public void run() {
                     try {
-                        for (int i = 0; i <= time+1; i++) {
+                        for (int i = 0; i <= time + 1; i++) {
                             final Message message = new Message();
                             message.what = HiRequestCodes.COUNT_DOWN;
                             message.arg1 = position;
-                            message.obj = time-i;
+                            message.obj = time - i;
                             handler.sendMessage(message);
                             Thread.sleep(1000);
 
@@ -125,6 +127,27 @@ public class HiTimesUtil {
 
             }).start();
 
+        }
+    }
+
+    /**
+     * 判断是不是刚刚 ，间隔10m 以内算是刚刚
+     *
+     * @param now  [hh, mm]
+     * @param time [hh, mm, ss]
+     * @return
+     */
+    public static boolean isjustNow(String[] now, String[] time) {
+        if (!now[0].equals(time[0])) {
+            return false;
+        } else {
+            int n = Integer.parseInt(now[1]);
+            int t = Integer.parseInt(time[1]);
+            if ((n > t && n - t <= 10) || (n < t && t - n <= 10))
+                return true;
+            else {
+                return false;
+            }
         }
     }
 }
