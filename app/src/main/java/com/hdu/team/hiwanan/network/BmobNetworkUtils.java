@@ -9,6 +9,7 @@ import com.hdu.team.hiwanan.model.bmob.Calendar;
 import com.hdu.team.hiwanan.model.bmob.User;
 import com.hdu.team.hiwanan.model.bmob.UserBmob;
 import com.hdu.team.hiwanan.listener.OnDownloadListener;
+import com.hdu.team.hiwanan.util.HiLog;
 
 import java.io.File;
 import java.util.List;
@@ -273,6 +274,7 @@ public class BmobNetworkUtils {
 
     /**
      * 上传
+     *
      * @param calendar
      * @param listener
      * @return
@@ -328,5 +330,28 @@ public class BmobNetworkUtils {
                 });
             }
         }).start();
+    }
+
+    public static boolean updateCalendar(final Calendar calendar) {
+        if (calendar == null) {
+            return false;
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                calendar.update(calendar.getObjectId(), new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+                        if(e == null) {
+                            HiLog.d("update calendar success");
+                        } else {
+                            HiLog.e(e.getMessage());
+                        }
+                    }
+                });
+            }
+        }).start();
+
+        return true;
     }
 }
