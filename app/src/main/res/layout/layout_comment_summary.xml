@@ -29,7 +29,7 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="123456" />
+                android:text="0" />
         </LinearLayout>
 
     </LinearLayout>
@@ -58,7 +58,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:gravity="center"
-                android:text="123456" />
+                android:text="0" />
         </LinearLayout>
 
     </LinearLayout>
@@ -86,7 +86,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:gravity="center"
-                android:text="123456" />
+                android:text="0" />
         </LinearLayout>
 
 

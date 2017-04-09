@@ -3,6 +3,7 @@ package com.hdu.team.hiwanan.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,7 @@ import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.model.HiCalendarData;
 import com.hdu.team.hiwanan.model.bmob.Calendar;
+import com.hdu.team.hiwanan.model.bmob.Comment;
 import com.hdu.team.hiwanan.network.BmobNetworkUtils;
 import com.hdu.team.hiwanan.util.HiLog;
 import com.hdu.team.hiwanan.util.OkHttpUtils;
@@ -52,7 +55,9 @@ public class HiCalendarFragment2 extends Fragment {
     private static final java.lang.String TAG = "HiCalendarFragment2";
     private Activity mSelf;
 
-    /**Views*/
+    /**
+     * Views
+     */
 //    private RecyclerView mRecyclerView;
 //    private ImageView mImageView;
     private ScrollView mScrollView;
@@ -73,8 +78,8 @@ public class HiCalendarFragment2 extends Fragment {
     private TextView words;           //名言
     private TextView author;          //作者
 
-
-
+    private RecyclerView mRecyclerView;
+//    private List<Calendar>
 
     /**Values*/
     private HiCalendar mCalendar;
@@ -97,7 +102,7 @@ public class HiCalendarFragment2 extends Fragment {
             mContentView = inflater.inflate(R.layout.layout_calendar2, null);
             initViews();
             initData();
-            HiLog.d(TAG, "main : "+Thread.currentThread().getId());
+            HiLog.d(TAG, "main : " + Thread.currentThread().getId());
         }
         return mContentView;
     }
@@ -135,13 +140,13 @@ public class HiCalendarFragment2 extends Fragment {
         mScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                HiLog.d(TAG, "scrollY: "+scrollY);
-                HiLog.d(TAG, "oldY: "+oldScrollY);
+                HiLog.d(TAG, "scrollY: " + scrollY);
+                HiLog.d(TAG, "oldY: " + oldScrollY);
 //                mDistanceY += scrollY > oldScrollY ? scrollY-oldScrollY : 0;
                 mDistanceY = scrollY;
                 int titleHeight = mTabLayout.getBottom();
-                HiLog.d(TAG, "height: "+titleHeight);
-                HiLog.d(TAG, "distance: "+mDistanceY);
+                HiLog.d(TAG, "height: " + titleHeight);
+                HiLog.d(TAG, "distance: " + mDistanceY);
 
                 /**
                  * 绿色：#00BFA5
@@ -149,21 +154,21 @@ public class HiCalendarFragment2 extends Fragment {
                  * 高度没到达时候。渐变
                  * 白色：#ffffff (255 - 255 - 255)
                  */
-                if (mDistanceY == 0){
+                if (mDistanceY == 0) {
                     mTitleView.setVisibility(View.GONE);
                     mTabLayout.setVisibility(View.VISIBLE);
                     mWhichTab = 0;
                 }
-                if(mDistanceY <= titleHeight){
-                    HiLog.d(TAG, "distance: "+mDistanceY);
-                    float scale = (float) mDistanceY/titleHeight;
+                if (mDistanceY <= titleHeight) {
+                    HiLog.d(TAG, "distance: " + mDistanceY);
+                    float scale = (float) mDistanceY / titleHeight;
                     float alpha = scale * 255;
-                    HiLog.d(TAG, "scale: "+scale);
-                    HiLog.d(TAG, "alpha: "+alpha);
+                    HiLog.d(TAG, "scale: " + scale);
+                    HiLog.d(TAG, "alpha: " + alpha);
                     HiLog.d(TAG, "---------------------------");
                     mTabLayout.setBackgroundColor(Color.argb((int) alpha, 0, 191, 165));
                     mTitleView.setBackgroundColor(Color.argb((int) alpha, 0, 191, 165));
-                }else {
+                } else {
                     mTabLayout.setBackgroundColor(getResources().getColor(R.color.title_color));
                     mTabLayout.setVisibility(View.GONE);
                     mTitleView.setVisibility(View.VISIBLE);
@@ -176,7 +181,6 @@ public class HiCalendarFragment2 extends Fragment {
     }
 
 
-
     /**
      * "{\"reason\":\"Success\",\"result\":{\"data\":{\"avoid\":\"开光.嫁娶.\",\"animalsYear\":\"鸡\",\"weekday\":\"星期六\",\"suit\":\"破屋.坏垣.求医.治病.余事勿取.\",\"lunarYear\":\"丁酉年\",\"lunar\":\"二月十四\",\"year-month\":\"2017-3\",\"date\":\"2017-3-11\"}},\"error_code\":0}"
      */
@@ -186,33 +190,33 @@ public class HiCalendarFragment2 extends Fragment {
 
 
 //      请求示例：http://japi.juhe.cn/calendar/day?date=2015-1-1&key=您申请的appKey
-        String url = HiConfig.URL_CALENDAR + "?date=" + date +"&key="+HiConfig.APP_KEY_CALENDAR;
+        String url = HiConfig.URL_CALENDAR + "?date=" + date + "&key=" + HiConfig.APP_KEY_CALENDAR;
         OkHttpUtils.OkHttpGet(url, new OnResponseListener() {
             @Override
             public void onSuccess(Object result) {
-                String data  = GsonUtils.parseJsonToString(result);
-                HiLog.d(TAG, "result : "+result.toString());
-                HiLog.d(TAG, "success : "+data);
+                String data = GsonUtils.parseJsonToString(result);
+                HiLog.d(TAG, "result : " + result.toString());
+                HiLog.d(TAG, "success : " + data);
 //                HiCalendarData calendarData = GsonUtils.parseJsonToClass(data, HiCalendarData.class);
                 Gson gson = new Gson();
 //                String d = gson.toJson(result);
 
                 HiCalendarData calendarData = gson.fromJson(String.valueOf(result), HiCalendarData.class);
-                Message message  = new Message();
+                Message message = new Message();
                 message.what = HiResponseCodes.CALENDAR_OK;
                 message.obj = calendarData;
-                HiLog.d(TAG, "network : "+Thread.currentThread().getId());
+                HiLog.d(TAG, "network : " + Thread.currentThread().getId());
                 mHandler.sendMessage(message);
 
             }
 
             @Override
             public void onFailure(int errorCode, String error) {
-                Message message  = new Message();
+                Message message = new Message();
                 message.what = HiResponseCodes.CALENDAR_FAIL;
                 message.obj = errorCode + error;
                 mHandler.sendMessage(message);
-                HiLog.d(TAG, "error "+ errorCode + " "+ error);
+                HiLog.d(TAG, "error " + errorCode + " " + error);
             }
         });
 
@@ -247,24 +251,24 @@ public class HiCalendarFragment2 extends Fragment {
     }
 
     private void showWhichTab() {
-        if(mDistanceY < mTabHeight){
+        if (mDistanceY < mTabHeight) {
             mTabLayout.setVisibility(View.VISIBLE);
             mTitleView.setVisibility(View.GONE);
-        }else {
+        } else {
             mTabLayout.setVisibility(View.GONE);
             mTitleView.setVisibility(View.VISIBLE);
         }
     }
 
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case HiResponseCodes.CALENDAR_OK:
                     HiCalendarData calendarData = (HiCalendarData) msg.obj;
-                    HiLog.d(TAG, "main2 : "+Thread.currentThread().getId());
+                    HiLog.d(TAG, "main2 : " + Thread.currentThread().getId());
                     refreshView(calendarData);
                     break;
 
@@ -280,6 +284,7 @@ public class HiCalendarFragment2 extends Fragment {
 
     /**
      * 刷新view，主线程
+     *
      * @param calendarData
      */
     private void refreshView(HiCalendarData calendarData) {
@@ -291,13 +296,13 @@ public class HiCalendarFragment2 extends Fragment {
         weekend.setText(result.getWeekday());
 
         year_old.setText(result.getLunarYear());
-        year_zodiac.setText(result.getAnimalsYear()+"年");
+        year_zodiac.setText(result.getAnimalsYear() + "年");
         month_zodiac.setText(result.getLunar());
         day_zodiac.setText(" ");
 
         day.setText(date[2]);
-        suit.setText("宜："+result.getSuit());
-        avoio.setText("不适："+result.getAvoid());
+        suit.setText("宜：" + result.getSuit());
+        avoio.setText("不适：" + result.getAvoid());
 
         // TODO: 3/11/17  剩下的标签名言名句？
 //        words.setText("");
@@ -309,6 +314,43 @@ public class HiCalendarFragment2 extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
+    }
+
+
+    class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.CustomViewHolder> {
+
+        private Context mContext;
+        private List<Comment> mComments;
+
+        //CustomViewHolder，用于缓存，提高效率
+        public class CustomViewHolder extends RecyclerView.ViewHolder {
+            private TextView id;
+            private TextView date;
+            private TextView userId;
+            private TextView like;
+            private TextView words;
+            private TextView lastId;
+
+            public CustomViewHolder(View itemView) {
+                super(itemView);
+//                text = (TextView) itemView.findViewById(R.id.text_view);
+            }
+        }
+
+        @Override
+        public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return null;
+        }
+
+        @Override
+        public void onBindViewHolder(CustomViewHolder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return 0;
+        }
     }
 }
 

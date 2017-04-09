@@ -14,7 +14,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,21 +29,15 @@ import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiTimePickerActivity;
 import com.hdu.team.hiwanan.broadcast.HiAlarmClockReceiver;
 import com.hdu.team.hiwanan.constant.HiConfig;
-import com.hdu.team.hiwanan.constant.HiRequestCodes;
 import com.hdu.team.hiwanan.database.HiGoodNightDB;
 import com.hdu.team.hiwanan.manager.HiAlarmTaskPoolManager;
 import com.hdu.team.hiwanan.model.HiAlarmTab;
 import com.hdu.team.hiwanan.model.HiAlarmTask;
 import com.hdu.team.hiwanan.service.HiScreenLockService;
 import com.hdu.team.hiwanan.util.HiLog;
-import com.hdu.team.hiwanan.manager.HiAlarmTabManager;
-import com.hdu.team.hiwanan.util.HiNotificationUtil;
-import com.hdu.team.hiwanan.util.HiToast;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by JerryYin on 11/3/15.
@@ -321,9 +314,9 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
             //SharedPreferences.Editor editor = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
             if (convertView == null) {
                 handler = new HiHandler();
-//                convertView = LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.item_sleep_time, null);
-                convertView = inflater.inflate(R.layout.item_sleep_time, null);
-//                convertView = mSelf.getLayoutInflater().inflate(R.layout.item_sleep_time, null);
+//                convertView = LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.layout_item_sleep_time, null);
+                convertView = inflater.inflate(R.layout.layout_item_sleep_time, null);
+//                convertView = mSelf.getLayoutInflater().inflate(R.layout.layout_item_sleep_time, null);
                 handler.imgIcon = (ImageView) convertView.findViewById(R.id.img_icon);
                 handler.tvCategory = (TextView) convertView.findViewById(R.id.text_ready_time);
                 handler.tvTime = (TextView) convertView.findViewById(R.id.text_ready_time_point);

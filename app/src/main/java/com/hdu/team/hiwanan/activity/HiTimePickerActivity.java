@@ -131,8 +131,8 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
     private void initData() {
         initRingtones();
 
-        mCategoryAdapter = ArrayAdapter.createFromResource(this, R.array.category_values, R.layout.hi_spinner_item);
-        mRingtoneAdapter = new ArrayAdapter(this, R.layout.hi_spinner_item, mRingtoneLists);
+        mCategoryAdapter = ArrayAdapter.createFromResource(this, R.array.category_values, R.layout.layout_item_hi_spinner);
+        mRingtoneAdapter = new ArrayAdapter(this, R.layout.layout_item_hi_spinner, mRingtoneLists);
 
         mCategoryAdapter.setDropDownViewResource(R.layout.hi_spinner_dropdown);
         mRingtoneAdapter.setDropDownViewResource(R.layout.hi_spinner_dropdown);

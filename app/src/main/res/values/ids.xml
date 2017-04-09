@@ -11,7 +11,7 @@
 
 
     <!--单条评论-->
-    <item name="user_image" type="id">头像</item>
+    <item name="img_user" type="id">头像</item>
     <item name="nick_name" type="id">昵称</item>
     <item name="comment_date" type="id">日期</item>
     <item name="comment_content" type="id">评论内容</item>

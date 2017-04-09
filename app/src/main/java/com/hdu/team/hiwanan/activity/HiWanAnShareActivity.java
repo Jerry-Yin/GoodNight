@@ -26,8 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.bmob.newim.core.d.b;
-
 /**
  * Created by JerryYin on 11/13/15.
  */
@@ -86,7 +84,7 @@ public class HiWanAnShareActivity extends HiActivity implements AdapterView.OnIt
         map.put("itemImg", mBitmap);
 
         mDataList.add(map);
-        mSimpleAdapter = new SimpleAdapter(this, mDataList, R.layout.gridview_item, new String[]{"itemImg"}, new int[]{R.id.img_grid_view_item});
+        mSimpleAdapter = new SimpleAdapter(this, mDataList, R.layout.layout_item_gridview, new String[]{"itemImg"}, new int[]{R.id.img_grid_view_item});
         /*
          * HashMap载入bmp图片在GridView中不显示,但是如果载入资源ID能显示 如
          * map.put("itemImage", R.drawable.img);

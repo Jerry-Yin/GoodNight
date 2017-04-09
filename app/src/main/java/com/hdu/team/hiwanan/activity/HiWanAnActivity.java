@@ -257,7 +257,7 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
             if (convertView == null) {
-                convertView = mLayoutInflater.inflate(R.layout.item_record_voice, parent, false);
+                convertView = mLayoutInflater.inflate(R.layout.layout_item_record_voice, parent, false);
                 holder = new ViewHolder();
                 holder.seconds = (TextView) convertView.findViewById(R.id.text_voice_time);
                 holder.length = convertView.findViewById(R.id.zone_voice_msg);

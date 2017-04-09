@@ -69,7 +69,7 @@ public class CusRecyclerViewAdapter extends RecyclerView.Adapter<CusRecyclerView
 
     @Override
     public CusViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.layout_calendar_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.layout_item_calendar, parent, false);
         CusViewHolder holder = new CusViewHolder(view);
         return holder;
     }
