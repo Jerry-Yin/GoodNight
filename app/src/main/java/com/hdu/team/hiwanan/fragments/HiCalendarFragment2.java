@@ -124,6 +124,9 @@ public class HiCalendarFragment2 extends Fragment implements View.OnClickListene
             mThumbed = mSharedPreferences.getBoolean(mToday, false);
             mContentView = inflater.inflate(R.layout.layout_calendar2, null);
             initViews();
+
+            initData();
+            showWhichTab();
             HiLog.d(TAG, "main : " + Thread.currentThread().getId());
         }
         return mContentView;
@@ -167,8 +170,6 @@ public class HiCalendarFragment2 extends Fragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        initData();
-        showWhichTab();
     }
 
 
@@ -314,6 +315,7 @@ public class HiCalendarFragment2 extends Fragment implements View.OnClickListene
     }
 
     private void showWhichTab() {
+//        if (mTitleView != null && mTabLayout != null) {
         if (mDistanceY < mTabHeight) {
             mTabLayout.setVisibility(View.VISIBLE);
             mTitleView.setVisibility(View.GONE);
@@ -321,6 +323,7 @@ public class HiCalendarFragment2 extends Fragment implements View.OnClickListene
             mTabLayout.setVisibility(View.GONE);
             mTitleView.setVisibility(View.VISIBLE);
         }
+//        }
     }
 
 
@@ -353,6 +356,7 @@ public class HiCalendarFragment2 extends Fragment implements View.OnClickListene
 
                 case HiResponseCodes.COMMENT_OK:
                     List<Comment> list = (List<Comment>) msg.obj;
+                    mCommentDataList.clear();
                     for (Comment c : list) {
                         mCommentDataList.add(c);
                     }
@@ -492,10 +496,10 @@ public class HiCalendarFragment2 extends Fragment implements View.OnClickListene
             holder.tv_word1.setText(comment.getWords());
             if (comment.getLastid() < 0) {
                 //单条评论
-//                holder.tv_reply.setVisibility(View.INVISIBLE);
-//                holder.tv_last_usr1.setVisibility(View.GONE);
-//                holder.tv_signal1.setVisibility(View.GONE);
-//                holder.layout_sub.setVisibility(View.GONE);
+                holder.tv_reply.setVisibility(View.GONE);
+                holder.tv_last_usr1.setVisibility(View.GONE);
+                holder.tv_signal1.setVisibility(View.GONE);
+                holder.layout_sub.setVisibility(View.GONE);
             } else {
                 holder.tv_reply.setVisibility(View.VISIBLE);
                 holder.tv_last_usr1.setVisibility(View.VISIBLE);

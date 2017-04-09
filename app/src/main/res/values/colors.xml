@@ -31,12 +31,16 @@
     <color name="green_sure">#32C25E </color>
     <color name="green_2">#51B8AE</color>
     <color name="green_3">#80CBC4</color>
+    <color name="black">#616161</color>
+    <color name="black_dark">#323232</color>
+    <color name="black_little">#E0E0E0</color>
 
     <drawable name="main_button_checked_bg">#BDBDBD</drawable>
     <drawable name="radio_btn_pressed_bg">#BDBDBD</drawable>
     <drawable name="img_around_color">#616161</drawable>
     <drawable name="img_pressed_bg_normal">#E0E0E0</drawable>
     <drawable name="img_pressed_bg_pressed">#B0BEC5</drawable>
+
 
 
 </resources>

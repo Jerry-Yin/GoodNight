@@ -88,12 +88,8 @@ public class HiAlarmTask implements Runnable {
     @Override
     public void run() {
         HiLog.d(TAG, "alarmTask"+taskId +" is start...");
-        try {
-            player.prepare();
-            player.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //            player.prepare();
+        player.start();
         sendScreenLockBroadcast();
     }
 

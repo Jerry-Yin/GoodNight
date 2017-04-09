@@ -19,9 +19,8 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
                 android:src="@drawable/thumb_up" />
 
             <TextView
@@ -30,7 +29,7 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="0" />
+                android:text="0"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -49,9 +48,8 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
                 android:src="@drawable/comment" />
 
             <TextView
@@ -59,7 +57,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:gravity="center"
-                android:text="0" />
+                android:text="0"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -77,9 +75,8 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
                 android:src="@drawable/share" />
 
             <TextView

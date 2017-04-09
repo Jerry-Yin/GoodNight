@@ -124,5 +124,6 @@
     <string name="reply">回复</string>
     <string name="user_demo">User Name</string>
     <string name="comma">:</string>
+    <string name="write_comment">写评论</string>
 
 </resources>

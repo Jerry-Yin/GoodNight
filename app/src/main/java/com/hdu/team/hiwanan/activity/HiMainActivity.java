@@ -70,7 +70,7 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
 //            Toast.makeText(this, "联网失败，请检查手机网络状态", Toast.LENGTH_LONG).show();
 //        HiToast.showToast(mIntance, "联网失败，请检查手机网络状态");
 //        }
-        setContentView(R.layout.activity_hi_main);
+        setContentView(R.layout.layout_activity_main);
         mIntance = HiMainActivity.this;
 
         initViews();
