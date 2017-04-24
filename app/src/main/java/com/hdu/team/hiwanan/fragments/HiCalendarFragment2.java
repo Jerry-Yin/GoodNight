@@ -25,6 +25,8 @@ import com.hdu.team.hiwanan.adapter.CusRecyclerViewAdapter;
 import com.hdu.team.hiwanan.constant.HiResponseCodes;
 import com.hdu.team.hiwanan.model.HiCalendar;
 
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -46,6 +48,9 @@ import com.hdu.team.hiwanan.view.RoundImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 
 
 /**
@@ -70,6 +75,7 @@ public class HiCalendarFragment2 extends Fragment implements View.OnClickListene
     private ScrollView mScrollView;
     private TabLayout mTabLayout;
     private View mTitleView;
+    private ImageView mBtnShare;
 
     private TextView year;
     private TextView month;           //月份
@@ -135,6 +141,7 @@ public class HiCalendarFragment2 extends Fragment implements View.OnClickListene
     public void initViews() {
         mScrollView = (ScrollView) mContentView.findViewById(R.id.sv_calendar);
         mTitleView = mSelf.findViewById(R.id.title_view_share);
+        mBtnShare = (ImageView) mSelf.findViewById(R.id.btn_title_share);
         year = (TextView) mContentView.findViewById(R.id.text_year);
         month = (TextView) mContentView.findViewById(R.id.text_month);
         day1 = (TextView) mContentView.findViewById(R.id.text_day1);
@@ -159,6 +166,8 @@ public class HiCalendarFragment2 extends Fragment implements View.OnClickListene
         likeSummay.setOnClickListener(this);
         commentSum = (TextView) mContentView.findViewById(R.id.comment_summary);
         shareSum = (TextView) mContentView.findViewById(R.id.share_summary);
+
+        mBtnShare.setOnClickListener(this);
 
         mRecyclerView = (RecyclerView) mContentView.findViewById(R.id.rcy_comment);
         mRecyclerViewAdapter = new RecyclerViewAdapter(mSelf, mCommentDataList);
@@ -583,9 +592,40 @@ public class HiCalendarFragment2 extends Fragment implements View.OnClickListene
             case R.id.linear_thumb:
                 thumbClicked();
                 break;
+
+            case R.id.btn_title_share:
+                showShareUI();
+                break;
             default:
                 break;
         }
+    }
+
+    private void showShareUI() {
+        ShareSDK.initSDK(mSelf);
+        OnekeyShare oks = new OnekeyShare();
+        //关闭sso授权
+//        oks.disableSSOWhenAuthorize();
+
+        // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间等使用
+        oks.setTitle("Hi晚安");
+        // titleUrl是标题的网络链接，QQ和QQ空间等使用
+        oks.setTitleUrl("https://github.com/Jerry-Yin/GoodNight");
+        // text是分享文本，所有平台都需要这个字段
+        oks.setText("我想跟你说'晚安'哦！");
+        // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+        //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
+        // url仅在微信（包括好友和朋友圈）中使用
+        oks.setUrl("http://hiwanan.cn");
+        // comment是我对这条分享的评论，仅在人人网和QQ空间使用
+        oks.setComment("我是测试评论文本");
+        // site是分享此内容的网站名称，仅在QQ空间使用
+        oks.setSite(getString(R.string.app_name));
+        // siteUrl是分享此内容的网站地址，仅在QQ空间使用
+        oks.setSiteUrl("https://github.com/Jerry-Yin/GoodNight");
+
+        // 启动分享GUI
+        oks.show(mSelf);
     }
 
     /**

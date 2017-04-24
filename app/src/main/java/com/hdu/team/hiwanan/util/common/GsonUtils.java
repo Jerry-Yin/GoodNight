@@ -30,6 +30,7 @@ public class GsonUtils {
      */
     public static <T> T parseJsonToClass(String jsonData, Class<T> tClass){
         Gson gson = new Gson();
+//        T object = gson.fromJson(jsonData, tClass);
         T object = gson.fromJson(jsonData, tClass);
         return object;
     }

@@ -21,6 +21,9 @@ import com.hdu.team.hiwanan.fragments.HiFindFragment;
 import com.hdu.team.hiwanan.fragments.HiClockFragment;
 import com.hdu.team.hiwanan.fragments.HiSettingFragment;
 import com.jauker.widget.BadgeView;
+import com.mob.commons.SMSSDK;
+
+import cn.sharesdk.framework.ShareSDK;
 
 
 public class HiMainActivity extends HiActivity implements View.OnClickListener {
@@ -213,7 +216,7 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
         if (!init) {
             transaction.addToBackStack(null);
         }
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 
     /**

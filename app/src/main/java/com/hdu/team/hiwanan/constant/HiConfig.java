@@ -14,7 +14,20 @@ public class HiConfig {
     public static final String APP_DIR = Environment.getExternalStorageDirectory() + "/HiWanan";
     public static final String APP_TEMP = APP_DIR + "/temp";
     public static final String APP_IMAGE = APP_DIR + "/image";
-    public static final String APP_VOICE_DIR = Environment.getExternalStorageDirectory() + "/hiwanan_voice_audios";   //录音文件
+//    public static final String APP_VOICE_DIR = Environment.getExternalStorageDirectory() + "/hiwanan_voice_audios";   //录音文件
+    public static final String APP_VOICE_DIR = APP_DIR + "/voice";   //录音文件
+
+    /**
+     * Mob 分享组件
+     */
+    public static final String APP_KEY_MOB_SHARE = "1d14c6b3baf80";
+    public static final String APP_SECRET_MOB_SHARE = "0b8221a83e7df0bec794ca64b961605e";
+
+    public static final String APP_KEY_MOB_SMS = "1d1499cc9e258";
+    public static final String APP_SECRET_MOB_SMS = "1a199d9ece76d42e8b13bf1bb901d361";
+
+    public static final String APP_KEY_WX = "wxb2e17c893a5e9e77";
+    public static final String APP_SECRET_WX = "8170b19e36298bce0d60bf65b8d81813";
 
     /**
      * sharedPrf数据库名称

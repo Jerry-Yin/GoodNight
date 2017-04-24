@@ -23,6 +23,12 @@ import com.hdu.team.hiwanan.model.bmob.UserBmob;
 import com.hdu.team.hiwanan.network.BmobNetworkUtils;
 import com.hdu.team.hiwanan.util.ToastUtils;
 
+import java.util.HashMap;
+
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
+import cn.smssdk.gui.RegisterPage;
+
 /**
  * Created by JerryYin on 11/12/15.
  */
@@ -30,15 +36,18 @@ public class HiRegistActivity extends HiActivity {
 
     private static final String TAG = "HiRegistActivity";
 
-    /**View*/
-    private Button mBtnRegister;
+    /**
+     * View
+     */
+    private Button mBtnRegister, mBtnSms;
     private EditText mTxtUsrName, mTxtPwd, mTxtPwdCfm, mTxtEmail;
     private RadioButton mBoxMan, mBoxWoman, mBoxStudent, mBoxWorker;
 
     private AlertDialog mAlertDialog;
 
-    /** values*/
-
+    /**
+     * values
+     */
 
 
     @Override
@@ -53,6 +62,7 @@ public class HiRegistActivity extends HiActivity {
 
     private void initViews() {
         mBtnRegister = (Button) findViewById(R.id.btn_register);
+        mBtnSms = (Button) findViewById(R.id.btn_sms_code);
         mTxtUsrName = (EditText) findViewById(R.id.txt_account);
         mTxtPwd = (EditText) findViewById(R.id.txt_password);
         mTxtPwdCfm = (EditText) findViewById(R.id.txt_pwd_confirm);
@@ -62,17 +72,18 @@ public class HiRegistActivity extends HiActivity {
         mBoxStudent = (RadioButton) findViewById(R.id.btn_student);
         mBoxWorker = (RadioButton) findViewById(R.id.btn_worker);
         mBtnRegister.setOnClickListener(this);
+        mBtnSms.setOnClickListener(this);
     }
 
 
     private void initDatas() {
-        if (mAlertDialog == null){
+        if (mAlertDialog == null) {
             mAlertDialog = new AlertDialog.Builder(this).create();
         }
     }
 
     /**
-     *  逻辑检查
+     * 逻辑检查
      */
     private void checkUsr() {
         String usrName = mTxtUsrName.getText().toString().trim();
@@ -81,34 +92,34 @@ public class HiRegistActivity extends HiActivity {
         String email = mTxtEmail.getText().toString().trim();
         String sex = null;
         String group = null;
-        if (!TextUtils.isEmpty(usrName)){
-            if (!TextUtils.isEmpty(pwd) || (pwd.length()>6 && pwd.length()<15)){
-                if (!TextUtils.isEmpty(pwdCfm) && pwdCfm.equals(pwd)){
-                    if (mBoxMan.isChecked()){
+        if (!TextUtils.isEmpty(usrName)) {
+            if (!TextUtils.isEmpty(pwd) || (pwd.length() > 6 && pwd.length() < 15)) {
+                if (!TextUtils.isEmpty(pwdCfm) && pwdCfm.equals(pwd)) {
+                    if (mBoxMan.isChecked()) {
                         sex = getString(R.string.sex_man);
-                    }else if (mBoxWoman.isChecked()){
+                    } else if (mBoxWoman.isChecked()) {
                         sex = getString(R.string.sex_woman);
-                    }else {
+                    } else {
                         ToastUtils.showToast(this, getString(R.string.sex_not_nul), Toast.LENGTH_SHORT);
                     }
-                    if (mBoxStudent.isChecked()){
+                    if (mBoxStudent.isChecked()) {
                         group = getString(R.string.type_student);
-                    }else if (mBoxWorker.isChecked()){
+                    } else if (mBoxWorker.isChecked()) {
                         group = getString(R.string.type_worker);
-                    }else {
+                    } else {
                         ToastUtils.showToast(this, getString(R.string.group_not_nul), Toast.LENGTH_SHORT);
                     }
 
                     RegisterUsr(usrName, pwd, sex, email, group);
 
-                }else {
+                } else {
                     ToastUtils.showToast(this, getString(R.string.chk_pwd_confirm), Toast.LENGTH_SHORT);
                 }
 
-            }else {
+            } else {
                 ToastUtils.showToast(this, getString(R.string.chk_pwd), Toast.LENGTH_LONG);
             }
-        }else {
+        } else {
             ToastUtils.showToast(this, getString(R.string.usr_null), Toast.LENGTH_SHORT);
         }
 
@@ -116,6 +127,7 @@ public class HiRegistActivity extends HiActivity {
 
     /**
      * 注册用户信息
+     *
      * @param usrName
      * @param pwd
      * @param sex
@@ -132,16 +144,16 @@ public class HiRegistActivity extends HiActivity {
         user.setEmail(null);
         user.setSex(sex);
         user.setGroup(group);
-        if (sex.equals(getString(R.string.sex_man))){
-            if (group.equals(getString(R.string.type_student))){
+        if (sex.equals(getString(R.string.sex_man))) {
+            if (group.equals(getString(R.string.type_student))) {
                 user.setIcon(HiConfig.USER_ICON_M_S);
-            }else {
+            } else {
                 user.setIcon(HiConfig.USER_ICON_M_W);
             }
-        }else if(sex.equals(getString(R.string.sex_woman))){
-            if (group.equals(getString(R.string.type_student))){
+        } else if (sex.equals(getString(R.string.sex_woman))) {
+            if (group.equals(getString(R.string.type_student))) {
                 user.setIcon(HiConfig.USER_ICON_W_S);
-            }else {
+            } else {
                 user.setIcon(HiConfig.USER_ICON_W_W);
             }
         }
@@ -150,7 +162,7 @@ public class HiRegistActivity extends HiActivity {
         BmobNetworkUtils.signUp(user, new OnResponseListener() {
             @Override
             public void onSuccess(Object result) {
-                Log.d(TAG, "result = "+result);
+                Log.d(TAG, "result = " + result);
                 message.what = HiRequestCodes.REGIST_SUCCESS;
                 message.obj = result;
                 mHandler.sendMessage(message);
@@ -158,7 +170,7 @@ public class HiRegistActivity extends HiActivity {
 
             @Override
             public void onFailure(int errorCode, String error) {
-                Log.d(TAG, "code = "+errorCode+" error ="+error);
+                Log.d(TAG, "code = " + errorCode + " error =" + error);
                 message.what = HiRequestCodes.REGIST_FAIL;
                 message.obj = error;
                 mHandler.sendMessage(message);
@@ -167,7 +179,7 @@ public class HiRegistActivity extends HiActivity {
 
     }
 
-    public void backToLogin(String name, String password){
+    public void backToLogin(String name, String password) {
         Intent intent = new Intent(this, HiLoginActivity.class);
         intent.putExtra(HiConfig.KEY_USER_NAME, name);
         intent.putExtra(HiConfig.KEY_PASSWORD, password);
@@ -175,11 +187,11 @@ public class HiRegistActivity extends HiActivity {
         this.finish();
     }
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case HiRequestCodes.REGIST_SUCCESS:
                     mAlertDialog.dismiss();
                     ToastUtils.showToast(getApplicationContext(), getString(R.string.regist_success), Toast.LENGTH_LONG);
@@ -200,6 +212,7 @@ public class HiRegistActivity extends HiActivity {
 
     /**
      * 将组册成功的用户信息保存到本地数据库
+     *
      * @param name
      * @param password
      */
@@ -213,10 +226,43 @@ public class HiRegistActivity extends HiActivity {
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_register){
-            //TODO 注册用户，上传至服务器，保存至本地数据库，返回登录界面
-            //需要判断用户名和密码是否符合要求规格
-            checkUsr();
+        switch (v.getId()) {
+            case R.id.btn_register:
+                //TODO 注册用户，上传至服务器，保存至本地数据库，返回登录界面
+                //需要判断用户名和密码是否符合要求规格
+                checkUsr();
+                break;
+
+            case R.id.btn_sms_code:
+                smsRegister();
+                break;
         }
+    }
+
+    /**
+     * 获取短信验证码
+     */
+    private void smsRegister() {
+        //打开注册页面
+        RegisterPage registerPage = new RegisterPage();
+        registerPage.setRegisterCallback(new EventHandler() {
+            public void afterEvent(int event, int result, Object data) {
+                // 解析注册结果
+                if (result == SMSSDK.RESULT_COMPLETE) {
+                    @SuppressWarnings("unchecked")
+                    HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
+                    String country = (String) phoneMap.get("country");
+                    String phone = (String) phoneMap.get("phone");
+
+                    // 提交用户信息（此方法可以不调用）
+                    registerUser(country, phone);
+                }
+            }
+        });
+        registerPage.show(this);
+    }
+
+    private void registerUser(String country, String phone) {
+
     }
 }

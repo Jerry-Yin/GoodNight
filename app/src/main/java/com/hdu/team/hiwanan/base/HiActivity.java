@@ -15,6 +15,9 @@ import com.hdu.team.hiwanan.manager.SystemBarTintManager;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
+import cn.sharesdk.framework.ShareSDK;
+import cn.smssdk.SMSSDK;
+
 
 /**
  * Created by JerryYin on 11/3/15.
@@ -33,7 +36,8 @@ public abstract class HiActivity extends FragmentActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ShareSDK.initSDK(this);
+        SMSSDK.initSDK(this, HiConfig.APP_KEY_MOB_SMS, HiConfig.APP_SECRET_MOB_SMS);
         /**
          * 设置竖屏
          */

@@ -125,5 +125,6 @@
     <string name="user_demo">User Name</string>
     <string name="comma">:</string>
     <string name="write_comment">写评论</string>
+    <string name="text_sms_code">获取短信验证码</string>
 
 </resources>

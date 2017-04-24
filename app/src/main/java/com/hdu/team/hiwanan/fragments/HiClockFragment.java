@@ -30,11 +30,13 @@ import com.hdu.team.hiwanan.activity.HiTimePickerActivity;
 import com.hdu.team.hiwanan.broadcast.HiAlarmClockReceiver;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.database.HiGoodNightDB;
+import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.manager.HiAlarmTaskPoolManager;
 import com.hdu.team.hiwanan.model.HiAlarmTab;
 import com.hdu.team.hiwanan.model.HiAlarmTask;
 import com.hdu.team.hiwanan.service.HiScreenLockService;
 import com.hdu.team.hiwanan.util.HiLog;
+import com.hdu.team.hiwanan.util.OkHttpUtils;
 
 import java.util.Calendar;
 import java.util.List;
@@ -160,8 +162,22 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         mTimeListAdapter.notifyDataSetChanged();
         mSelf.startService(new Intent(mSelf, HiScreenLockService.class));
 
+        testHttpSerlet();
     }
 
+    private void testHttpSerlet() {
+        OkHttpUtils.OkHttpGet("http://112.74.198.75/WananConsole/HiHttpSerlet", new OnResponseListener() {
+            @Override
+            public void onSuccess(Object result) {
+                HiLog.d(TAG, result.toString());
+            }
+
+            @Override
+            public void onFailure(int errorCode, String error) {
+                HiLog.d(TAG, errorCode + error);
+            }
+        });
+    }
 
 
     @Override
