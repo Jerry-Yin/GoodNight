@@ -19,6 +19,7 @@ import com.hdu.team.hiwanan.base.HiActivity;
 import com.hdu.team.hiwanan.fragments.HiGoodNightFragment;
 import com.hdu.team.hiwanan.fragments.HiFindFragment;
 import com.hdu.team.hiwanan.fragments.HiClockFragment;
+import com.hdu.team.hiwanan.fragments.HiGoodNightFragment2;
 import com.hdu.team.hiwanan.fragments.HiSettingFragment;
 import com.jauker.widget.BadgeView;
 import com.mob.commons.SMSSDK;
@@ -52,7 +53,7 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
      */
     private FragmentManager mFragmentManager;
     private HiClockFragment mHomePageFragment;
-    private HiGoodNightFragment mGoodNightFragment;
+    private HiGoodNightFragment2 mGoodNightFragment;
     private HiFindFragment mSleepFragment;
     private HiSettingFragment mSettingFragment;
 
@@ -186,9 +187,9 @@ public class HiMainActivity extends HiActivity implements View.OnClickListener {
         return mHomePageFragment;
     }
 
-    public HiGoodNightFragment getGoodNightFragment() {
+    public HiGoodNightFragment2 getGoodNightFragment() {
         if (mGoodNightFragment == null) {
-            mGoodNightFragment = new HiGoodNightFragment();
+            mGoodNightFragment = new HiGoodNightFragment2();
         }
         return mGoodNightFragment;
     }

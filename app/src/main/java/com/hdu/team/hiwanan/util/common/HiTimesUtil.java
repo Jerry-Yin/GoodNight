@@ -29,6 +29,13 @@ public class HiTimesUtil {
         return str;
     }
 
+    public static String getCurDateTimeNoSpace() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HH:mm:ss");
+        Date curDate = new Date(System.currentTimeMillis());
+        String str = formatter.format(curDate);
+        return str;
+    }
+
     /**
      * 自动补0
      *

@@ -110,7 +110,6 @@ public class HiUploadAudioUtil {
                                 listener.onFailure(responseCode, null);
                             }
                         }
-
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -121,5 +120,4 @@ public class HiUploadAudioUtil {
             }
         }).start();
     }
-
 }

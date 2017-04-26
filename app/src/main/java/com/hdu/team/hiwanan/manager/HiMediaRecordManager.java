@@ -109,6 +109,7 @@ public class HiMediaRecordManager {
     private String generateFileName(String date) {
 //        return UUID.randomUUID().toString() + ".amr";     //eg: 520c0f04-59e0-4e39-a7a5-335c09db3a74.amr
 //        return date + "|"+ time + "|"+".amr";
+//        Form: [userid.username.datetime.arm]
         return date + "|"+".amr";
     }
 
