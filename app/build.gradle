@@ -79,5 +79,8 @@ dependencies {
     compile name:'SMSSDKGUI-2.1.4', ext:'aar'
 
 
+//    music view
+    compile 'com.github.iammert:MusicPlayerView:e3b937c729'
+
 }
 

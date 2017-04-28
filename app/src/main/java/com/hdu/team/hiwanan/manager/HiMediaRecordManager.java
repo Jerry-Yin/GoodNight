@@ -15,7 +15,7 @@ public class HiMediaRecordManager {
 
     private MediaRecorder mediaRecorder;
     private String mDir;    //文件夹名字，用于保存录音文件
-    private String mCurFilePath;    //文件夹路径     (需要回传) -->Button -->Activity
+    private String mCurFilePath;    //文件夹路径     (需要回传) -->Button -->d
 
     private boolean isPrepared = false;
 
@@ -60,7 +60,7 @@ public class HiMediaRecordManager {
     }
 
 
-    public void prepareAudio(String date) {
+    public void prepareAudio(String date, int userId, String time) {
         //创建文件夹
         try {
             isPrepared = false;
@@ -70,7 +70,7 @@ public class HiMediaRecordManager {
                 dir.mkdirs();
 
             //根据文件夹创建文件
-            String fileName = generateFileName(date);
+            String fileName = generateFileName(date, userId, time);
             File file = new File(dir, fileName);
 
             mCurFilePath = file.getAbsolutePath();
@@ -89,7 +89,7 @@ public class HiMediaRecordManager {
             //准备阶段 结束
             isPrepared = true;
             //TODO 可以开始录音
-            if (mAudioStateListener != null){
+            if (mAudioStateListener != null) {
                 mAudioStateListener.OnDenePrepared();
             }
 
@@ -99,18 +99,21 @@ public class HiMediaRecordManager {
 
     }
 
+
     /**
      * old 随即生成文件的名称
      * new 以 “日期＋时长” 来命文件名
      * 音频的后缀名为 .amr
-     * @param date 日期
-     * @param time 时长
+     * @param date
+     * @param userId
+     * @param time
+     * @return
      */
-    private String generateFileName(String date) {
+    private String generateFileName(String date, int userId, String time) {
 //        return UUID.randomUUID().toString() + ".amr";     //eg: 520c0f04-59e0-4e39-a7a5-335c09db3a74.amr
 //        return date + "|"+ time + "|"+".amr";
-//        Form: [userid.username.datetime.arm]
-        return date + "|"+".amr";
+//        Form: [date.userid.time.amr]
+        return date + "." + userId + "." + time + ".amr";
     }
 
     /**
@@ -120,7 +123,7 @@ public class HiMediaRecordManager {
      */
     public int getVoiceLevel(int maxLevle) {
         try {
-            if(isPrepared){
+            if (isPrepared) {
                 return maxLevle * mediaRecorder.getMaxAmplitude() / 32768 + 1;
             }
         } catch (Exception e) {
@@ -138,7 +141,7 @@ public class HiMediaRecordManager {
     public void cancel() {
         release();
         //删除文件
-        if (mCurFilePath != null){
+        if (mCurFilePath != null) {
             File file = new File(mCurFilePath);
             file.delete();
             mCurFilePath = null;

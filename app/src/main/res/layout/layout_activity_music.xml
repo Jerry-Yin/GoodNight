@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+
+    <include
+        android:id="@+id/title_bar"
+        layout="@layout/layout_title_bar" />
+
+    <LinearLayout
+        android:id="@+id/music_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@color/black_dark"
+        android:transitionName="@string/transition">
+
+        <co.mobiwise.library.MusicPlayerView
+            android:id="@+id/music_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            app:buttonColor="@color/btn_out_color1"
+            app:cover="@drawable/img_michal_jackson"
+            app:progressEmptyColor="@color/test_color"
+            app:progressLoadedColor="@color/btn_out_color"
+            app:textColor="#80FFFFFF"
+            app:textSize="14sp"
+            android:transitionName="@string/transition1"/>
+
+    </LinearLayout>
+
+</LinearLayout>

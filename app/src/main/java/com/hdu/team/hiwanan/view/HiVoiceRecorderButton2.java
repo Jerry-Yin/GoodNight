@@ -1,6 +1,7 @@
 package com.hdu.team.hiwanan.view;
 
 import android.content.Context;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
@@ -74,7 +75,7 @@ public class HiVoiceRecorderButton2 extends FloatingActionButton implements HiMe
             @Override
             public boolean onLongClick(View v) {
                 mReady = true;
-                mHiMediaRecordManager.prepareAudio(HiTimesUtil.getCurDateTime());
+                mHiMediaRecordManager.prepareAudio(HiTimesUtil.getCurDate(), 2, HiTimesUtil.getCurTime()) ;
                 return false;
             }
         });
@@ -82,6 +83,13 @@ public class HiVoiceRecorderButton2 extends FloatingActionButton implements HiMe
 
     private void initMediaRecorder() {
 //        String dir = Environment.getExternalStorageDirectory() + "/hiwanan_voice_audios";
+        String dir = "";
+        if (Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+            //has SD_Card
+            dir = HiConfig.APP_VOICE_DIR;
+        }else {
+            dir = Environment.getDataDirectory().toString();
+        }
         mHiMediaRecordManager = HiMediaRecordManager.getInstance(HiConfig.APP_VOICE_DIR);
         mHiMediaRecordManager.setOnAudioStateListener(this);        //录音准备完毕回调
     }

@@ -10,59 +10,73 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
+import android.widget.ScrollView;
 
 import com.hdu.team.hiwanan.R;
-import com.hdu.team.hiwanan.activity.HiCollectionActivity;
-import com.hdu.team.hiwanan.activity.HiWanAnActivity;
+import com.hdu.team.hiwanan.activity.HiMusicPlayerActivity;
+import com.hdu.team.hiwanan.listener.OnPlayingListener;
 import com.hdu.team.hiwanan.listener.OnResponseListener;
-import com.hdu.team.hiwanan.manager.HiDialogManager;
 import com.hdu.team.hiwanan.manager.HiMediaPlayerManager;
 import com.hdu.team.hiwanan.model.RecorderVoice;
 import com.hdu.team.hiwanan.util.HiLog;
 import com.hdu.team.hiwanan.util.HiToast;
 import com.hdu.team.hiwanan.util.HiUploadAudioUtil;
 import com.hdu.team.hiwanan.util.common.HiTimesUtil;
+import com.hdu.team.hiwanan.view.HiCountdownLinearLayout;
 import com.hdu.team.hiwanan.view.HiVoiceRecorderButton2;
 
 import java.io.File;
 
+import co.mobiwise.library.MusicPlayerView;
+
 /**
  * Created by JerryYin on 11/3/15.
  */
-public class HiGoodNightFragment2 extends Fragment implements View.OnClickListener, HiVoiceRecorderButton2.OnFinishRecorderListener {
+public class HiGoodNightFragment2 extends Fragment implements View.OnClickListener, HiVoiceRecorderButton2.OnFinishRecorderListener, View.OnTouchListener {
 
-    /**
-     * Values
-     */
-    private static final String TAG = "HiGoodNightFragment";
 
     /**
      * Constants
      */
-    private View mContentView;
-    private Activity mSelf;
+    private static final String TAG = "HiGoodNightFragment";
+
 
     /**
      * Views
      */
+    private View mContentView;
+    private Activity mSelf;
     private HiVoiceRecorderButton2 mBtnSpeak;
     //    private RadioButton mbtnCollection;
 //    private RadioButton mbtnHelpSleep;
     private LinearLayout mLayoutExpend;
     private ImageView mImgExpend;
 
+    private LinearLayout mMusicLayout;
+    private ScrollView mScrollView;
+    private HiCountdownLinearLayout mLayoutCountdown;
+    private MusicPlayerView mMusicView;
+
+
+    /**
+     * Values
+     */
     private float mDensity;
     private int mHiddenViewMeasuredHeight;  //ExpendLayout 的高度
+    private HiMediaPlayerManager mPlayerManager;
 
 
     @Nullable
@@ -84,20 +98,66 @@ public class HiGoodNightFragment2 extends Fragment implements View.OnClickListen
 
     public void initViews() {
         mBtnSpeak = (HiVoiceRecorderButton2) mContentView.findViewById(R.id.btn_speak);
+        mScrollView = (ScrollView) mContentView.findViewById(R.id.scroll_layout);
+        mLayoutCountdown = (HiCountdownLinearLayout) mContentView.findViewById(R.id.layout_countdown);
         mLayoutExpend = (LinearLayout) mContentView.findViewById(R.id.layout_expend);
         mImgExpend = (ImageView) mContentView.findViewById(R.id.img_expend);
         mDensity = mContentView.getResources().getDisplayMetrics().density;
         mHiddenViewMeasuredHeight = (int) (mDensity * 120 + 0.5);
         Log.d(TAG, mHiddenViewMeasuredHeight + "");
+        mMusicLayout = (LinearLayout) mContentView.findViewById(R.id.music_layout);
+        mMusicView = (MusicPlayerView) mContentView.findViewById(R.id.music_view);
 
+        mMusicView.setOnClickListener(this);
+        mLayoutCountdown.setOnTouchListener(this);
+        mMusicLayout.setOnClickListener(this);
         mImgExpend.setOnClickListener(this);
         mBtnSpeak.setOnClickListener(this);
         mBtnSpeak.setAudioFinishRecorderListener(this);
     }
 
+
     public void initData() {
+//        mPlayerManager = HiMediaPlayerManager.getMediaPlayer(mSelf);
+//        HiLog.d(TAG, mPlayerManager.toString());
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initMusic();
+    }
 
+    private void initMusic() {
+//        mMusicView.setCoverURL("https://upload.wikimedia.org/wikipedia/en/b/b3/MichaelsNumberOnes.JPG");
+        if (mPlayerManager == null)
+            mPlayerManager = HiMediaPlayerManager.getMediaPlayer(mSelf);
+        HiLog.d(TAG, mPlayerManager.toString());
+        HiLog.d(TAG, "isPlaying: " + mPlayerManager.isPlaying());
+        HiLog.d(TAG, "isPaused: " + mPlayerManager.isPaused());
+        if (mPlayerManager.isPlaying()) {
+            mMusicView.setMax(mPlayerManager.getMaxProgress());
+            mMusicView.setProgress(mPlayerManager.getProgress());
+            mMusicView.start();
+            mPlayerManager.setOnPlayingListener(new OnPlayingListener() {
+                @Override
+                public void onProgress(int progress) {
+//                    mMusicView.setProgress(mPlayerManager.getProgress());
+                }
+
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    if (!mMusicView.isRotating()) {
+                        mMusicView.stop();
+                    }
+                }
+            });
+        } else if (mPlayerManager.isPaused()) {
+            //paused
+            mMusicView.setMax(mPlayerManager.getMaxProgress());
+            mMusicView.setProgress(mPlayerManager.getProgress());
+            mMusicView.stop();
+        }
     }
 
     @Override
@@ -117,8 +177,55 @@ public class HiGoodNightFragment2 extends Fragment implements View.OnClickListen
                     animationIvClose();
                 }
                 break;
+
+            case R.id.music_layout:
+                //场景动画2  多个view 分别绑定对应的 transitionName
+                Intent intent4 = new Intent(mSelf, HiMusicPlayerActivity.class);
+                Pair<View, String> music_layout = Pair.create(((View) mMusicLayout), getString(R.string.transition));
+                Pair<View, String> music_view = Pair.create(((View) mMusicView), getString(R.string.transition1));
+
+                ActivityOptionsCompat optionsCompat4 = ActivityOptionsCompat.makeSceneTransitionAnimation(mSelf, music_layout, music_view);
+                ActivityCompat.startActivity(mSelf, intent4, optionsCompat4.toBundle());
+                break;
+
+            case R.id.music_view:
+                if (mPlayerManager.isPaused()) {
+                    resumeMusic();
+                } else {
+                    playMusic();
+                }
+                break;
             default:
                 break;
+        }
+    }
+
+    private void resumeMusic() {
+        mPlayerManager.resume();
+        mMusicView.start();
+    }
+
+
+    private void playMusic() {
+        if (!mMusicView.isRotating()) {
+            mPlayerManager.playSound(null, R.raw.jaychou1, new OnPlayingListener() {
+                @Override
+                public void onProgress(int progress) {
+//                    mMusicView.setProgress(progress);
+                }
+
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    if (!mMusicView.isRotating()) {
+                        mMusicView.stop();
+                    }
+                }
+            });
+            mMusicView.setMax(mPlayerManager.getMaxProgress());
+            mMusicView.start();
+        } else {
+            mPlayerManager.pause();
+            mMusicView.stop();
         }
     }
 
@@ -197,14 +304,23 @@ public class HiGoodNightFragment2 extends Fragment implements View.OnClickListen
                 .setItems(new String[]{"点我试听哦"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
-                        HiMediaPlayerManager.playSound(filePath, new MediaPlayer.OnCompletionListener() {
+                        mPlayerManager.playSound(filePath, 0, new OnPlayingListener() {
+                            @Override
+                            public void onProgress(int progress) {
+
+                            }
+
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-                                //TODO 播放完成后调用
-//                mAnimView.setBackgroundResource(R.drawable.img_anim);
                                 builder.show();
                             }
                         });
+//                        try {
+//                            dialog.wait();
+//
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
                     }
                 })
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -212,15 +328,17 @@ public class HiGoodNightFragment2 extends Fragment implements View.OnClickListen
                     public void onClick(DialogInterface dialog, int which) {
                         File audio = new File(filePath);
                         if (audio.exists()) {
-                            HiUploadAudioUtil.upLoadAudio(audio, "", new OnResponseListener() {
+                            HiUploadAudioUtil.uploadVoice("http://192.168.2.101:8080/WananBackend/voiceupload", audio, new OnResponseListener() {
                                 @Override
                                 public void onSuccess(Object result) {
-                                    HiToast.showToast(mSelf, result.toString());
+//                                    HiToast.showToast(mSelf, result.toString());
+                                    Log.d(TAG, result.toString());
                                 }
 
                                 @Override
                                 public void onFailure(int errorCode, String error) {
-                                    HiToast.showToast(mSelf, errorCode + error);
+//                                    HiToast.showToast(mSelf, errorCode + error);
+                                    Log.d(TAG, errorCode + error);
                                 }
                             });
                         } else {
@@ -236,5 +354,64 @@ public class HiGoodNightFragment2 extends Fragment implements View.OnClickListen
                 })
                 .create()
                 .show();
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (v.getId()) {
+            case R.id.layout_countdown:
+                float startX = 0;
+                float startY = 0;
+                float endX = 0;
+                float endY = 0;
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+//                        mScrollView.requestDisallowInterceptTouchEvent(false);
+                        HiLog.d(TAG, "滑down "+ (endY-startY));
+                        startX = event.getX();
+                        startY = event.getY();
+
+                    case MotionEvent.ACTION_MOVE:
+                        HiLog.d(TAG, "滑move "+ (endY-startY));
+//                        mScrollView.requestDisallowInterceptTouchEvent(false);
+                        endX = event.getX();
+                        endY = event.getY();
+                        if (endY - startY > 0) {
+                            //下滑
+// && Math.abs(endY - startY) > 5f
+//                            mScrollView.requestDisallowInterceptTouchEvent(false);
+                            HiLog.d(TAG, "下滑 "+ (endY-startY));
+                            if (mLayoutExpend.getVisibility() == View.GONE) {
+                                animateOpen(mLayoutExpend);
+                                animationIvOpen();
+                            } else {
+                                animateClose(mLayoutExpend);
+                                animationIvClose();
+                            }
+                        } else if (endY - startY < 0 ) {
+                            //上滑
+//                            mScrollView.requestDisallowInterceptTouchEvent(false);
+                            HiLog.d(TAG, "上滑 "+ (endY-startY));
+                            if (mLayoutExpend.getVisibility() == View.GONE) {
+                                animateOpen(mLayoutExpend);
+                                animationIvOpen();
+                            } else {
+                                animateClose(mLayoutExpend);
+                                animationIvClose();
+                            }
+                        }
+
+                    case MotionEvent.ACTION_UP:
+                        HiLog.d(TAG, "滑up 1 "+ (startY));
+                        HiLog.d(TAG, "滑up 2 "+ endY);
+                        HiLog.d(TAG, "滑up 3 "+ event.getY());
+                        mScrollView.requestDisallowInterceptTouchEvent(false);
+
+
+                }
+
+                break;
+        }
+        return false;
     }
 }

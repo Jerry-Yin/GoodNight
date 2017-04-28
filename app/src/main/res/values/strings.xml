@@ -90,8 +90,9 @@
     </string>
 
     <string name="transition">transition</string>
+    <string name="transition1">transition_music</string>
     <string name="transition_img">transition_img</string>
-
+    <string name="transition_name">transition_name</string>
 
     <!--日历-->
     <string name="month_old">八月十二 </string>

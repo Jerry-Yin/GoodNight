@@ -24,6 +24,7 @@ import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.base.HiActivity;
 import com.hdu.team.hiwanan.constant.HiConfig;
 import com.hdu.team.hiwanan.constant.HiRequestCodes;
+import com.hdu.team.hiwanan.listener.OnPlayingListener;
 import com.hdu.team.hiwanan.listener.OnProgressListener;
 import com.hdu.team.hiwanan.manager.HiMediaPlayerManager;
 import com.hdu.team.hiwanan.model.RecorderVoice;
@@ -63,6 +64,7 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
     private List<RecorderVoice> mDataLists = new ArrayList<>();
     private View mAnimView;
 
+    private HiMediaPlayerManager mMediaPlayerManager;
     private ArrayList<Boolean> mCancelAble = new ArrayList<>();
 
     @Override
@@ -90,19 +92,19 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
                 RecorderVoice recorderVoice = new RecorderVoice(filePath, times, HiTimesUtil.getCurDateTime());
                 mDataLists.add(recorderVoice);
                 mAdapter.notifyDataSetChanged();
-                int position = mDataLists.size()-1;
+                int position = mDataLists.size() - 1;
                 mlistVoice.setSelection(position);
 
                 //TODO 录音完毕 发送音频到服务器； 启动撤回倒计时线程，
-                sendVoiceToServer(mDataLists.size()-1);
+                sendVoiceToServer(mDataLists.size() - 1);
                 mCancelAble.add(true);
-                HiTimesUtil.startCountDown(times*2, mHandler, position);
+                HiTimesUtil.startCountDown(times * 2, mHandler, position);
             }
         });
         mlistVoice.setOnItemClickListener(this);
         mlistVoice.setOnItemLongClickListener(this);
 
-
+        mMediaPlayerManager = HiMediaPlayerManager.getMediaPlayer(this);
     }
 
     @Override
@@ -135,17 +137,20 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
         animationDrawable.start();
 
         //TODO 播放音频
-        HiMediaPlayerManager.playSound(mDataLists.get(position).filePath, new MediaPlayer.OnCompletionListener() {
+        mMediaPlayerManager.playSound(mDataLists.get(position).filePath, 0, new OnPlayingListener() {
+            @Override
+            public void onProgress(int progress) {
+
+            }
+
             @Override
             public void onCompletion(MediaPlayer mp) {
-                //TODO 播放完成后调用
                 mAnimView.setBackgroundResource(R.drawable.img_anim);
             }
         });
     }
 
     /**
-     *
      * @param parent
      * @param view
      * @param position
@@ -154,11 +159,11 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
      */
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-        if (mCancelAble.get(position)){
+        if (mCancelAble.get(position)) {
             mBuilder.setItems(new CharSequence[]{"复制", "撤回", "删除", "更多..."}, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    switch (which){
+                    switch (which) {
                         case 0:
 
                             break;
@@ -178,11 +183,11 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
                     }
                 }
             }).create().show();
-        }else {
+        } else {
             mBuilder.setItems(new CharSequence[]{"复制", "删除", "更多..."}, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    switch (which){
+                    switch (which) {
                         case 0:
 
                             break;
@@ -203,23 +208,23 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
         return true;
     }
 
-    public void sendVoiceToServer(int position){
+    public void sendVoiceToServer(int position) {
         BmobNetworkUtils.uploadFile(mDataLists.get(position).filePath, new OnProgressListener() {
             @Override
             public void onSuccess(Object result) {
-                Log.d(TAG, "result = "+result.toString());
+                Log.d(TAG, "result = " + result.toString());
                 // result = http://bmob-cdn-4793.b0.upaiyun.com/2016/07/19/e1d1a9b35a3848a4964ec9af51fa264b.amr
 
             }
 
             @Override
             public void onFailure(int errorCode, String error) {
-                Log.d(TAG, "error = "+errorCode+ " " +error.toString());
+                Log.d(TAG, "error = " + errorCode + " " + error.toString());
             }
 
             @Override
             public void onProgress(Integer progress) {
-                Log.d(TAG, "progress = "+progress);
+                Log.d(TAG, "progress = " + progress);
             }
         });
     }
@@ -278,14 +283,14 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case HiRequestCodes.COUNT_DOWN:
                     //倒计时
-                    Log.d(TAG, "倒计时："+msg.obj + " s");
-                    Log.d(TAG, "mCancelAble.get(position) = "+mCancelAble.get(msg.arg1));
-                    if (Float.valueOf(msg.obj.toString()) <= 0){
+                    Log.d(TAG, "倒计时：" + msg.obj + " s");
+                    Log.d(TAG, "mCancelAble.get(position) = " + mCancelAble.get(msg.arg1));
+                    if (Float.valueOf(msg.obj.toString()) <= 0) {
                         mCancelAble.set(msg.arg1, false);
-                        Log.d(TAG, "mCancelAble.get(position) done = "+mCancelAble.get(msg.arg1));
+                        Log.d(TAG, "mCancelAble.get(position) done = " + mCancelAble.get(msg.arg1));
                     }
                     break;
             }
@@ -298,20 +303,20 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
         mCancelAble.clear();
         mDataLists.clear();
         mAdapter.notifyDataSetChanged();
-        for (File file : localList){
-            Log.d(TAG, "path = "+file.getPath());
-            Log.d(TAG, "abPath = "+file.getAbsolutePath());
-            Log.d(TAG, "file = "+file.getName());
+        for (File file : localList) {
+            Log.d(TAG, "path = " + file.getPath());
+            Log.d(TAG, "abPath = " + file.getAbsolutePath());
+            Log.d(TAG, "file = " + file.getName());
             String[] names = file.getName().split("\\|");
-            for (String n : names){
+            for (String n : names) {
                 //name : date.time.amr
-                Log.d(TAG, "n = "+n);
+                Log.d(TAG, "n = " + n);
             }
 
             long duration = 0;
             try {
                 duration = AmrFileUtil.getAmrDuration(file);
-                Log.d(TAG, "duration = "+ duration);
+                Log.d(TAG, "duration = " + duration);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -328,13 +333,13 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
     @Override
     protected void onPause() {
         super.onPause();
-        HiMediaPlayerManager.pause();
+        mMediaPlayerManager.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        HiMediaPlayerManager.resume();
+        mMediaPlayerManager.resume();
 
         reloadLocalVoice();
     }
@@ -348,6 +353,6 @@ public class HiWanAnActivity extends HiActivity implements View.OnClickListener,
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        HiMediaPlayerManager.release();
+        mMediaPlayerManager.release();
     }
 }

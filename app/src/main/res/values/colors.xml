@@ -34,6 +34,7 @@
     <color name="black">#616161</color>
     <color name="black_dark">#323232</color>
     <color name="black_little">#E0E0E0</color>
+    <color name="blue1">#75BAF7</color>
 
     <drawable name="main_button_checked_bg">#BDBDBD</drawable>
     <drawable name="radio_btn_pressed_bg">#BDBDBD</drawable>

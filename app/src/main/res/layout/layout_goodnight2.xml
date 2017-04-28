@@ -5,149 +5,180 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scroll_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/test_color"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_count_down"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_margin="5dp"
-                android:gravity="center"
-                android:text="@string/count_down"
-                android:textColor="@color/accent_color"
-                android:textSize="20sp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical">
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/card1"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_toLeftOf="@+id/sig1"
-                    app:cardBackgroundColor="@color/btn_out_color1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="10dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="02"
-                        android:textSize="30sp" />
-                </android.support.v7.widget.CardView>
-
-                <TextView
-                    android:id="@+id/sig1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
-                    android:layout_toLeftOf="@+id/card2"
-                    android:gravity="center_vertical"
-                    android:text=":"
-                    android:textSize="40sp" />
-
-                <TextView
-                    android:id="@+id/sig2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
-                    android:layout_toRightOf="@+id/card2"
-                    android:gravity="center_vertical"
-                    android:text=":"
-                    android:textSize="40sp" />
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/card2"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_centerInParent="true"
-                    android:layout_margin="5dp"
-                    app:cardBackgroundColor="@color/btn_out_color1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="10dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="34"
-                        android:textSize="30sp" />
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/card3"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
-                    android:layout_toRightOf="@+id/sig2"
-                    app:cardBackgroundColor="@color/btn_out_color1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="10dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="34"
-                        android:textSize="30sp" />
-                </android.support.v7.widget.CardView>
-            </RelativeLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <LinearLayout
-                android:id="@+id/layout_expend"
                 android:layout_width="match_parent"
-                android:layout_height="120dip"
-                android:background="@color/logo"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:orientation="vertical">
+
+                <com.hdu.team.hiwanan.view.HiCountdownLinearLayout
+                    android:id="@+id/layout_countdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_count_down"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:text="@string/count_down"
+                        android:textColor="@color/blue"
+                        android:textSize="20sp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/card1"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_toLeftOf="@+id/sig1"
+                            app:cardBackgroundColor="@color/blue1"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="10dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="02"
+                                android:textColor="@color/white"
+                                android:textSize="30sp" />
+                        </android.support.v7.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/sig1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:layout_margin="5dp"
+                            android:layout_toLeftOf="@+id/card2"
+                            android:gravity="center_vertical"
+                            android:text=":"
+                            android:textColor="@color/blue1"
+                            android:textSize="40sp" />
+
+                        <TextView
+                            android:id="@+id/sig2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:layout_margin="5dp"
+                            android:layout_toRightOf="@+id/card2"
+                            android:gravity="center_vertical"
+                            android:text=":"
+                            android:textColor="@color/blue1"
+                            android:textSize="40sp" />
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/card2"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_centerInParent="true"
+                            android:layout_margin="5dp"
+                            app:cardBackgroundColor="@color/blue1"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="10dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="34"
+                                android:textColor="@color/white"
+                                android:textSize="30sp" />
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/card3"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="5dp"
+                            android:layout_toRightOf="@+id/sig2"
+                            app:cardBackgroundColor="@color/blue1"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="10dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="34"
+                                android:textColor="@color/white"
+                                android:textSize="30sp" />
+                        </android.support.v7.widget.CardView>
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_expend"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dip"
+                        android:background="@color/blue1"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/img_expend"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:src="@drawable/ic_expand_more_black_24dp" />
+
+                </com.hdu.team.hiwanan.view.HiCountdownLinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/music_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/black_dark"
+                    android:gravity="center"
+                    android:transitionName="@string/transition">
+
+                    <co.mobiwise.library.MusicPlayerView
+                        android:id="@+id/music_view"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        app:buttonColor="@color/btn_out_color1"
+                        app:cover="@drawable/img_michal_jackson"
+                        app:progressEmptyColor="@color/test_color"
+                        app:progressLoadedColor="@color/btn_out_color"
+                        app:textColor="#80FFFFFF"
+                        app:textSize="14sp"
+                        android:transitionName="@string/transition1"/>
+                </LinearLayout>
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/img_expend"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                android:src="@drawable/ssdk_oks_classic_alipay"/>
 
+            <com.hdu.team.hiwanan.view.HiVoiceRecorderButton2
+                android:id="@+id/btn_speak"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="bottom|center"
+                android:src="@drawable/img_speak"
+                app:backgroundTint="@color/blue1" />
         </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
-
-        <com.hdu.team.hiwanan.view.HiVoiceRecorderButton2
-            android:id="@+id/btn_speak"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:src="@drawable/img_speak"
-            app:backgroundTint="@color/green_2" />
-    </RelativeLayout>
-
+    </ScrollView>
 
 </LinearLayout>

@@ -88,6 +88,9 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.HiTimePickerActivity" />
 
+        <activity android:name=".activity.HiMusicPlayerActivity"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.HiWanAnActivity"
             android:screenOrientation="portrait" />

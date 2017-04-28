@@ -14,15 +14,17 @@
             layout="@layout/layout_title_bar" />
     </RelativeLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_below="@+id/title_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/frgment_root"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@color/content_color"
             android:orientation="vertical">
         </LinearLayout>
@@ -33,7 +35,7 @@
             android:layout_gravity="bottom">
             <include layout="@layout/main_button"/>
         </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
 
 
 
