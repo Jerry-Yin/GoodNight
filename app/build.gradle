@@ -82,5 +82,9 @@ dependencies {
 //    music view
     compile 'com.github.iammert:MusicPlayerView:e3b937c729'
 
+    //hellocharts-adroid
+    compile 'com.github.lecho:hellocharts-android:v1.5.8'
+//    compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
+
 }
 

@@ -159,7 +159,7 @@
                         android:layout_width="250dp"
                         android:layout_height="250dp"
                         app:buttonColor="@color/btn_out_color1"
-                        app:cover="@drawable/img_michal_jackson"
+                        app:cover="@drawable/img_jaychou1"
                         app:progressEmptyColor="@color/test_color"
                         app:progressLoadedColor="@color/btn_out_color"
                         app:textColor="#80FFFFFF"

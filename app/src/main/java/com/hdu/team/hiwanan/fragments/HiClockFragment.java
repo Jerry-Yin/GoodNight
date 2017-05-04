@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -29,17 +31,34 @@ import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiTimePickerActivity;
 import com.hdu.team.hiwanan.broadcast.HiAlarmClockReceiver;
 import com.hdu.team.hiwanan.constant.HiConfig;
+import com.hdu.team.hiwanan.constant.HiResponseCodes;
 import com.hdu.team.hiwanan.database.HiGoodNightDB;
 import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.manager.HiAlarmTaskPoolManager;
 import com.hdu.team.hiwanan.model.HiAlarmTab;
 import com.hdu.team.hiwanan.model.HiAlarmTask;
+import com.hdu.team.hiwanan.model.HiMaps;
+import com.hdu.team.hiwanan.model.HiRespSleepTime;
 import com.hdu.team.hiwanan.service.HiScreenLockService;
 import com.hdu.team.hiwanan.util.HiLog;
+import com.hdu.team.hiwanan.util.HiToast;
 import com.hdu.team.hiwanan.util.OkHttpUtils;
+import com.hdu.team.hiwanan.util.common.GsonUtils;
+import com.hdu.team.hiwanan.util.common.HiTimesUtil;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.ColumnChartData;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.Viewport;
+import lecho.lib.hellocharts.view.ColumnChartView;
+import lecho.lib.hellocharts.view.LineChartView;
 
 /**
  * Created by JerryYin on 11/3/15.
@@ -66,6 +85,10 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
     private ListView mListView;
     private FloatingActionButton mbtnAddClock;
 
+    private LineChartView mLineChartView;
+    private ColumnChartView mColumnChartView;
+
+
     /**
      * Values
      */
@@ -83,6 +106,20 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         return mSelf;
     }
 
+
+    private LineChartData mLineChartData;       //折线图数据
+    private List<AxisValue> mAxisValuesX = new ArrayList<>();    //X坐标值
+    private List<AxisValue> mAxisValuesY = new ArrayList<>();    //X坐标值
+    private List<Line> mLines = new ArrayList<Line>();   //
+    private Line mLineStandard; //设定睡眠时间 线
+    private Line mLineReal;     //实际睡眠时间 线
+    private List<PointValue> mPointValuesStandard = new ArrayList<PointValue>();  //设定睡眠时间数据 点
+    private List<PointValue> mPointValuesReal = new ArrayList<PointValue>();  //实际睡眠时间数据 点
+
+
+    private ColumnChartData mColumnChartData;   //柱状图数据
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,37 +135,24 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
             mGoodNightDB = HiGoodNightDB.getInstance(mSelf);
             mAlarmTaskPoolManager = HiAlarmTaskPoolManager.getInstance();
             // first time using check.
-            if (isFirstLoadCheck()) {
-                //if it is the first time user open this app, create 3 default alarm tab items.
-                //int id, int icon, String category, String time, boolean on, int musicId)
-                HiAlarmTab tab1 = new HiAlarmTab(0, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_READY, "10:00", false, R.raw.voice);
-                HiAlarmTab tab2 = new HiAlarmTab(1, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_SLEEP, "10:30", false, R.raw.voice);
-                HiAlarmTab tab3 = new HiAlarmTab(2, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_GETUP, "08:00", false, R.raw.voice);
-
-                mGoodNightDB.saveAlarmTab(tab1);
-                mGoodNightDB.saveAlarmTab(tab2);
-                mGoodNightDB.saveAlarmTab(tab3);
-
-                mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab1.getId(), tab1.getMusicId()));
-                mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab2.getId(), tab1.getMusicId()));
-                mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab3.getId(), tab1.getMusicId()));
-            }
-
+            firstLoad();
             setupViews();
+            initData();
         }
         return mContentView;
     }
 
+
     /**
-     * @author Kaikai,Fu
-     * to check if the user is the first time to open this app.
      * @return
+     * @author Kaikai, Fu
+     * to check if the user is the first time to open this app.
      */
-    private boolean isFirstLoadCheck(){
+    private boolean isFirstLoad() {
         mPreferences = mSelf.getSharedPreferences(HiConfig.HI_PREFERENCE_NAME, Context.MODE_PRIVATE);
         boolean firstLoad = mPreferences.getBoolean(HiConfig.FIRST_LOAD, true);
 
-        if(firstLoad) {
+        if (firstLoad) {
             SharedPreferences.Editor editor = mPreferences.edit();
             editor.putBoolean(HiConfig.FIRST_LOAD, false);
             editor.commit();
@@ -137,20 +161,190 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         return firstLoad;
     }
 
+    private void firstLoad() {
+        if (isFirstLoad()) {
+            //if it is the first time user open this app, create 3 default alarm tab items.
+            //int id, int icon, String category, String time, boolean on, int musicId)
+            HiAlarmTab tab1 = new HiAlarmTab(0, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_READY, "10:00", false, R.raw.voice);
+            HiAlarmTab tab2 = new HiAlarmTab(1, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_SLEEP, "10:30", false, R.raw.voice);
+            HiAlarmTab tab3 = new HiAlarmTab(2, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_GETUP, "08:00", false, R.raw.voice);
+
+            mGoodNightDB.saveAlarmTab(tab1);
+            mGoodNightDB.saveAlarmTab(tab2);
+            mGoodNightDB.saveAlarmTab(tab3);
+
+            mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab1.getId(), tab1.getMusicId()));
+            mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab2.getId(), tab1.getMusicId()));
+            mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab3.getId(), tab1.getMusicId()));
+        }
+    }
+
     private void setupViews() {
         mbtnAddClock = (FloatingActionButton) mContentView.findViewById(R.id.btn_add_clock);
         mbtnAddClock.setOnClickListener(this);
         mListView = (ListView) mContentView.findViewById(R.id.list_sleep_time);
+        mLineChartView = (LineChartView) mContentView.findViewById(R.id.line_chart_view);
+        mColumnChartView = (ColumnChartView) mContentView.findViewById(R.id.column_chart_view);
 
         //load the data from db.
         mAlarmList = mGoodNightDB.queryAllAlarmTabs();
-
 
         mTimeListAdapter = new HiTimeListAdapter(mSelf, mAlarmList);
         mListView.setAdapter(mTimeListAdapter);
         mTimeListAdapter.notifyDataSetChanged();
         mListView.setOnItemClickListener(this);
         mListView.setOnItemLongClickListener(this);
+    }
+
+
+    private void initData() {
+        initSleepTimeData();
+        mLineChartData = new LineChartData();
+        initAxis();
+        initPoints();
+        initLines();
+        mLineChartData.setBaseValue(Float.NEGATIVE_INFINITY);
+        mLineChartView.setLineChartData(mLineChartData);
+
+        Viewport viewport = mLineChartView.getMaximumViewport();
+        viewport.set(viewport.left, viewport.top, viewport.right, 0);
+        mLineChartView.setMaximumViewport(viewport);
+
+        viewport = mLineChartView.getCurrentViewport();
+        viewport.set(viewport.left, viewport.top, viewport.right, 0);
+        mLineChartView.setCurrentViewport(viewport);
+
+    }
+
+    private void initSleepTimeData() {
+        List<HiMaps> params = new ArrayList<>();
+        params.add(new HiMaps("action", "query"));
+        String json = "'{\"userid\":1, \"duration\":10};'";
+        params.add(new HiMaps("params", json));
+        OkHttpUtils.OkHttpPost(HiConfig.URL_GET_SLEEP, params, new OnResponseListener() {
+            Message message = new Message();
+
+            @Override
+            public void onSuccess(Object result) {
+                HiLog.d(TAG, result.toString());
+                HiRespSleepTime response = GsonUtils.parseJsonToClass((String) result, HiRespSleepTime.class);
+                if (response != null) {
+                    if (response.getStatus() == 1) {
+                        message.what = HiResponseCodes.SLEEP_TIME_OK;
+                    } else {
+                        message.what = HiResponseCodes.SLEEP_TIME_FAIL;
+                    }
+                    message.obj = response.getResult();
+                    mHandler.sendMessage(message);
+                }
+            }
+
+            @Override
+            public void onFailure(int errorCode, String error) {
+                HiLog.d(TAG, errorCode + error);
+                message.what = HiResponseCodes.SLEEP_TIME_FAIL;
+                message.obj = errorCode + error;
+                mHandler.handleMessage(message);
+            }
+        });
+
+    }
+
+    //设置折线图坐标
+    private void initAxis() {
+        Axis axisX = new Axis(); //X轴
+        axisX.setHasTiltedLabels(false);     //X坐标轴字体是斜的显示还是直的，true是斜的显示
+        axisX.setHasLines(true);            //x 轴分割线
+        axisX.setAutoGenerated(true);
+        axisX.setInside(false);            //
+        axisX.setTextColor(getResources().getColor(R.color.colorAccent));
+//        axisX.setName("日期/d");
+        axisX.setTextSize(10);
+//        axisX.setMaxLabelChars(8);
+        for (int i = 0; i <= 7; i++) {
+            AxisValue value = new AxisValue(i);
+            String label = HiTimesUtil.getCurWeek(i);
+            value.setLabel(label);
+            mAxisValuesX.add(value);
+        }
+        axisX.setValues(mAxisValuesX);
+        mLineChartData.setAxisXBottom(axisX);
+
+//        Axis axisY = Axis.generateAxisFromRange(0, 24, 4);  //Y轴
+        Axis axisY = new Axis();  //Y轴
+        axisY.setHasTiltedLabels(false);
+        axisY.setHasLines(true);
+        axisY.setAutoGenerated(true);
+        axisY.setInside(true);
+        axisY.setTextColor(getResources().getColor(R.color.colorAccent));
+        axisY.setName("睡眠时长/h");
+//        axisY.setMaxLabelChars(24); //默认是3，只能看最后三个数字
+        axisY.setTextSize(10);
+        for (int i = 0; i <= 24; i++) {
+            AxisValue value = new AxisValue(i);
+            value.setLabel(String.valueOf(i));
+            mAxisValuesY.add(value);
+//            i+=4;
+        }
+        axisY.setValues(mAxisValuesY);
+        mLineChartData.setAxisYLeft(axisY);
+    }
+
+    //初始化 点 数据
+    private void initPoints() {
+        for (int i = 1; i <= 7; i++) {
+            if (i % 2 == 0)
+                mPointValuesStandard.add(new PointValue(i, (float) 8.5));
+            else
+                mPointValuesStandard.add(new PointValue(i, (float) 8.0));
+        }
+
+        mPointValuesReal.add(new PointValue(1, (float) 7.2));
+        mPointValuesReal.add(new PointValue(2, (float) 8.1));
+        mPointValuesReal.add(new PointValue(3, (float) 8.5));
+        mPointValuesReal.add(new PointValue(4, (float) 10.2));
+        mPointValuesReal.add(new PointValue(5, (float) 6.7));
+        mPointValuesReal.add(new PointValue(6, (float) 7.0));
+        mPointValuesReal.add(new PointValue(7, (float) 8.2));
+
+
+    }
+
+    //设置线条数据
+
+    /**
+     * Line line = new Line(highPointValues).setColor(Color.parseColor("#C0D79C")).setStrokeWidth(1);  //折线的颜色、粗细
+     * line.setShape(ValueShape.CIRCLE);//折线图上每个数据点的形状  这里是圆形 （有三种 ：ValueShape.SQUARE  ValueShape.CIRCLE  ValueShape.SQUARE）
+     * line.setCubic(true);//曲线是否平滑
+     * line.setFilled(false);//是否填充曲线的面积
+     * 　 line.setHasLabels(true);//曲线的数据坐标是否加上备注
+     * line.setPointRadius(3);　//座标点大小
+     * line.setHasLabelsOnlyForSelected(false);//点击数据坐标提示数据（设置了这个line.setHasLabels(true);就无效）
+     * line.setHasLines(true);//是否用直线显示。如果为false 则没有曲线只有点显示
+     * line.setHasPoints(true);//是否显示圆点 如果为false 则没有原点只有点显示
+     * lines.add(line);
+     * LineChartData data = new LineChartData();
+     * data.setValueLabelBackgroundColor(Color.TRANSPARENT);　　　　//此处设置坐标点旁边的文字背景
+     * data.setValueLabelBackgroundEnabled(false);
+     * data.setValueLabelsTextColor(Color.BLACK);  //此处设置坐标点旁边的文字颜色
+     */
+    private void initLines() {
+        mLineStandard = new Line(mPointValuesStandard)
+                .setColor(getResources().getColor(R.color.blue1))
+                .setCubic(false)
+                .setStrokeWidth(1)
+                .setPointRadius(3);
+        mLineReal = new Line(mPointValuesReal)
+                .setColor(getResources().getColor(R.color.btn_out_color))
+                .setCubic(false)
+                .setStrokeWidth(2)
+                .setPointRadius(4)
+                .setFilled(true);
+//        mLineStandard.setShape(ValueShape.DIAMOND);
+//        mLineReal.setShape(ValueShape.SQUARE);
+        mLines.add(mLineStandard);
+        mLines.add(mLineReal);
+        mLineChartData.setLines(mLines);
     }
 
     @Override
@@ -162,23 +356,33 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         mTimeListAdapter.notifyDataSetChanged();
         mSelf.startService(new Intent(mSelf, HiScreenLockService.class));
 
-        testHttpSerlet();
     }
 
-    private void testHttpSerlet() {
-        OkHttpUtils.OkHttpGet("http://112.74.198.75/WananConsole/HiHttpSerlet", new OnResponseListener() {
-            @Override
-            public void onSuccess(Object result) {
-                HiLog.d(TAG, result.toString());
-            }
 
-            @Override
-            public void onFailure(int errorCode, String error) {
-                HiLog.d(TAG, errorCode + error);
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case HiResponseCodes.SLEEP_TIME_OK:
+//                    List<HiRespSleepTime.SleepTimeLine> timeLine = GsonUtils.parseJsonToClass(msg.obj.toString(), HiRespSleepTime.SleepTimeLine.class);
+//                    refreshTimeLine(timeLine);
+                    break;
+                case HiResponseCodes.SLEEP_TIME_FAIL:
+                    String result = msg.obj.toString();
+                    HiToast.showToast(mSelf, result);
+                    break;
             }
-        });
+        }
+    };
+
+    /**
+     * 根据数据刷新图标界面
+     * @param timeLine
+     */
+    private void refreshTimeLine(HiRespSleepTime.SleepTimeLine timeLine) {
+
     }
-
 
     @Override
     public void onClick(View v) {
@@ -262,6 +466,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 
     /**
      * delete tab from view & db & taskPool
+     *
      * @param position
      */
     private void removeAlarmTab(int position) {
@@ -351,7 +556,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
                     new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            HiLog.d("switch checked","" + isChecked);
+                            HiLog.d("switch checked", "" + isChecked);
 
                             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(mSelf.ALARM_SERVICE);
                             Intent alarmIntent = new Intent(getActivity(), HiAlarmClockReceiver.class);
@@ -367,13 +572,13 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
                                 int hour = Integer.parseInt(h);
                                 int minute = Integer.parseInt(m);
 
-                                HiLog.i(TAG,"hour->" + hour + "; minute->" + minute);
-                                Calendar calendar =  Calendar.getInstance();
+                                HiLog.i(TAG, "hour->" + hour + "; minute->" + minute);
+                                Calendar calendar = Calendar.getInstance();
                                 calendar.set(Calendar.HOUR_OF_DAY, hour);
                                 calendar.set(Calendar.MINUTE, minute);
 
                                 //设置的时间早于当前时间，则说明应该在第二天响铃
-                                if(Calendar.getInstance().getTimeInMillis() > calendar.getTimeInMillis()) {
+                                if (Calendar.getInstance().getTimeInMillis() > calendar.getTimeInMillis()) {
                                     calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
                                 }
 
@@ -381,7 +586,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
                                 HiLog.d(TAG, "position " + position);
                                 //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pendingIntent);
                                 //TODO:重复闹钟设定,每天重复
-                                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
+                                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
 //                                ELAPSED_REALTIME：         从设备启动之后开始算起，度过了某一段特定时间后，激活Pending Intent，但不会唤醒设备。其中设备睡眠的时间也会包含在内。
 //                                ELAPSED_REALTIME_WAKEUP：  从设备启动之后开始算起，度过了某一段特定时间后唤醒设备。
@@ -412,6 +617,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 
     /**
      * update switch status to db when status changed
+     *
      * @param id
      * @param on
      */

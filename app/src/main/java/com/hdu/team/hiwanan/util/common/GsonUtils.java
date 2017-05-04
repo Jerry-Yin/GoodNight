@@ -1,6 +1,11 @@
 package com.hdu.team.hiwanan.util.common;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.koushikdutta.async.http.body.JSONArrayBody;
+
+import org.json.JSONArray;
+import java.util.List;
 
 /**
  * Created by JerryYin on 3/11/17.
@@ -33,5 +38,12 @@ public class GsonUtils {
 //        T object = gson.fromJson(jsonData, tClass);
         T object = gson.fromJson(jsonData, tClass);
         return object;
+    }
+
+
+    public static <T> List<T> parseJsonArrayToList(String jsonArray, Class<T> tClass){
+        Gson gson = new Gson();
+//        JSONArray s = JSONArray.fromObject(jsonArray);
+
     }
 }

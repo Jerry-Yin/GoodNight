@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiMusicPlayerActivity;
@@ -45,7 +47,7 @@ import co.mobiwise.library.MusicPlayerView;
 /**
  * Created by JerryYin on 11/3/15.
  */
-public class HiGoodNightFragment2 extends Fragment implements View.OnClickListener, HiVoiceRecorderButton2.OnFinishRecorderListener, View.OnTouchListener {
+public class HiGoodNightFragment2 extends Fragment implements View.OnClickListener, HiVoiceRecorderButton2.OnFinishRecorderListener, GestureDetector.OnGestureListener, View.OnTouchListener {
 
 
     /**
@@ -77,6 +79,8 @@ public class HiGoodNightFragment2 extends Fragment implements View.OnClickListen
     private float mDensity;
     private int mHiddenViewMeasuredHeight;  //ExpendLayout 的高度
     private HiMediaPlayerManager mPlayerManager;
+
+    private GestureDetector mDetector;
 
 
     @Nullable
@@ -110,10 +114,13 @@ public class HiGoodNightFragment2 extends Fragment implements View.OnClickListen
 
         mMusicView.setOnClickListener(this);
         mLayoutCountdown.setOnTouchListener(this);
+//        mLayoutCountdown.setOng
         mMusicLayout.setOnClickListener(this);
         mImgExpend.setOnClickListener(this);
         mBtnSpeak.setOnClickListener(this);
         mBtnSpeak.setAudioFinishRecorderListener(this);
+
+        mDetector = new GestureDetector(this);
     }
 
 
@@ -356,62 +363,69 @@ public class HiGoodNightFragment2 extends Fragment implements View.OnClickListen
                 .show();
     }
 
+
+    /**
+     *
+     * @param e
+     * @return
+     */
+
+    private static final int FLING_MIN_DISTANCE = 50;
+    private static final int FLING_MIN_VELOCITY = 0;
+
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        switch (v.getId()) {
-            case R.id.layout_countdown:
-                float startX = 0;
-                float startY = 0;
-                float endX = 0;
-                float endY = 0;
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-//                        mScrollView.requestDisallowInterceptTouchEvent(false);
-                        HiLog.d(TAG, "滑down "+ (endY-startY));
-                        startX = event.getX();
-                        startY = event.getY();
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
 
-                    case MotionEvent.ACTION_MOVE:
-                        HiLog.d(TAG, "滑move "+ (endY-startY));
-//                        mScrollView.requestDisallowInterceptTouchEvent(false);
-                        endX = event.getX();
-                        endY = event.getY();
-                        if (endY - startY > 0) {
-                            //下滑
-// && Math.abs(endY - startY) > 5f
-//                            mScrollView.requestDisallowInterceptTouchEvent(false);
-                            HiLog.d(TAG, "下滑 "+ (endY-startY));
-                            if (mLayoutExpend.getVisibility() == View.GONE) {
-                                animateOpen(mLayoutExpend);
-                                animationIvOpen();
-                            } else {
-                                animateClose(mLayoutExpend);
-                                animationIvClose();
-                            }
-                        } else if (endY - startY < 0 ) {
-                            //上滑
-//                            mScrollView.requestDisallowInterceptTouchEvent(false);
-                            HiLog.d(TAG, "上滑 "+ (endY-startY));
-                            if (mLayoutExpend.getVisibility() == View.GONE) {
-                                animateOpen(mLayoutExpend);
-                                animationIvOpen();
-                            } else {
-                                animateClose(mLayoutExpend);
-                                animationIvClose();
-                            }
-                        }
+    @Override
+    public void onShowPress(MotionEvent e) {
 
-                    case MotionEvent.ACTION_UP:
-                        HiLog.d(TAG, "滑up 1 "+ (startY));
-                        HiLog.d(TAG, "滑up 2 "+ endY);
-                        HiLog.d(TAG, "滑up 3 "+ event.getY());
-                        mScrollView.requestDisallowInterceptTouchEvent(false);
+    }
 
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
 
-                }
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
 
-                break;
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        // TODO Auto-generated method stub
+        if (e1.getX()-e2.getX() > FLING_MIN_DISTANCE
+                && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+            // Fling left
+            Toast.makeText(mSelf, "向左手势", Toast.LENGTH_SHORT).show();
+        } else if (e2.getX()-e1.getX() > FLING_MIN_DISTANCE
+                && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+            // Fling right
+            Toast.makeText(mSelf, "向右手势", Toast.LENGTH_SHORT).show();
+        }
+        if (e1.getY()-e2.getY() > FLING_MIN_DISTANCE
+                && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+            // Fling left
+            Toast.makeText(mSelf, "向上手势", Toast.LENGTH_SHORT).show();
+        } else if (e2.getY()-e1.getY() > FLING_MIN_DISTANCE
+                && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+            // Fling right
+            Toast.makeText(mSelf, "向下手势", Toast.LENGTH_SHORT).show();
         }
         return false;
+    }
+
+
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return mDetector.onTouchEvent(event);
     }
 }

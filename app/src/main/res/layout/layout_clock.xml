@@ -5,16 +5,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/img_shalou"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:src="@drawable/img_time2" />
+        android:layout_height="0dp"
+        android:layout_weight="0.6"
+        android:orientation="vertical"
+        android:padding="5dp"
+        >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/line_chart_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/smssdk_gray"/>
+
+            <Switch
+                android:id="@+id/switch_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|right"
+                android:textOn="周"
+                android:textOff="月"
+                android:showText="true"
+                android:textSize="10sp"
+                android:textAllCaps="false"
+                android:checked="true"/>
+        </FrameLayout>
+
+
+        <lecho.lib.hellocharts.view.ColumnChartView
+            android:id="@+id/column_chart_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:background="@color/green_3"
+            android:visibility="gone"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:layout_marginTop="20dp">
 
         <!-- android:listSelector="@android:color/transparent" 可去除ListView点击颜色效果-->
         <ListView

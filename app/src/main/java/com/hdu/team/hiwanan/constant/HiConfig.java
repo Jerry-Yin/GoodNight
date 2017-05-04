@@ -38,6 +38,17 @@ public class HiConfig {
     /* 测试地址*/
     public final static String TEST_URL = "http://192.168.2.2000/Wanan/UpVoice";
 
+    //云服务器地址
+    public final static String URL_UPLOAD_VOICE = "http://112.74.198.75/wanan.v1/fileupload";
+    /**
+     * {"action":"query","params":
+     *  {"userId":2,
+     *   "duration":3
+     *  }
+     * }
+     */
+    public final static String URL_GET_SLEEP = "http://112.74.198.75/wanan.v1/sleep";
+
 
     /**
      * Hi语音性别键值对
@@ -130,4 +141,7 @@ public class HiConfig {
      */
     public static final String ACTION_SCREEN_ON = "android.intent.action.SCREEN_ON";
     public static final String ACTION_SCREEN_OFF = "android.intent.action.SCREEN_OFF_hi";
+
+
+
 }

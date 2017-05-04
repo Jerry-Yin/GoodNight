@@ -107,49 +107,54 @@ public class OkHttpUtils {
      * @param listener
      */
     public static void OkHttpPost(final String url, final List<HiMaps> paramsList, final OnResponseListener listener) {
-        Log.d(TAG, "url---" + url);
-        OkHttpClient okHttpClient = new OkHttpClient();
-
-        FormBody.Builder builder = new FormBody.Builder();
-        if (paramsList != null) {
-            for (HiMaps map : paramsList) {
-                builder.add(map.getKey(), map.getValue());
-            }
-        }
-        RequestBody requestBody = builder.build();
-
-        Request request = new Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .build();
-
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new Callback() {
+        new Thread(new Runnable() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                if (listener != null) {
-                    listener.onFailure(call.hashCode(), e.getMessage());
-                }
-            }
+            public void run() {
+                Log.d(TAG, "url---" + url);
+                OkHttpClient okHttpClient = new OkHttpClient();
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Log.d(TAG, "response----" + response.body() + "/ " + response.message() + "/ " + response.cacheResponse() + "/ " + response.code() + "/ ");
-                String result = response.body().string();
-                if (result.toString() != null) {
-                    if (listener == null) return;
-//                    String result = response.cacheResponse().toString();
-                    listener.onSuccess(result);
-                    Log.i(TAG, "cache---" + result);
-                } else {
-                    String str = response.networkResponse().toString();
-                    Log.i(TAG, "network---" + str);
-                    if (listener != null) {
-                        listener.onFailure(call.hashCode(), response.body().toString()+" "+str);
+                FormBody.Builder builder = new FormBody.Builder();
+                if (paramsList != null) {
+                    for (HiMaps map : paramsList) {
+                        builder.add(map.getKey(), map.getValue());
                     }
                 }
+                RequestBody requestBody = builder.build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(requestBody)
+                        .build();
+
+                Call call = okHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        if (listener != null) {
+                            listener.onFailure(call.hashCode(), e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.d(TAG, "response----" + response.body() + "/ " + response.message() + "/ " + response.cacheResponse() + "/ " + response.code() + "/ ");
+                        String result = response.body().string();
+                        if (result.toString() != null) {
+                            if (listener == null) return;
+//                    String result = response.cacheResponse().toString();
+                            listener.onSuccess(result);
+                            Log.i(TAG, "cache---" + result);
+                        } else {
+                            String str = response.networkResponse().toString();
+                            Log.i(TAG, "network---" + str);
+                            if (listener != null) {
+                                listener.onFailure(call.hashCode(), response.body().toString()+" "+str);
+                            }
+                        }
+                    }
+                });
             }
-        });
+        }).start();
 
     }
 

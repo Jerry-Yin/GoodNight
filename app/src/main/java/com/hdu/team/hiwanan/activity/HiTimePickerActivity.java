@@ -1,5 +1,7 @@
 package com.hdu.team.hiwanan.activity;
 
+import android.annotation.TargetApi;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,6 +30,7 @@ import com.hdu.team.hiwanan.util.HiToast;
 import com.hdu.team.hiwanan.util.common.HiTimesUtil;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +49,10 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
     private TimePicker mTimePicker;
     private TextView mTvLastTime;
     //private TextView mTvTitle;
+    private Button mBtnTimeSleep, mBtnTimeGetup;
+
+
+    private TimePickerDialog mPickerDialog;
 
     //TODO:new view for spinner category and ringtone, just for testing
     private Spinner mSpRingtone;
@@ -65,12 +73,11 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
     private long mRingtoneId = 0; //用于存放铃声的id
     private long mCategoryId = 0; //用于存放铃声种类的id
 
-    private HiGoodNightDB mDbManager ;
+    private HiGoodNightDB mDbManager;
     private HiAlarmTaskPoolManager mAlarmTaskPoolManager;
-    
+
     private RingtoneManager mRingtoneManager;//ringtone manager 用户获取系统默认的铃声列表
     private MediaPlayer mPreviewPlayer;     //用于铃声选择时播放试听
-
 
 
     @Override
@@ -97,6 +104,11 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         mSpRingtone = (Spinner) findViewById(R.id.sp_ringtone);
         mSpCategory = (Spinner) findViewById(R.id.sp_category);
 
+        mBtnTimeSleep = (Button) findViewById(R.id.btn_time_sleep);
+        mBtnTimeGetup = (Button) findViewById(R.id.btn_time_getup);
+        mBtnTimeSleep.setOnClickListener(this);
+        mBtnTimeGetup.setOnClickListener(this);
+
         //获取前面传递过来的值
         mIntent = getIntent();
 
@@ -110,7 +122,7 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         mDbManager = HiGoodNightDB.getInstance(this);
         mRingtoneManager = new RingtoneManager(this);
         mPreviewPlayer = new MediaPlayer();
-        
+
         mAlarmTaskPoolManager = HiAlarmTaskPoolManager.getInstance();
     }
 
@@ -145,6 +157,8 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         mSpCategory.setOnItemSelectedListener(this);
         mSpRingtone.setOnItemSelectedListener(this);
     }
+
+
 
     private void initSelection() {
         if (mIntent.getExtras().getInt(HiConfig.REQUEST_TYPE, 0) == HiConfig.MODIFY_REQUEST) {
@@ -226,6 +240,34 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
 
                 break;
 
+            case R.id.btn_time_sleep:
+                if (mPickerDialog == null) {
+                    mPickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+                        @TargetApi(Build.VERSION_CODES.M)
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                            HiLog.d(TAG, view.getHour() + " : " + view.getMinute());
+                            HiLog.d(TAG, "hour: " + hourOfDay + " & " + "minute: " + minute);
+                        }
+                    }, (int) mHours, (int) mMinutes, true);
+                }
+                mPickerDialog.show();
+                break;
+
+            case R.id.btn_time_getup:
+                if (mPickerDialog == null) {
+                    mPickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+                        @TargetApi(Build.VERSION_CODES.M)
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                            HiLog.d(TAG, view.getHour() + " : " + view.getMinute());
+                            HiLog.d(TAG, "hour: " + hourOfDay + " & " + "minute: " + minute);
+                        }
+                    }, (int) mHours, (int) mMinutes, true);
+                }
+                mPickerDialog.show();
+                break;
+
             default:
                 break;
         }
@@ -241,9 +283,9 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         String minute = mTimePicker.getCurrentMinute() < 10 ? "0" + mTimePicker.getCurrentMinute() : String.valueOf(mTimePicker.getCurrentMinute());
         String time = hour + ":" + minute;
         boolean on = false;//default true;
-        HiLog.d(TAG, "new tab, musicid : "+mRingtoneId);
+        HiLog.d(TAG, "new tab, musicid : " + mRingtoneId);
         HiAlarmTab alarmTab = new HiAlarmTab(id, icon, category, time, on, (int) mRingtoneId);
-        HiLog.d(TAG, "save tab : "+mDbManager.saveAlarmTab(alarmTab));
+        HiLog.d(TAG, "save tab : " + mDbManager.saveAlarmTab(alarmTab));
 
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
@@ -293,7 +335,7 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
         switch (parent.getId()) {
             case R.id.sp_ringtone:
                 mRingtoneId = position;
-                HiLog.d(TAG, "selected musicid : "+mRingtoneId);
+                HiLog.d(TAG, "selected musicid : " + mRingtoneId);
                 Uri uri = mRingtoneManager.getRingtoneUri(position);
 
                 try {

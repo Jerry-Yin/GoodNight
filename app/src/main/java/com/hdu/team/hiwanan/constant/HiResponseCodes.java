@@ -26,4 +26,11 @@ public class HiResponseCodes {
     public static final int COMMENT_OK = 0x07;
     public static final int COMMENT_NO = 0x08;
 
+    /**
+     * 睡眠记录
+     */
+    public static final int SLEEP_TIME_OK = 0x12;
+    public static final int SLEEP_TIME_FAIL = 0x13;
+
+
 }
