@@ -15,6 +15,67 @@ import java.util.Date;
  * 时间
  */
 public class HiTimesUtil {
+    public static long convertStringToLong(String dateTime, String format) {
+
+        long result = 0;
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(format);
+            Date dateAndTime = formatter.parse(dateTime);
+            result = dateAndTime.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static long getCurrentDateTime(String format) {
+       long result = 0;
+        try {
+            Date current = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat(format);
+            String tmpFormat = formatter.format(current);
+            Date formatted = formatter.parse(tmpFormat);
+            result = formatted.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String getHourFromLong(long millisecond) {
+        long hour = millisecond / 1000 / 60 / 60 % 24;
+        String result = "00";
+        if (hour < 10) {
+            result = "0" + hour;
+        } else {
+            result = hour + "";
+        }
+        return result;
+
+    }
+
+    public static String getMinuteFromLong(long millisecond) {
+        long minute = millisecond / 1000 / 60 % 60;
+        String result = "00";
+        if (minute < 10) {
+            result = "0" + minute;
+        } else {
+            result = minute + "";
+        }
+        return result;
+
+    }
+    public static String getSecoundFromLong(long mullisecond) {
+        long second = mullisecond / 1000 % 60;
+        String result = "00";
+
+        if (second < 10) {
+            result =  "0" + second;
+        } else {
+            result = second + "";
+        }
+        return result;
+    }
 
 
     /**

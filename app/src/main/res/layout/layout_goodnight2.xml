@@ -54,6 +54,7 @@
                             app:cardElevation="10dp">
 
                             <TextView
+                                android:id="@+id/down_hour"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
@@ -95,6 +96,7 @@
                             app:cardElevation="10dp">
 
                             <TextView
+                                android:id="@+id/down_minute"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
@@ -114,6 +116,7 @@
                             app:cardElevation="10dp">
 
                             <TextView
+                                android:id="@+id/down_second"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center"

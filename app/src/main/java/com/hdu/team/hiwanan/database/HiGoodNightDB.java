@@ -78,6 +78,15 @@ public class HiGoodNightDB {
     }
 
 
+    public HiAlarmTab querySleepAlarmTab() {
+        if (db == null)
+            db = mOpenHelper.getReadableDatabase();
+        HiAlarmTab tab = new HiAlarmTab();
+        //Cursor cursor = db.query(HiAlarmTab.AlarmEntry.TABLE_NAME,);
+
+
+        return tab;
+    }
     /**
      * query a alarmtab by id
      * @param id

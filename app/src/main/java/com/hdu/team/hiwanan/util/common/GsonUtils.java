@@ -40,10 +40,9 @@ public class GsonUtils {
         return object;
     }
 
-
-    public static <T> List<T> parseJsonArrayToList(String jsonArray, Class<T> tClass){
-        Gson gson = new Gson();
+    //public static <T> List<T> parseJsonArrayToList(String jsonArray, Class<T> tClass){
+     //   Gson gson = new Gson();
 //        JSONArray s = JSONArray.fromObject(jsonArray);
 
-    }
+   // }
 }

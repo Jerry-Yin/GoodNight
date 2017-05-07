@@ -219,8 +219,9 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
     private void initSleepTimeData() {
         List<HiMaps> params = new ArrayList<>();
         params.add(new HiMaps("action", "query"));
-        String json = "'{\"userid\":1, \"duration\":10};'";
+        String json = "{\"userId\":1, \"duration\":10}";
         params.add(new HiMaps("params", json));
+
         OkHttpUtils.OkHttpPost(HiConfig.URL_GET_SLEEP, params, new OnResponseListener() {
             Message message = new Message();
 
