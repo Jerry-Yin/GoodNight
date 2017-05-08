@@ -128,10 +128,10 @@ public class HiGoodNightFragment2 extends Fragment implements View.OnClickListen
         mCountdownSecond = (TextView) mContentView.findViewById(R.id.down_second);
         mDbManager = HiGoodNightDB.getInstance(mContentView.getContext());
 
-        String setString = "16:55:00";
+        String setString = mDbManager.querySleepAlarmTab().getTime();//"21:10";
 
 
-        long set = HiTimesUtil.convertStringToLong(setString, "HH:mm:ss");
+        long set = HiTimesUtil.convertStringToLong(setString, "HH:mm");
         long now = HiTimesUtil.getCurrentDateTime("HH:mm:ss");
 
         long toWait = set - now;
