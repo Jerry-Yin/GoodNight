@@ -56,6 +56,7 @@ import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
@@ -261,7 +262,9 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         mLineChartView.setLineChartData(mLineChartData);
 
         Viewport viewport = mLineChartView.getMaximumViewport();
-        viewport.set(viewport.left, (float) (viewport.top*1.5), viewport.right, 0);
+//        float top = (float) (24);
+        float max = viewport.top;
+        viewport.set(viewport.left, (float) (max*1.5), viewport.right, 0);
         HiLog.d(TAG, "left1: "+viewport.left);
         HiLog.d(TAG, "top1: "+viewport.top);    //top = maxValue   ( top*1.2): to set the maxY = 1.2*MaxValue
         HiLog.d(TAG, "right1: "+viewport.right);
@@ -492,6 +495,8 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         mLineStandard = new Line(mPointValuesPlan)
                 .setColor(getResources().getColor(R.color.btn_out_color))
                 .setCubic(false)
+                .setHasLabels(false)
+                .setShape(ValueShape.CIRCLE)
                 .setStrokeWidth(1)
                 .setPointRadius(2);
         mLineReal = new Line(mPointValuesReal)
@@ -499,6 +504,8 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
                 .setCubic(false)
                 .setStrokeWidth(1)
                 .setPointRadius(2)
+                .setHasLabels(false)
+                .setShape(ValueShape.CIRCLE)
                 .setFilled(true);
 //        mLineStandard.setShape(ValueShape.DIAMOND);
 //        mLineReal.setShape(ValueShape.SQUARE);

@@ -128,5 +128,7 @@
     <string name="write_comment">写评论</string>
     <string name="text_sms_code">获取短信验证码</string>
     <string name="count_down">晚安倒计时</string>
+    <string name="duration_plan">设定时长</string>
+    <string name="duration_real">实际时长</string>
 
 </resources>

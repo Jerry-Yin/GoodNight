@@ -10,7 +10,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.6"
         android:orientation="vertical"
-        android:padding="5dp"
+        android:layout_margin="5dp"
         >
 
         <FrameLayout
@@ -22,18 +22,85 @@
                 android:layout_height="match_parent"
                 android:background="@color/green_2"/>
 
-            <Switch
-                android:id="@+id/switch_change"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|right"
-                android:textOn="周"
-                android:textOff="月"
-                android:showText="true"
-                android:textSize="10sp"
-                android:textColor="@color/green_2"
-                android:textAllCaps="false"
-                android:checked="true"/>
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="25dp"
+               android:background="@color/green_2"
+               android:layout_gravity="top"
+               android:gravity="center_vertical">
+               <Switch
+                   android:id="@+id/switch_change"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textOn="周"
+                   android:textOff="月"
+                   android:showText="true"
+                   android:textSize="10sp"
+                   android:layout_alignParentRight="true"
+                   android:textColor="@color/green_2"
+                   android:textAllCaps="false"
+                   android:checked="true"/>
+
+               <LinearLayout
+                   android:layout_width="wrap_content"
+                   android:layout_height="match_parent"
+                   android:orientation="horizontal"
+                   android:layout_marginLeft="2dp">
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="睡眠时长"
+                       android:textColor="@color/white"
+                       android:textSize="10sp"
+                       android:layout_gravity="center_vertical"/>
+
+                   <LinearLayout
+                       android:layout_width="wrap_content"
+                       android:layout_height="match_parent"
+                       android:orientation="vertical"
+                       android:layout_marginLeft="10dp">
+
+                       <LinearLayout
+                           android:layout_width="wrap_content"
+                           android:layout_height="0dp"
+                           android:layout_weight="1"
+                           android:orientation="horizontal">
+                           <View
+                               android:layout_width="25dp"
+                               android:layout_height="1.2dp"
+                               android:background="@color/btn_out_color"
+                               android:layout_gravity="center_vertical"/>
+                           <TextView
+                               android:layout_width="wrap_content"
+                               android:layout_height="match_parent"
+                               android:gravity="center_vertical"
+                               android:text="@string/duration_plan"
+                               android:textSize="8sp"
+                               android:textColor="@color/white"
+                               android:paddingLeft="2dp"/>
+                       </LinearLayout>
+                       <LinearLayout
+                           android:layout_width="wrap_content"
+                           android:layout_height="0dp"
+                           android:layout_weight="1"
+                           android:orientation="horizontal">
+                           <View
+                               android:layout_width="25dp"
+                               android:layout_height="1.2dp"
+                               android:background="@color/white"
+                               android:layout_gravity="center_vertical"/>
+                           <TextView
+                               android:layout_width="wrap_content"
+                               android:layout_height="match_parent"
+                               android:gravity="center_vertical"
+                               android:text="@string/duration_real"
+                               android:textSize="8sp"
+                               android:textColor="@color/white"
+                               android:paddingLeft="2dp"/>
+                       </LinearLayout>
+                   </LinearLayout>
+               </LinearLayout>
+           </RelativeLayout>
         </FrameLayout>
 
 
