@@ -2,9 +2,13 @@ package com.hdu.team.hiwanan.util.common;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.hdu.team.hiwanan.util.HiLog;
 import com.koushikdutta.async.http.body.JSONArrayBody;
 
-import org.json.JSONArray;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,9 +45,14 @@ public class GsonUtils {
     }
 
 
-    public static <T> List<T> parseJsonArrayToList(String jsonArray, Class<T> tClass){
+    public static <T> List<T> parseJsonArrayToList(String array, Class<T> tClass){
         Gson gson = new Gson();
-//        JSONArray s = JSONArray.fromObject(jsonArray);
-
+        List<T> list = new ArrayList<>();
+        HiLog.d("json = ", array);
+//        JSONArray jsonArray = JSONArray.fromObject(array);
+//        for (int i=0; i<jsonArray.size(); i++){
+//            list.add(gson.fromJson(jsonArray.get(i).toString(), tClass));
+//        }
+        return list;
     }
 }

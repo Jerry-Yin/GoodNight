@@ -45,13 +45,13 @@ public class HiRespSleepTime {
          */
 
         private String date;
-        private int actual_duration;
+        private float actual_duration;
         private String sleep_stamp;
         private int user_id;
         private String start;
         private String end;
         private String wakeup_stamp;
-        private int plan_duration;
+        private float plan_duration;
 
         public String getDate() {
             return date;
@@ -61,11 +61,11 @@ public class HiRespSleepTime {
             this.date = date;
         }
 
-        public int getActual_duration() {
+        public float getActual_duration() {
             return actual_duration;
         }
 
-        public void setActual_duration(int actual_duration) {
+        public void setActual_duration(float actual_duration) {
             this.actual_duration = actual_duration;
         }
 
@@ -109,11 +109,11 @@ public class HiRespSleepTime {
             this.wakeup_stamp = wakeup_stamp;
         }
 
-        public int getPlan_duration() {
+        public float getPlan_duration() {
             return plan_duration;
         }
 
-        public void setPlan_duration(int plan_duration) {
+        public void setPlan_duration(float plan_duration) {
             this.plan_duration = plan_duration;
         }
     }

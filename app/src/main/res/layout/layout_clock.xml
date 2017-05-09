@@ -20,7 +20,7 @@
                 android:id="@+id/line_chart_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/smssdk_gray"/>
+                android:background="@color/green_2"/>
 
             <Switch
                 android:id="@+id/switch_change"
@@ -31,6 +31,7 @@
                 android:textOff="月"
                 android:showText="true"
                 android:textSize="10sp"
+                android:textColor="@color/green_2"
                 android:textAllCaps="false"
                 android:checked="true"/>
         </FrameLayout>

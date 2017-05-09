@@ -35,6 +35,14 @@ public class HiConfig {
      */
     public final static String HI_PREFERENCE_NAME = "hi_pref";
 
+    /**
+     * 网络请求参数key
+     */
+    public static final String REQ_ACTION = "action";
+    public static final String REQ_PARAMS = "params";
+    public static final String REQ_USERID = "userId";
+    public static final String REQ_DURATION = "duration";
+
     /* 测试地址*/
     public final static String TEST_URL = "http://192.168.2.2000/Wanan/UpVoice";
 

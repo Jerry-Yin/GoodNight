@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -37,7 +38,6 @@ import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.manager.HiAlarmTaskPoolManager;
 import com.hdu.team.hiwanan.model.HiAlarmTab;
 import com.hdu.team.hiwanan.model.HiAlarmTask;
-import com.hdu.team.hiwanan.model.HiMaps;
 import com.hdu.team.hiwanan.model.HiRespSleepTime;
 import com.hdu.team.hiwanan.service.HiScreenLockService;
 import com.hdu.team.hiwanan.util.HiLog;
@@ -63,7 +63,7 @@ import lecho.lib.hellocharts.view.LineChartView;
 /**
  * Created by JerryYin on 11/3/15.
  */
-public class HiClockFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class HiClockFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = "HiClockFragment";
     private HiGoodNightDB mGoodNightDB;
@@ -87,6 +87,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 
     private LineChartView mLineChartView;
     private ColumnChartView mColumnChartView;
+    private Switch mSwitchWeek;
 
 
     /**
@@ -109,12 +110,15 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 
     private LineChartData mLineChartData;       //折线图数据
     private List<AxisValue> mAxisValuesX = new ArrayList<>();    //X坐标值
-    private List<AxisValue> mAxisValuesY = new ArrayList<>();    //X坐标值
+    private List<AxisValue> mAxisValuesY = new ArrayList<>();    //Y坐标值
+    private boolean mIsWeek = true;  //默认坐标是显示周的数据
     private List<Line> mLines = new ArrayList<Line>();   //
     private Line mLineStandard; //设定睡眠时间 线
     private Line mLineReal;     //实际睡眠时间 线
-    private List<PointValue> mPointValuesStandard = new ArrayList<PointValue>();  //设定睡眠时间数据 点
+    private List<PointValue> mPointValuesPlan = new ArrayList<PointValue>();  //设定睡眠时间数据 点
     private List<PointValue> mPointValuesReal = new ArrayList<PointValue>();  //实际睡眠时间数据 点
+
+    private List<String> mDateList = null;  //横坐标日期
 
 
     private ColumnChartData mColumnChartData;   //柱状图数据
@@ -131,7 +135,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
             }
         } else {
             mContentView = inflater.inflate(R.layout.layout_clock, container, false);
-            mSelf = getActivity();
+            mSelf = this.getActivity();
             mGoodNightDB = HiGoodNightDB.getInstance(mSelf);
             mAlarmTaskPoolManager = HiAlarmTaskPoolManager.getInstance();
             // first time using check.
@@ -185,6 +189,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         mListView = (ListView) mContentView.findViewById(R.id.list_sleep_time);
         mLineChartView = (LineChartView) mContentView.findViewById(R.id.line_chart_view);
         mColumnChartView = (ColumnChartView) mContentView.findViewById(R.id.column_chart_view);
+        mSwitchWeek = (Switch) mContentView.findViewById(R.id.switch_change);
 
         //load the data from db.
         mAlarmList = mGoodNightDB.queryAllAlarmTabs();
@@ -194,92 +199,118 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         mTimeListAdapter.notifyDataSetChanged();
         mListView.setOnItemClickListener(this);
         mListView.setOnItemLongClickListener(this);
+        mSwitchWeek.setOnCheckedChangeListener(this);
     }
 
 
     private void initData() {
-        initSleepTimeData();
         mLineChartData = new LineChartData();
-        initAxis();
-        initPoints();
-        initLines();
-        mLineChartData.setBaseValue(Float.NEGATIVE_INFINITY);
-        mLineChartView.setLineChartData(mLineChartData);
-
-        Viewport viewport = mLineChartView.getMaximumViewport();
-        viewport.set(viewport.left, viewport.top, viewport.right, 0);
-        mLineChartView.setMaximumViewport(viewport);
-
-        viewport = mLineChartView.getCurrentViewport();
-        viewport.set(viewport.left, viewport.top, viewport.right, 0);
-        mLineChartView.setCurrentViewport(viewport);
-
+        initAxisY();
+        switchAxisX(mIsWeek);
+        fetchSleepTimeData(mIsWeek);
+//        setPoints();
+//        initLines();
+//        refreshLineView();
     }
 
-    private void initSleepTimeData() {
-        List<HiMaps> params = new ArrayList<>();
-        params.add(new HiMaps("action", "query"));
-        String json = "'{\"userid\":1, \"duration\":10};'";
-        params.add(new HiMaps("params", json));
-        OkHttpUtils.OkHttpPost(HiConfig.URL_GET_SLEEP, params, new OnResponseListener() {
-            Message message = new Message();
-
-            @Override
-            public void onSuccess(Object result) {
-                HiLog.d(TAG, result.toString());
-                HiRespSleepTime response = GsonUtils.parseJsonToClass((String) result, HiRespSleepTime.class);
-                if (response != null) {
-                    if (response.getStatus() == 1) {
-                        message.what = HiResponseCodes.SLEEP_TIME_OK;
-                    } else {
-                        message.what = HiResponseCodes.SLEEP_TIME_FAIL;
-                    }
-                    message.obj = response.getResult();
-                    mHandler.sendMessage(message);
-                }
-            }
-
-            @Override
-            public void onFailure(int errorCode, String error) {
-                HiLog.d(TAG, errorCode + error);
-                message.what = HiResponseCodes.SLEEP_TIME_FAIL;
-                message.obj = errorCode + error;
-                mHandler.handleMessage(message);
-            }
-        });
-
-    }
-
-    //设置折线图坐标
-    private void initAxis() {
+    private void switchAxisX(boolean isWeek) {
+        mAxisValuesX.clear();
         Axis axisX = new Axis(); //X轴
         axisX.setHasTiltedLabels(false);     //X坐标轴字体是斜的显示还是直的，true是斜的显示
         axisX.setHasLines(true);            //x 轴分割线
         axisX.setAutoGenerated(true);
         axisX.setInside(false);            //
-        axisX.setTextColor(getResources().getColor(R.color.colorAccent));
 //        axisX.setName("日期/d");
         axisX.setTextSize(10);
+        axisX.setTextColor(getResources().getColor(R.color.white));
 //        axisX.setMaxLabelChars(8);
-        for (int i = 0; i <= 7; i++) {
-            AxisValue value = new AxisValue(i);
-            String label = HiTimesUtil.getCurWeek(i);
-            value.setLabel(label);
-            mAxisValuesX.add(value);
+        if (isWeek) {
+            //week 7days
+            mDateList = HiTimesUtil.getLastWeekDate();
+            for (int i = 0; i < mDateList.size(); i++) {
+                AxisValue value = new AxisValue(i);
+                String label = mDateList.get(i);
+//                HiLog.d(TAG, "week" +i + ":" + label);
+                value.setLabel(label);
+                mAxisValuesX.add(value);
+            }
+        } else {
+            //month 6x5=30days
+            mDateList = HiTimesUtil.getLastMonthDate();
+//            int x = 0;
+            for (int i = 0; i < mDateList.size(); i++) {
+//                if (i % 5 == 0) {
+                AxisValue value = new AxisValue(i);
+                String label = mDateList.get(i);
+                value.setLabel(label);
+//                    HiLog.d(TAG, "month" +i + ":" + label);
+                mAxisValuesX.add(value);
+//                    x++;
+//                }
+            }
         }
         axisX.setValues(mAxisValuesX);
         mLineChartData.setAxisXBottom(axisX);
+        refreshLineView();
+    }
+
+    private void refreshLineView() {
+//        mLineChartView.setViewportCalculationEnabled(false);
+//        mLineChartData.finish();
+        mLineChartData.setBaseValue(Float.NEGATIVE_INFINITY);
+        mLineChartView.setLineChartData(mLineChartData);
+
+        Viewport viewport = mLineChartView.getMaximumViewport();
+        viewport.set(viewport.left, (float) (viewport.top*1.5), viewport.right, 0);
+        HiLog.d(TAG, "left1: "+viewport.left);
+        HiLog.d(TAG, "top1: "+viewport.top);    //top = maxValue   ( top*1.2): to set the maxY = 1.2*MaxValue
+        HiLog.d(TAG, "right1: "+viewport.right);
+        HiLog.d(TAG, "bottom1: "+viewport.bottom);
+        mLineChartView.setMaximumViewport(viewport);
+
+//        viewport = mLineChartView.getCurrentViewport();
+//        viewport.set(viewport.left, viewport.top, viewport.right, 0);
+//        HiLog.d(TAG, "left2: "+viewport.left);
+//        HiLog.d(TAG, "top2: "+viewport.top);
+//        HiLog.d(TAG, "right2: "+viewport.right);
+//        HiLog.d(TAG, "bottom2: "+viewport.bottom);
+        mLineChartView.setCurrentViewport(viewport);
+
+    }
+
+    //设置折线图坐标
+    private void initAxisY() {
+//        Axis axisX = new Axis(); //X轴
+//        axisX.setHasTiltedLabels(false);     //X坐标轴字体是斜的显示还是直的，true是斜的显示
+//        axisX.setHasLines(true);            //x 轴分割线
+//        axisX.setAutoGenerated(true);
+//        axisX.setInside(false);            //
+////        axisX.setName("日期/d");
+//        axisX.setTextSize(10);
+//        axisX.setTextColor(getResources().getColor(R.color.white));
+////        axisX.setMaxLabelChars(8);
+//        for (int i = 0; i <= 7; i++) {
+//            AxisValue value = new AxisValue(i);
+//            String label = HiTimesUtil.getCurWeek(i);
+//            value.setLabel(label);
+//            mAxisValuesX.add(value);
+//        }
+//        axisX.setValues(mAxisValuesX);
+//        mLineChartData.setAxisXBottom(axisX);
 
 //        Axis axisY = Axis.generateAxisFromRange(0, 24, 4);  //Y轴
+        if (mAxisValuesY != null) {
+            mAxisValuesY.clear();
+        }
         Axis axisY = new Axis();  //Y轴
         axisY.setHasTiltedLabels(false);
         axisY.setHasLines(true);
         axisY.setAutoGenerated(true);
-        axisY.setInside(true);
-        axisY.setTextColor(getResources().getColor(R.color.colorAccent));
-        axisY.setName("睡眠时长/h");
+        axisY.setInside(false);
+//        axisY.setName("睡眠时长/h");
 //        axisY.setMaxLabelChars(24); //默认是3，只能看最后三个数字
         axisY.setTextSize(10);
+        axisY.setTextColor(getResources().getColor(R.color.white));
         for (int i = 0; i <= 24; i++) {
             AxisValue value = new AxisValue(i);
             value.setLabel(String.valueOf(i));
@@ -290,24 +321,150 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         mLineChartData.setAxisYLeft(axisY);
     }
 
-    //初始化 点 数据
-    private void initPoints() {
-        for (int i = 1; i <= 7; i++) {
-            if (i % 2 == 0)
-                mPointValuesStandard.add(new PointValue(i, (float) 8.5));
-            else
-                mPointValuesStandard.add(new PointValue(i, (float) 8.0));
+
+    private void fetchSleepTimeData(boolean isWeek) {
+        int userId = 2;
+        int duration;
+        if (isWeek) {
+            duration = 7;
+        } else {
+            duration = 30;
         }
+//        List<HiMaps> params = new ArrayList<>();
+//        params.add(new HiMaps("action", "query"));
+//        String p1 = "\"action\":\"query\"";
+//        String p = "{\"userId\":2, \"duration\":7}";
+////        String json = "{"+"userId"+":" + userId + "," + "+duration:" + duration + "}";
+////        JsonArray array = new JsonArray();
+////        JsonObject o1 = new JsonObject();
+////        o1.addProperty("userId", userId);
+////        JsonObject o2 = new JsonObject();
+////        o2.addProperty("duration", duration);
+////        array.add(o1);
+////        array.add(o2);
+//        params.add(new HiMaps("params", p));
+//        HiLog.d(TAG, "params: "+params);
 
-        mPointValuesReal.add(new PointValue(1, (float) 7.2));
-        mPointValuesReal.add(new PointValue(2, (float) 8.1));
-        mPointValuesReal.add(new PointValue(3, (float) 8.5));
-        mPointValuesReal.add(new PointValue(4, (float) 10.2));
-        mPointValuesReal.add(new PointValue(5, (float) 6.7));
-        mPointValuesReal.add(new PointValue(6, (float) 7.0));
-        mPointValuesReal.add(new PointValue(7, (float) 8.2));
+        String params = "{\"action\":\"query\",\"params\":{\"userId\":" + userId + ",\"duration\":" + duration + "}}";
+
+        OkHttpUtils.sendPost(HiConfig.URL_GET_SLEEP, params, new OnResponseListener<String>() {
+            Message message = new Message();
+
+            @Override
+            public void onSuccess(String result) {
+                HiLog.d(TAG, result.toString());
+                HiRespSleepTime response = GsonUtils.parseJsonToClass((String) result, HiRespSleepTime.class);
+                if (response != null) {
+                    if (response.getStatus() == 1) {
+                        message.what = HiResponseCodes.SLEEP_TIME_OK;
+                    } else {
+                        message.what = HiResponseCodes.SLEEP_TIME_FAIL;
+                    }
+                    message.obj = response.getResult();
+                    Looper.prepare();
+                    mHandler.sendMessage(message);
+                    Looper.loop();
+                }
+            }
+
+            @Override
+            public void onFailure(int errorCode, String error) {
+                HiLog.d(TAG, errorCode + error);
+                message.what = HiResponseCodes.SLEEP_TIME_FAIL;
+                message.obj = errorCode + error;
+                Looper.prepare();
+                mHandler.handleMessage(message);
+                Looper.loop();
+            }
+        });
+
+    }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //initTime();
+        //TODO: refresh view if data changed, can add a standalone method to handle this task.
+        setupViews();
+        mTimeListAdapter.notifyDataSetChanged();
+        mSelf.startService(new Intent(mSelf, HiScreenLockService.class));
+
+    }
+
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case HiResponseCodes.SLEEP_TIME_OK:
+                    List<HiRespSleepTime.SleepTimeLine> timeLine = (List<HiRespSleepTime.SleepTimeLine>) msg.obj;
+                    HiLog.d(TAG, "timeLine= " + timeLine);
+                    refreshTimeLineData(mIsWeek, timeLine);
+                    break;
+                case HiResponseCodes.SLEEP_TIME_FAIL:
+                    String result = msg.obj.toString();
+                    HiToast.showToast(mSelf, result);
+                    break;
+            }
+        }
+    };
+
+    /**
+     * 根据数据刷新图标界面
+     *
+     * @param mIsWeek
+     * @param timeLine
+     */
+    private void refreshTimeLineData(boolean mIsWeek, List<HiRespSleepTime.SleepTimeLine> timeLine) {
+        setPoints(mIsWeek, timeLine);
+        initLines();
+        refreshLineView();
+    }
+
+    //初始化 点 数据
+    private void setPoints(boolean mIsWeek, List<HiRespSleepTime.SleepTimeLine> timeLine) {
+        if (mPointValuesReal != null && mPointValuesReal.size() > 0) {
+            mPointValuesReal.clear();
+        }
+        if (mPointValuesPlan != null && mPointValuesPlan.size() > 0) {
+            mPointValuesPlan.clear();
+        }
+//        int length = 0;
+////        int x = 0;
+//        if (mIsWeek) {
+//            length = 7;
+//        } else {
+//            length = 30;
+//        }
+        for (int i = 0; i < mDateList.size(); i++) {
+            String date = mDateList.get(i);
+            HiRespSleepTime.SleepTimeLine line = getLineByDate(timeLine, date);
+            if (line == null){
+                mPointValuesPlan.add(new PointValue(i, 0));
+                mPointValuesReal.add(new PointValue(i, 0));
+            }else {
+                mPointValuesPlan.add(new PointValue(i, line.getPlan_duration()));
+                mPointValuesReal.add(new PointValue(i, line.getActual_duration()));
+            }
+        }
+    }
+
+    /**
+     * is timeLine contains date
+     * @param timeLine  2017-05-02
+     * @param date  05.02
+     * @return
+     */
+    private HiRespSleepTime.SleepTimeLine getLineByDate(List<HiRespSleepTime.SleepTimeLine> timeLine, String date) {
+        for (HiRespSleepTime.SleepTimeLine line : timeLine){
+            String[] d = line.getDate().split("-");
+            if ((d[1]+"."+d[2]).equals(date)){
+                return line;
+             }
+        }
+        return null;
     }
 
     //设置线条数据
@@ -329,60 +486,42 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
      * data.setValueLabelsTextColor(Color.BLACK);  //此处设置坐标点旁边的文字颜色
      */
     private void initLines() {
-        mLineStandard = new Line(mPointValuesStandard)
-                .setColor(getResources().getColor(R.color.blue1))
-                .setCubic(false)
-                .setStrokeWidth(1)
-                .setPointRadius(3);
-        mLineReal = new Line(mPointValuesReal)
+        if (mLineStandard != null)
+            mLineStandard = null;
+        if (mLineReal != null)
+            mLineReal = null;
+        mLineStandard = new Line(mPointValuesPlan)
                 .setColor(getResources().getColor(R.color.btn_out_color))
                 .setCubic(false)
-                .setStrokeWidth(2)
-                .setPointRadius(4)
+                .setStrokeWidth(1)
+                .setPointRadius(2);
+        mLineReal = new Line(mPointValuesReal)
+                .setColor(getResources().getColor(R.color.white))
+                .setCubic(false)
+                .setStrokeWidth(1)
+                .setPointRadius(2)
                 .setFilled(true);
 //        mLineStandard.setShape(ValueShape.DIAMOND);
 //        mLineReal.setShape(ValueShape.SQUARE);
+        mLines.clear();
         mLines.add(mLineStandard);
         mLines.add(mLineReal);
         mLineChartData.setLines(mLines);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //initTime();
-        //TODO: refresh view if data changed, can add a standalone method to handle this task.
-        setupViews();
-        mTimeListAdapter.notifyDataSetChanged();
-        mSelf.startService(new Intent(mSelf, HiScreenLockService.class));
-
-    }
-
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case HiResponseCodes.SLEEP_TIME_OK:
-//                    List<HiRespSleepTime.SleepTimeLine> timeLine = GsonUtils.parseJsonToClass(msg.obj.toString(), HiRespSleepTime.SleepTimeLine.class);
-//                    refreshTimeLine(timeLine);
-                    break;
-                case HiResponseCodes.SLEEP_TIME_FAIL:
-                    String result = msg.obj.toString();
-                    HiToast.showToast(mSelf, result);
-                    break;
-            }
-        }
-    };
-
     /**
-     * 根据数据刷新图标界面
-     * @param timeLine
+     * switch change the view to week or month
+     *
+     * @param buttonView
+     * @param isChecked
      */
-    private void refreshTimeLine(HiRespSleepTime.SleepTimeLine timeLine) {
-
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        mIsWeek = isChecked;
+        switchAxisX(isChecked);
+        fetchSleepTimeData(isChecked);
     }
+
 
     @Override
     public void onClick(View v) {

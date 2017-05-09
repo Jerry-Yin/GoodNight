@@ -5,10 +5,14 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.hdu.team.hiwanan.constant.HiRequestCodes;
+import com.hdu.team.hiwanan.util.HiLog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by JerryYin on 11/24/15.
@@ -67,6 +71,47 @@ public class HiTimesUtil {
         return str;
     }
 
+    /**
+     * 获取今天之前一周的日期（7天）
+     * @return
+     */
+    public static List<String> getLastWeekDate(){
+        List<String> lastWeek = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("MM.dd");
+        Calendar c = Calendar.getInstance();
+        //过去七天
+        for (int i=-7; i<0; i++){
+            c.setTime(new Date(System.currentTimeMillis()));
+            c.add(Calendar.DATE, i);
+            Date d = c.getTime();
+            String day = format.format(d);
+            lastWeek.add(day);
+            c.clear();
+        }
+        return lastWeek;
+    }
+
+    /**
+     * 获取今天之前一个月的日期（30天）
+     * @return
+     */
+    public static List<String> getLastMonthDate(){
+        List<String> lastWeek = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("MM.dd");
+        Calendar c = Calendar.getInstance();
+        //过去七天
+        for (int i=30; i>0; i--){
+            c.setTime(new Date(System.currentTimeMillis()));
+            System.out.println("i = "+i);
+            c.add(Calendar.DATE, -i);
+            Date d = c.getTime();
+            String day = format.format(d);
+            lastWeek.add(day);
+            System.out.println("day = "+day);
+            c.clear();
+        }
+        return lastWeek;
+    }
 
     /**
      * 。

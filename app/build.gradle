@@ -39,6 +39,7 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
     compile files('libs/badgeview.jar')
     //bmob-sdk：Bmob的android sdk包，包含了Bmob的数据存储、文件等服务，以下是最新的bmob-sdk:
+
     //3.5.0：请务必查看下面注释[1]
     compile 'cn.bmob.android:bmob-sdk:3.5.0'
     //bmob-push：Bmob的推送包
@@ -47,7 +48,9 @@ dependencies {
     compile 'cn.bmob.android:bmob-im:2.0.5@aar'
     compile 'cn.bmob.android:bmob-sdk:3.4.7-aar'
     //bmob-sms ：Bmob单独为短信服务提供的包， 其实而bmob-sdk内部包含了bmob-sms的短信功能,请不要重复添加。
+
     //    compile 'cn.bmob.android:bmob-sms:1.0.1'
+
     //如果你想应用能够兼容Android6.0，请添加此依赖(org.apache.http.legacy.jar)
     compile 'cn.bmob.android:http-legacy:1.0'
     compile 'com.android.support:support-v4:23.2.1'
@@ -57,7 +60,9 @@ dependencies {
         transitive = true
     }
     //okhttp
+
     //    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+
     //    compile 'com.github.bumptech.glide:3.7.0'
     compile files('libs/QuickIntegrater.jar')
     compile files('libs/ShareSDK-Core-2.8.2.jar')
@@ -74,17 +79,18 @@ dependencies {
     compile files('libs/ShareSDK-YouDao-2.8.2.jar')
     compile files('libs/MobCommons-2017.0322.0931.jar')
     compile files('libs/MobTools-2017.0322.0931.jar')
-//    短信验证码
-    compile name:'SMSSDK-2.1.4', ext:'aar'
-    compile name:'SMSSDKGUI-2.1.4', ext:'aar'
-
-
-//    music view
+    //    短信验证码
+    compile name: 'SMSSDK-2.1.4', ext: 'aar'
+    compile name: 'SMSSDKGUI-2.1.4', ext: 'aar'
+    //    music view
     compile 'com.github.iammert:MusicPlayerView:e3b937c729'
-
     //hellocharts-adroid
     compile 'com.github.lecho:hellocharts-android:v1.5.8'
-//    compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
-
+    //    compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
+    compile files('libs/commons-beanutils-1.9.3.jar')
+    compile files('libs/commons-collections-3.2.2.jar')
+    compile files('libs/commons-lang-2.6.jar')
+    compile files('libs/commons-logging-1.2.jar')
+    compile files('libs/json-lib-2.4-jdk15.jar')
 }
 
