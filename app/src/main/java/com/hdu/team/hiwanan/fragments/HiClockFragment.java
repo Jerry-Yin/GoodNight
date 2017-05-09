@@ -349,7 +349,6 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
 
         OkHttpUtils.sendPost(HiConfig.URL_GET_SLEEP, params, new OnResponseListener<String>() {
             Message message = new Message();
-
             @Override
             public void onSuccess(String result) {
                 HiLog.d(TAG, result.toString());

@@ -32,18 +32,28 @@ public class HiAlarmTab {
     private int id;     //alarm id = position
     private int icon;   //R.drawable.icon
     private String category;
-    private String time;
+    private String timeSleep;
+    private String timeWakeup;
     private boolean on;
     private int musicId;
 
     public HiAlarmTab() {
     }
-
-    public HiAlarmTab(int id, int icon, String category, String time, boolean on, int musicId) {
+    public HiAlarmTab(int id, int icon, String category, String timeWakeup, boolean on, int musicId) {
         this.id = id;
         this.icon = icon;
         this.category = category;
-        this.time = time;
+        this.timeWakeup = timeWakeup;
+        this.on = on;
+        this.musicId = musicId;
+    }
+
+    public HiAlarmTab(int id, int icon, String category, String timeSleep, String timeWakeup, boolean on, int musicId) {
+        this.id = id;
+        this.icon = icon;
+        this.category = category;
+        this.timeSleep = timeSleep;
+        this.timeWakeup = timeWakeup;
         this.on = on;
         this.musicId = musicId;
     }
@@ -97,12 +107,21 @@ public class HiAlarmTab {
     }
 
     public String getTime() {
-        return time;
+        return timeSleep;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setTime(String timeSleep) {
+        this.timeSleep = timeSleep;
     }
+
+//    public String getTimeWakeup() {
+//        return timeWakeup;
+//    }
+//
+//    public void setTimeWakeup(String timeWakeup) {
+//        this.timeWakeup = timeWakeup;
+//    }
+
 
     public boolean isOn() {
         return on;

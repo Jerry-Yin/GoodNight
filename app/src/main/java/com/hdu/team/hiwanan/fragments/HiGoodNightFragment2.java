@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -25,10 +26,12 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hdu.team.hiwanan.R;
 import com.hdu.team.hiwanan.activity.HiMusicPlayerActivity;
+import com.hdu.team.hiwanan.database.HiGoodNightDB;
 import com.hdu.team.hiwanan.listener.OnPlayingListener;
 import com.hdu.team.hiwanan.listener.OnResponseListener;
 import com.hdu.team.hiwanan.manager.HiMediaPlayerManager;
@@ -41,6 +44,9 @@ import com.hdu.team.hiwanan.view.HiCountdownLinearLayout;
 import com.hdu.team.hiwanan.view.HiVoiceRecorderButton2;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import co.mobiwise.library.MusicPlayerView;
 
@@ -72,7 +78,12 @@ public class HiGoodNightFragment2 extends Fragment implements View.OnClickListen
     private HiCountdownLinearLayout mLayoutCountdown;
     private MusicPlayerView mMusicView;
 
+    private TextView mCountdownHour;
+    private TextView mCountdownMinute;
+    private TextView mCountdownSecond;
+    private CountDownTimer mTimer;//current time - setting time, 24hours to repeat.
 
+    private HiGoodNightDB mDbManager;
     /**
      * Values
      */
@@ -112,6 +123,12 @@ public class HiGoodNightFragment2 extends Fragment implements View.OnClickListen
         mMusicLayout = (LinearLayout) mContentView.findViewById(R.id.music_layout);
         mMusicView = (MusicPlayerView) mContentView.findViewById(R.id.music_view);
 
+        mCountdownHour = (TextView) mContentView.findViewById(R.id.down_hour);
+        mCountdownMinute = (TextView) mContentView.findViewById(R.id.down_minute);
+        mCountdownSecond = (TextView) mContentView.findViewById(R.id.down_second);
+        mDbManager = HiGoodNightDB.getInstance(mContentView.getContext());
+
+        startCountdown();
         mMusicView.setOnClickListener(this);
         mLayoutCountdown.setOnTouchListener(this);
 //        mLayoutCountdown.setOng
@@ -294,6 +311,37 @@ public class HiGoodNightFragment2 extends Fragment implements View.OnClickListen
         return animator;
     }
 
+    /**
+     * count down.
+     */
+    private void startCountdown() {
+        String setString = mDbManager.querySleepAlarmTab().getTime();//"21:10";
+        if (setString == null)
+            return;
+        long set = HiTimesUtil.convertStringToLong(setString, "HH:mm");
+        long now = HiTimesUtil.getCurrentDateTime("HH:mm:ss");
+
+        long toWait = set - now;
+        if (toWait < 0) {
+            toWait += 24 * 60 * 60 *1000;
+        }
+        mTimer = new CountDownTimer(toWait,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mCountdownHour.setText(HiTimesUtil.getHourFromLong(millisUntilFinished));
+                mCountdownMinute.setText(HiTimesUtil.getMinuteFromLong(millisUntilFinished));
+                mCountdownSecond.setText(HiTimesUtil.getSecoundFromLong(millisUntilFinished));
+            }
+            @Override
+            public void onFinish() {
+                mCountdownHour.setText("00");
+                mCountdownMinute.setText("00");
+                mCountdownSecond.setText("00");
+            }
+        };
+        mTimer.start();
+
+    }
 
     /**
      * on AudioFinishRecorderListener

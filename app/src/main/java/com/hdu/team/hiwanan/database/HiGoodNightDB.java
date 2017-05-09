@@ -77,7 +77,27 @@ public class HiGoodNightDB {
 
     }
 
-
+    /**
+     * query sleep time.
+     * @return
+     */
+    public HiAlarmTab querySleepAlarmTab() {
+        if (db == null)
+            db = mOpenHelper.getReadableDatabase();
+        HiAlarmTab tab = new HiAlarmTab();
+        Cursor cursor = db.query(HiAlarmTab.AlarmEntry.TABLE_NAME, new String[] {HiAlarmTab.AlarmEntry.COLUMN_ID,HiAlarmTab.AlarmEntry.COLUMN_ICON,HiAlarmTab.AlarmEntry.COLUMN_CATEGORY,
+                HiAlarmTab.AlarmEntry.COLUMN_TIME, HiAlarmTab.AlarmEntry.COLUMN_SWITCH,HiAlarmTab.AlarmEntry.COLUMN_MUSIC},
+                HiAlarmTab.AlarmEntry.COLUMN_CATEGORY + "=?", new String[]{HiAlarmTab.CATEGORY_SLEEP},null,null,null );
+        if (cursor.moveToFirst()) {
+            tab.setId(cursor.getInt(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_ID)));
+            tab.setIcon(cursor.getInt(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_ICON)));
+            tab.setCategory(cursor.getString(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_CATEGORY)));
+            tab.setTime(cursor.getString(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_TIME)));
+            tab.setOn(cursor.getInt(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_SWITCH)) == 1 ? true : false);
+            tab.setMusicId(cursor.getInt(cursor.getColumnIndex(HiAlarmTab.AlarmEntry.COLUMN_MUSIC)));
+        }
+        return tab;
+    }
     /**
      * query a alarmtab by id
      * @param id

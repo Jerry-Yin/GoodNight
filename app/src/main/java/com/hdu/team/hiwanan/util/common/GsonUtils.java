@@ -44,7 +44,6 @@ public class GsonUtils {
         return object;
     }
 
-
     public static <T> List<T> parseJsonArrayToList(String array, Class<T> tClass){
         Gson gson = new Gson();
         List<T> list = new ArrayList<>();
