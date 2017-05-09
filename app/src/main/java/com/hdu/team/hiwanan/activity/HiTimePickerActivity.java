@@ -184,6 +184,10 @@ public class HiTimePickerActivity extends HiActivity implements TimePicker.OnTim
             }
             mSpCategory.setSelection((int) mCategoryId, true);
             mRingtoneId = tab.getMusicId();
+
+//            if (mRingtoneId > mRingtoneLists.size())
+//                mRingtoneId = 0;
+
             mSpRingtone.setSelection((int) mRingtoneId, true);
 
         } else {

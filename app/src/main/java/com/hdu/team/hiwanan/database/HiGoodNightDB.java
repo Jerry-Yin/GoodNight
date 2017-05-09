@@ -201,7 +201,7 @@ public class HiGoodNightDB {
         if (db == null)
             db = mOpenHelper.getWritableDatabase();
         String sql = "DELETE FROM "+HiAlarmTab.AlarmEntry.TABLE_NAME;
-        String sql1 = "UPDATEsqlite_sequence SETseq=0 WHEREname="+HiAlarmTab.AlarmEntry.TABLE_NAME;
+        String sql1 = "UPDATE sqlite_sequence SETseq=0 WHERE name="+HiAlarmTab.AlarmEntry.TABLE_NAME;
         String sql2 = "DELETE FROM sqlite_sequence";
         db.execSQL(sql);
         db.execSQL(sql2);

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -77,6 +78,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
      */
     private View mContentView;
     private Activity mSelf;
+    private RingtoneManager mRingtoneManager;
 
     /**
      * View
@@ -170,17 +172,18 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         if (isFirstLoad()) {
             //if it is the first time user open this app, create 3 default alarm tab items.
             //int id, int icon, String category, String time, boolean on, int musicId)
-            HiAlarmTab tab1 = new HiAlarmTab(0, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_READY, "10:00", false, R.raw.voice);
-            HiAlarmTab tab2 = new HiAlarmTab(1, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_SLEEP, "10:30", false, R.raw.voice);
-            HiAlarmTab tab3 = new HiAlarmTab(2, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_GETUP, "08:00", false, R.raw.voice);
+            mRingtoneManager = new RingtoneManager(mSelf);
+            HiAlarmTab tab1 = new HiAlarmTab(0, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_READY, "10:00", false, 0);
+            HiAlarmTab tab2 = new HiAlarmTab(1, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_SLEEP, "10:30", false, 0);
+            HiAlarmTab tab3 = new HiAlarmTab(2, R.drawable.ic_access_alarm_black_24dp, HiAlarmTab.CATEGORY_GETUP, "08:00", false, 0);
 
             mGoodNightDB.saveAlarmTab(tab1);
             mGoodNightDB.saveAlarmTab(tab2);
             mGoodNightDB.saveAlarmTab(tab3);
 
-            mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab1.getId(), tab1.getMusicId()));
-            mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab2.getId(), tab1.getMusicId()));
-            mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab3.getId(), tab1.getMusicId()));
+            mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab1.getId(), String.valueOf(mRingtoneManager.getRingtoneUri(tab1.getMusicId()))));
+            mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab2.getId(), String.valueOf(mRingtoneManager.getRingtoneUri(tab1.getMusicId()))));
+            mAlarmTaskPoolManager.addTask(new HiAlarmTask(mSelf, tab3.getId(), String.valueOf(mRingtoneManager.getRingtoneUri(tab1.getMusicId()))));
         }
     }
 
@@ -191,6 +194,7 @@ public class HiClockFragment extends Fragment implements View.OnClickListener, A
         mLineChartView = (LineChartView) mContentView.findViewById(R.id.line_chart_view);
         mColumnChartView = (ColumnChartView) mContentView.findViewById(R.id.column_chart_view);
         mSwitchWeek = (Switch) mContentView.findViewById(R.id.switch_change);
+
 
         //load the data from db.
         mAlarmList = mGoodNightDB.queryAllAlarmTabs();
